@@ -10,3 +10,6 @@ npm-debug.*
 web-build/
 web-report/
 android/.gradle
+debug.log
+yarn-error.log
+.vscode/launch.json

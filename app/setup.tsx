@@ -8,7 +8,7 @@ import configureStore from "./store/configureStore";
 
 class Root extends React.Component {
   state: {
-    isLoading?: any;
+    isLoadingStore?: any;
     store?: any;
   };
 
@@ -17,19 +17,18 @@ class Root extends React.Component {
 
     console.disableYellowBox = true;
     this.state = {
-      isLoading: true,
-      store: configureStore(() => this.onComplete())
+      isLoadingStore: true,
+      store: configureStore(this.onStoreConfigured)
     };
   }
 
-  onComplete = () => {
-    console.log("onComplete");
-    this.setState({ isLoading: false });
+  onStoreConfigured = () => {
+    this.setState({ isLoadingStore: false });
   };
 
   render() {
-    let { isLoading } = this.state;
-    if (isLoading) {
+    let { isLoadingStore } = this.state;
+    if (isLoadingStore) {
       return null;
     }
 
