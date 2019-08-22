@@ -30,7 +30,10 @@ class App extends React.Component<IAppProps> {
         <Text>sup</Text>
         <Text>{JSON.stringify(categories)}</Text>
         {categories.categories.map((c: Category) => (
-          <Card title={`${c.name} (${c.count})`} />
+          <Card
+            title={`${c.name} (${c.count})`}
+            image={{ uri: c.image && c.image.src }}
+          />
         ))}
       </View>
     );
