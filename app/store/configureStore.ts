@@ -18,7 +18,8 @@ var logger = createLogger({
 
 const persistConfig = {
   key: "root",
-  storage
+  storage,
+  blacklist: ["ui"]
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
