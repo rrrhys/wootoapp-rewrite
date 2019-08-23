@@ -1,10 +1,35 @@
-import { Alert, AsyncStorage, Image, Platform, View } from "react-native";
+import { Alert, AsyncStorage, Image, Platform, Text, View } from "react-native";
 import React, { Component } from "react";
+import { createAppContainer, createStackNavigator } from "react-navigation";
 
-import App from "./App";
+import CategoryScreen from "./screens/CategoryScreen";
+import Drawer from "./components/Drawer";
+import Header from "./components/Header";
+import HomeScreen from "./screens/HomeScreen";
 import { Provider } from "react-redux";
-import Storage from "react-native-storage"; // persistent storage
 import configureStore from "./store/configureStore";
+
+const RootStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+    Category: CategoryScreen
+  },
+  {
+    initialRouteName: "Home",
+    /* The header config from HomeScreen is now here */
+    defaultNavigationOptions: ({ navigation, screenProps }) => ({
+      header: props => (
+        <Header
+          navigation={navigation}
+          title={props.scene.descriptor.options.title}
+          backButton={props.scene.descriptor.options.backButton}
+        />
+      )
+    })
+  }
+);
+
+const Navigation = createAppContainer(RootStack);
 
 class Root extends React.Component {
   state: {
@@ -29,27 +54,21 @@ class Root extends React.Component {
   render() {
     let { isLoadingStore } = this.state;
     if (isLoadingStore) {
-      return null;
+      return (
+        <View>
+          <Text>Loading</Text>
+        </View>
+      );
     }
 
     return (
       <Provider store={this.state.store}>
-        <App />
+        <Drawer>
+          <Navigation />
+        </Drawer>
       </Provider>
     );
   }
 }
-
-var storage = new Storage({
-  size: 1000, // maximum capacity, default 1000
-  storageBackend: AsyncStorage,
-
-  // expire time, default 1 day(1000 * 3600 * 24 milliseconds), can be null, which means never expire.
-  defaultExpires: null,
-  enableCache: true,
-  sync: {
-    // we'll talk about the details later.
-  }
-});
 
 export default Root;

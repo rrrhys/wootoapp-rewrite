@@ -4776,6 +4776,14 @@ react-native-code-push@^5.6.1:
     semver "^5.6.0"
     xcode "1.0.0"
 
+react-native-drawer@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-drawer/-/react-native-drawer-2.5.1.tgz#08b9314184f48c724f1b467f8859797369798654"
+  integrity sha512-cxcQNbSWy5sbGi7anSVp6EDr6JarOBMY9lbFOeLFeVYbONiudoqRKbgEsSDgSw3/LFCLvUXK5zdjXCOedeytxQ==
+  dependencies:
+    prop-types "^15.5.8"
+    tween-functions "^1.0.1"
+
 react-native-elements@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-1.1.0.tgz#f99bcda4459a886f3ab4591c684c099d37aedf2b"
@@ -5923,6 +5931,11 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
   integrity sha1-yy4SAwZ+DI3h9hQJS5/kVwTqYAM=
+
+tween-functions@^1.0.1:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/tween-functions/-/tween-functions-1.2.0.tgz#1ae3a50e7c60bb3def774eac707acbca73bbc3ff"
+  integrity sha1-GuOlDnxguz3vd06scHrLynO7w/8=
 
 type-check@~0.3.2:
   version "0.3.2"
