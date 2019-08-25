@@ -1,4 +1,3 @@
-import { Card, Image } from "react-native-elements";
 import {
   NavigationParams,
   NavigationScreenProp,
@@ -7,16 +6,15 @@ import {
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import Actions from "../actions";
-import { Category } from "../types/woocommerce";
+import CategoryTile from "../components/CategoryTile";
+import { ICategories } from "../reducers/categories";
 import { Iui } from "../reducers/ui";
 import React from "react";
 import config from "../../env";
 import { connect } from "react-redux";
 
 export interface IAppProps {
-  categories: {
-    categories: Array<Category>;
-  };
+  categories: ICategories;
   loadShop: () => void;
   ui: Iui;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
@@ -45,18 +43,8 @@ class HomeScreen extends React.Component<IAppProps> {
         <Text>sup</Text>
         <ScrollView>
           <Text>{JSON.stringify(categories)}</Text>
-          {categories.categories.map((c: Category) => (
-            <TouchableOpacity
-              key={c.id}
-              onPress={() =>
-                this.props.navigation.navigate("Category", { category: c })
-              }
-            >
-              <Card
-                title={`${c.name} (${c.count})`}
-                image={{ uri: c.image && c.image.src }}
-              />
-            </TouchableOpacity>
+          {categories.data.map(category => (
+            <CategoryTile key={category.id} category={category} />
           ))}
         </ScrollView>
       </View>
@@ -65,6 +53,7 @@ class HomeScreen extends React.Component<IAppProps> {
 }
 
 const select = store => {
+  console.log("Store", store);
   return {
     cart: store.cart,
     ui: store.ui,

@@ -1,16 +1,21 @@
-import { Card, Image } from "react-native-elements";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import Actions from "../actions";
 import { Category } from "../types/woocommerce";
-import Header from "../components/Header";
 import React from "react";
-import config from "../../env";
 import { connect } from "react-redux";
 
-export interface ICategoryProps {}
+export interface ICategoryScreenProps {
+  navigation: {
+    state: {
+      params: {
+        category: Category;
+      };
+    };
+  };
+}
 
-class CategoryScreen extends React.Component<ICategoryProps> {
+class CategoryScreen extends React.Component<ICategoryScreenProps> {
   static navigationOptions = ({ navigation, navigationOptions }) => {
     return {
       title: navigation.state.params.category.name,
@@ -18,7 +23,7 @@ class CategoryScreen extends React.Component<ICategoryProps> {
     };
   };
 
-  constructor(props: ICategoryProps) {
+  constructor(props: ICategoryScreenProps) {
     super(props);
 
     // we need an app definition.
@@ -33,11 +38,14 @@ class CategoryScreen extends React.Component<ICategoryProps> {
   }
 }
 
-const select = store => {
+const select = (store, ownProps: ICategoryScreenProps) => {
+  const { category } = ownProps.navigation.state.params;
+
   return {
     cart: store.cart,
     ui: store.ui,
-    categories: store.categories
+    categories: store.categories,
+    productsByCategory: store.products.byCategoryId[category.id]
   };
 };
 
