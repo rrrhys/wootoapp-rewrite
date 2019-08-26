@@ -8,6 +8,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Actions from "../actions";
 import CategoryTile from "../components/CategoryTile";
 import { ICategories } from "../reducers/categories";
+import { IStore } from "../types/store";
 import { Iui } from "../reducers/ui";
 import React from "react";
 import config from "../../env";
@@ -15,7 +16,7 @@ import { connect } from "react-redux";
 
 export interface IAppProps {
   categories: ICategories;
-  loadShop: () => void;
+  loadCategories: () => void;
   ui: Iui;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
@@ -33,7 +34,7 @@ class HomeScreen extends React.Component<IAppProps> {
     const { store_id, publishable_key, access_jwt } = config;
 
     props.navigation.setParams({ title: props.ui.name });
-    props.loadShop();
+    props.loadCategories();
   }
 
   render() {
@@ -42,7 +43,6 @@ class HomeScreen extends React.Component<IAppProps> {
       <View>
         <Text>sup</Text>
         <ScrollView>
-          <Text>{JSON.stringify(categories)}</Text>
           {categories.data.map(category => (
             <CategoryTile key={category.id} category={category} />
           ))}
@@ -52,7 +52,7 @@ class HomeScreen extends React.Component<IAppProps> {
   }
 }
 
-const select = store => {
+const select = (store: IStore) => {
   console.log("Store", store);
   return {
     cart: store.cart,
@@ -62,10 +62,9 @@ const select = store => {
 };
 
 const actions = dispatch => {
-  const { loadShop } = Actions;
+  const { loadCategories } = Actions;
   return {
-    loadShop: (shop_id: number, publishable_key: string, access_jwt: string) =>
-      dispatch(loadShop(shop_id, publishable_key, access_jwt))
+    loadCategories: () => dispatch(loadCategories())
   };
 };
 

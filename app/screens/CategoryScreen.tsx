@@ -2,6 +2,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import Actions from "../actions";
 import { Category } from "../types/woocommerce";
+import ProductTile from "../components/ProductTile";
 import React from "react";
 import { connect } from "react-redux";
 
@@ -13,6 +14,8 @@ export interface ICategoryScreenProps {
       };
     };
   };
+  loadProductsInCategory: (category: number, page: number) => void;
+  productsByCategory: Array<number>;
 }
 
 class CategoryScreen extends React.Component<ICategoryScreenProps> {
@@ -26,13 +29,18 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
   constructor(props: ICategoryScreenProps) {
     super(props);
 
-    // we need an app definition.
+    props.loadProductsInCategory(props.navigation.state.params.category.id, 1);
   }
 
   render() {
+    const { productsByCategory } = this.props;
     return (
       <View>
-        <Text>sup</Text>
+        <Text>{JSON.stringify(productsByCategory)}</Text>
+
+        {productsByCategory.map(p => (
+          <ProductTile key={p} id={p} />
+        ))}
       </View>
     );
   }
@@ -45,15 +53,16 @@ const select = (store, ownProps: ICategoryScreenProps) => {
     cart: store.cart,
     ui: store.ui,
     categories: store.categories,
+    //TODO: Replace the IDs with products here.
     productsByCategory: store.products.byCategoryId[category.id]
   };
 };
 
 const actions = dispatch => {
-  const { loadShop } = Actions;
+  const { loadProductsInCategory } = Actions;
   return {
-    loadShop: (shop_id: number, publishable_key: string, access_jwt: string) =>
-      dispatch(loadShop(shop_id, publishable_key, access_jwt))
+    loadProductsInCategory: (category: number, page: number) =>
+      dispatch(loadProductsInCategory(category, page))
   };
 };
 

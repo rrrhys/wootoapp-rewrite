@@ -163,7 +163,6 @@ export default {
           }
         })
         .catch(error => {
-          debugger;
           console.error(error);
         });
     },

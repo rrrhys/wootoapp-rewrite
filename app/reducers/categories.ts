@@ -15,11 +15,14 @@ const initialState: ICategories = {
 const categories = (state = initialState, action) => {
   if (action.type === CATEGORIES_LOADED) {
     let { data } = action;
-    return {
-      ...state,
-      data,
-      lastUpdated: new Date()
-    };
+
+    if (data) {
+      return {
+        ...state,
+        data,
+        lastUpdated: new Date()
+      };
+    }
   }
 
   return state;
