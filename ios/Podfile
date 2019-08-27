@@ -30,4 +30,6 @@ target 'MobileTEST' do
   pod 'RNReanimated', :podspec => '../node_modules/react-native-reanimated/RNReanimated.podspec'
 
   use_unimodules!
+  pod 'CodePush', :path => '../node_modules/react-native-code-push'
+
 end

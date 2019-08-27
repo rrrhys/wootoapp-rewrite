@@ -39,11 +39,31 @@ A connection will be required to begin the checkout process (where product objec
 
 ## Using the project
 
+### Web
+
 `yarn`
 
 `yarn web`
 
 visit localhost:19006 _Be aware of issues below_
+
+### iOS
+
+`yarn`
+
+`cd ios && pod install`
+
+Start on device:
+react-native run-ios --simulator="iPhone X"
+
+### Android
+
+Android Studio needs to be installed and set up.
+A suitable emulator (e.g. genymotion) should be installed.
+
+`yarn`
+
+`react-native run-android`
 
 ## Issues
 

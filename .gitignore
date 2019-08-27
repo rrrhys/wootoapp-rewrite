@@ -13,3 +13,7 @@ android/.gradle
 debug.log
 yarn-error.log
 .vscode/launch.json
+ios/Pods/*
+node_modules
+ios/build/*
+android/app/build/
