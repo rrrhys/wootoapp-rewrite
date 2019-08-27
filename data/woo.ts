@@ -146,8 +146,9 @@ export default {
         headers: headers
       })
         .then(response => {
-          //console.log(response);
+          console.log(response);
           finishedRequest(req);
+
           return response.json();
         })
         .then(response => {

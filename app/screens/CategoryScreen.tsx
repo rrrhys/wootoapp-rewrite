@@ -1,4 +1,4 @@
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View, SectionList } from "react-native";
 
 import Actions from "../actions";
 import { Category } from "../types/woocommerce";
@@ -34,12 +34,13 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
 
 	render() {
 		const { productsByCategory } = this.props;
-		return (
-			<View>
-				<Text>{JSON.stringify(productsByCategory)}</Text>
-
-				{productsByCategory && productsByCategory.map(p => <ProductTile key={p} id={p} />)}
-			</View>
+		return productsByCategory ? (
+			<SectionList
+				renderItem={({ item, index, section }) => <ProductTile key={item} id={item} />}
+				sections={[{ title: "test", data: productsByCategory }]}
+			/>
+		) : (
+			<Text>Loading..</Text>
 		);
 	}
 }
