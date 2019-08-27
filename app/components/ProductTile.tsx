@@ -1,7 +1,7 @@
 import { Text, View, TouchableOpacity } from "react-native";
 
 import { IStore } from "../types/store";
-import { NavigationInjectedProps } from "react-navigation";
+import { NavigationInjectedProps, withNavigation } from "react-navigation";
 import { Product } from "../types/woocommerce";
 import React from "react";
 import { connect } from "react-redux";
@@ -47,7 +47,9 @@ const actions = dispatch => {
 	return {};
 };
 
-export default connect(
-	select,
-	actions
-)(ProductTile);
+export default withNavigation(
+	connect(
+		select,
+		actions
+	)(ProductTile)
+);

@@ -1,10 +1,11 @@
-import { ScrollView, Text, TouchableOpacity, View, SectionList } from "react-native";
+import { SectionList } from "react-native";
 
 import Actions from "../actions";
 import { Category } from "../types/woocommerce";
 import ProductTile from "../components/ProductTile";
 import React from "react";
 import { connect } from "react-redux";
+import Loading from "../components/Loading";
 
 export interface ICategoryScreenProps {
 	navigation: {
@@ -40,7 +41,7 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
 				sections={[{ title: "test", data: productsByCategory }]}
 			/>
 		) : (
-			<Text>Loading..</Text>
+			<Loading />
 		);
 	}
 }
@@ -52,7 +53,6 @@ const select = (store, ownProps: ICategoryScreenProps) => {
 		cart: store.cart,
 		ui: store.ui,
 		categories: store.categories,
-		//TODO: Replace the IDs with products here.
 		productsByCategory: store.products.byCategoryId[category.id],
 	};
 };
