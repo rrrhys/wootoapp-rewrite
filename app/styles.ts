@@ -10,4 +10,8 @@ const styles = StyleSheet.create({
   }
 });
 
-export { styles, colors };
+const rules = {
+  padding: 7
+};
+
+export { styles, colors, rules };
