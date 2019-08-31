@@ -1,55 +1,67 @@
-import { Text, View, TouchableOpacity } from "react-native";
-
-import { IStore } from "../types/store";
 import { NavigationInjectedProps, withNavigation } from "react-navigation";
+import { Text, TouchableOpacity, View, ViewStyle } from "react-native";
+
+import { Card } from "react-native-elements";
+import { IStore } from "../types/store";
+import Loading from "./Loading";
 import { Product } from "../types/woocommerce";
 import React from "react";
 import { connect } from "react-redux";
-import { Card } from "react-native-elements";
 
 export interface Props {
-	id: number;
-	product: Product;
+  id: number;
+  product: Product;
+  style?: ViewStyle;
 }
 
-class ProductTile extends React.Component<Partial<NavigationInjectedProps> & Partial<Props>> {
-	navigateToProduct = () => {
-		const { product } = this.props;
-		this.props.navigation.navigate("Product", { product });
-	};
+class ProductTile extends React.Component<
+  Partial<NavigationInjectedProps> & Partial<Props>
+> {
+  navigateToProduct = () => {
+    const { product } = this.props;
+    this.props.navigation.navigate("Product", { product });
+  };
 
-	render() {
-		const { product } = this.props;
+  render() {
+    const { product, style } = this.props;
 
-		let image;
+    let image;
 
-		try {
-			image = product.images && product.images.length > 0 ? product.images[0] : null;
-		} catch (e) {
-			debugger;
-		}
+    try {
+      image =
+        product.images && product.images.length > 0 ? product.images[0] : null;
+    } catch (e) {
+      debugger;
+    }
 
-		return (
-			<View>
-				<TouchableOpacity onPress={this.navigateToProduct}>
-					<Card title={`${product.name}`} image={{ uri: image && image.src }} />
-				</TouchableOpacity>
-			</View>
-		);
-	}
+    return (
+      <View style={style}>
+        {product ? (
+          <TouchableOpacity onPress={this.navigateToProduct}>
+            <Card
+              title={`${product.name}`}
+              image={{ uri: image && image.src }}
+            />
+          </TouchableOpacity>
+        ) : (
+          <Loading />
+        )}
+      </View>
+    );
+  }
 }
 
 const select = (store: IStore, ownProps: Props) => {
-	return { product: store.products.products[ownProps.id] };
+  return { product: store.products.products[ownProps.id] };
 };
 
 const actions = dispatch => {
-	return {};
+  return {};
 };
 
 export default withNavigation(
-	connect(
-		select,
-		actions
-	)(ProductTile)
+  connect(
+    select,
+    actions
+  )(ProductTile)
 );

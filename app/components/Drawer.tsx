@@ -28,7 +28,9 @@ class Drawer extends React.PureComponent<Props> {
           main: { opacity: (2 - ratio) / 2 }
         })}
       >
-        {this.props.children}
+        <View accessibilityLabel={"drawer-first-child"} style={{ flex: 1 }}>
+          {this.props.children}
+        </View>
       </DrawerContainer>
     );
   }
@@ -36,7 +38,8 @@ class Drawer extends React.PureComponent<Props> {
 
 const drawerStyles = {
   drawer: { shadowColor: "#ff0000", shadowOpacity: 0.8, shadowRadius: 3 },
-  main: { paddingLeft: 3 }
+  main: { flex: 1, flexDirection: "column" },
+  container: { flex: 1, flexDirection: "column" }
 };
 
 const select = store => {

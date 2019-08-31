@@ -13,11 +13,13 @@ import {
 
 import Actions from "../actions";
 import React from "react";
+import { View } from "react-native";
 import { connect } from "react-redux";
 
 export interface IProps {
   backButton?: boolean;
   title: string;
+  hideHeader?: boolean;
   openDrawer: () => void;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
@@ -39,15 +41,25 @@ class Header extends React.PureComponent<IProps> {
       />
     );
     const leftComponent = backButton ? backButtonElement : menuButtonElement;
-    return (
-      <HeaderComponent
-        leftComponent={leftComponent}
-        centerComponent={{
-          text: this.props.title,
-          style: { color: "#fff" }
-        }}
-        rightComponent={{ icon: "home", color: "#fff" }}
-      />
+
+    const { hideHeader } = this.props;
+
+    return hideHeader ? null : (
+      <View>
+        <HeaderComponent
+          statusBarProps={{
+            barStyle: "light-content",
+            translucent: true,
+            backgroundColor: "transparent"
+          }}
+          leftComponent={leftComponent}
+          centerComponent={{
+            text: this.props.title,
+            style: { color: "#fff" }
+          }}
+          rightComponent={{ icon: "home", color: "#fff" }}
+        />
+      </View>
     );
   }
 }

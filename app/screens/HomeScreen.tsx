@@ -48,7 +48,6 @@ class HomeScreen extends React.Component<IAppProps> {
 }
 
 const select = (store: IStore) => {
-	console.log("Store", store);
 	return {
 		cart: store.cart,
 		ui: store.ui,
