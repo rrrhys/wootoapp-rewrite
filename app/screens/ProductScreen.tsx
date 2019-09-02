@@ -65,12 +65,13 @@ class ProductScreen extends React.Component<IProductScreenProps> {
 
     const { description } = product;
 
-    const { width } = Dimensions.get("window");
+    const { width, height } = Dimensions.get("window");
     return product ? (
       <View
         accessibilityLabel={"productScreenBaseView"}
         style={{
-          flex: 1
+          flex: 1,
+          height
         }}
       >
         <ScrollView>
@@ -125,13 +126,13 @@ class ProductScreen extends React.Component<IProductScreenProps> {
               style={{ height: 300, backgroundColor: "#00ff00" }}
               tabLabel="Specifications"
             >
-              <Text>test</Text>
+              <Text>(Specs)</Text>
             </ScrollView>
             <ScrollView
               style={{ height: 300, backgroundColor: "#00ff00" }}
               tabLabel="Reviews"
             >
-              <Text>test</Text>
+              <Text>(Reviews)</Text>
             </ScrollView>
           </ScrollableTabView>
 
