@@ -1,4 +1,4 @@
-import { FlatList, SectionList } from "react-native";
+import { Dimensions, FlatList, SectionList, View } from "react-native";
 
 import Actions from "../actions";
 import { Category } from "../types/woocommerce";
@@ -36,16 +36,35 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
   render() {
     const { productsByCategory } = this.props;
     const numColumns = 2;
-    const tileStyle = { flexDirection: "column", flex: 1 / numColumns };
-    return productsByCategory ? (
-      <FlatList
-        data={productsByCategory}
-        numColumns={numColumns}
-        keyExtractor={el => el}
-        renderItem={el => <ProductTile id={el.item} style={tileStyle} />}
-      />
-    ) : (
-      <Loading />
+    const tileStyle = {
+      flexDirection: "column",
+      flex: 1 / numColumns,
+      paddingHorizontal: 10,
+      borderColor: "#eeeeee",
+      borderWidth: 2
+    };
+
+    const { height } = Dimensions.get("window");
+
+    return (
+      <View
+        accessibilityLabel={"CategoryScreenBaseView"}
+        style={{
+          flex: 1,
+          height
+        }}
+      >
+        {productsByCategory ? (
+          <FlatList
+            data={productsByCategory}
+            numColumns={numColumns}
+            keyExtractor={el => el}
+            renderItem={el => <ProductTile id={el.item} style={tileStyle} />}
+          />
+        ) : (
+          <Loading />
+        )}
+      </View>
     );
   }
 }

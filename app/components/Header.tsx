@@ -37,7 +37,7 @@ class Header extends React.PureComponent<IProps> {
     const backButtonElement = (
       <Button
         onPress={() => this.props.navigation.goBack()}
-        icon={<Icon name="arrow-back" size={24} color="white" />}
+        icon={<Icon name="chevron-left" size={24} color="white" />}
       />
     );
     const leftComponent = backButton ? backButtonElement : menuButtonElement;

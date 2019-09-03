@@ -52,6 +52,13 @@ export default {
       });
     }
   },
+  store() {
+    if (config.platform === "WooCommerce") {
+      let store = woo.store();
+      //massage the promise?
+      return store;
+    }
+  },
   search(query) {
     if (config.platform === "WooCommerce") {
       let search = woo.search(query);

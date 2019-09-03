@@ -1,4 +1,4 @@
-import { Button, Image, Text } from "react-native-elements";
+import { Button, Icon, Image, Text } from "react-native-elements";
 import Carousel, { Pagination } from "react-native-snap-carousel";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
 import ScrollableTabView, {
@@ -7,6 +7,7 @@ import ScrollableTabView, {
 import { rules, styles } from "../styles";
 
 import Actions from "../actions";
+import BackButtonOverlay from "../components/BackButtonOverlay";
 import Loading from "../components/Loading";
 import { Product } from "../types/woocommerce";
 import ProductDescription from "../components/ProductDescription";
@@ -20,12 +21,21 @@ export interface IProductScreenProps {
         product: Product;
       };
     };
+    goBack: () => void;
   };
   loadProductById: (id: number) => void;
   product: Product;
 }
 
-class ProductScreen extends React.Component<IProductScreenProps> {
+export interface IProductScreenState {
+  activeSlide: number;
+}
+
+class ProductScreen extends React.Component<
+  IProductScreenProps,
+  IProductScreenState
+> {
+  _carousel;
   static navigationOptions = ({ navigation, navigationOptions }) => {
     return {
       hideHeader: true
@@ -75,17 +85,22 @@ class ProductScreen extends React.Component<IProductScreenProps> {
         }}
       >
         <ScrollView>
-          <Carousel
-            ref={c => {
-              this._carousel = c;
-            }}
-            data={product.images}
-            renderItem={this._renderItem}
-            sliderWidth={width}
-            itemWidth={width}
-            onSnapToItem={index => this.setState({ activeSlide: index })}
-          />
-          {product && (
+          <View style={{ maxHeight: width }}>
+            <Carousel
+              ref={c => {
+                this._carousel = c;
+              }}
+              data={product.images}
+              renderItem={this._renderItem}
+              sliderWidth={width}
+              itemWidth={width}
+              itemHeight={width}
+              sliderHeight={width}
+              onSnapToItem={index => this.setState({ activeSlide: index })}
+            />
+          </View>
+
+          {product && product.images.length > 1 && (
             <View style={{ marginTop: -50 }}>
               <Pagination
                 dotsLength={product.images.length}
@@ -138,6 +153,9 @@ class ProductScreen extends React.Component<IProductScreenProps> {
 
           {/* Sticky add to cart on the bottom. Left side */}
         </ScrollView>
+
+        <BackButtonOverlay onPress={() => this.props.navigation.goBack()} />
+
         <SafeAreaView>
           <View style={{ padding: rules.padding }}>
             <Button title="Add to Cart" />

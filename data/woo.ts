@@ -23,27 +23,34 @@ const getJsonStyleHeaders = function() {
 };
 
 const customPreflight = url => {
-  let store_id = config.store_id;
-  let publishable_key = config.publishable_key;
   if (url.substr(0, 1) !== "/") {
     url = "/" + url;
   }
 
-  let endpoint = config.endpoint;
-  let finalUrl = `${endpoint}/api/stores/${store_id}/${publishable_key}/`;
+  let finalUrl = edgeUrl();
   finalUrl += encodeURIComponent(url);
 
   return finalUrl;
 };
 
-const preflight = url => {
+const storeInfoUrl = () => {
   let store_id = config.store_id;
   let publishable_key = config.publishable_key;
+  let endpoint = config.endpoint;
+  return `${endpoint}/api/store/${store_id}/${publishable_key}`;
+};
+
+const edgeUrl = () => {
+  let store_id = config.store_id;
+  let publishable_key = config.publishable_key;
+  let endpoint = config.endpoint;
+  return `${endpoint}/api/stores/${store_id}/${publishable_key}/`;
+};
+
+const preflight = url => {
   url = "/wp-json/wc/v2" + url;
 
-  let endpoint = config.endpoint;
-
-  let finalUrl = `${endpoint}/api/stores/${store_id}/${publishable_key}/`;
+  let finalUrl = edgeUrl();
   finalUrl += encodeURIComponent(url);
 
   return finalUrl;
@@ -90,6 +97,18 @@ const randId = () => {
 };
 
 export default {
+  store: () => {
+    let url = storeInfoUrl();
+    let req = activeRequest("store", url);
+
+    return fetch(url, {
+      method: "GET",
+      headers: getRegularHeaders()
+    }).then(response => {
+      finishedRequest(req);
+      return response.json();
+    });
+  },
   search: function(query) {
     let args = {
       status: "",
