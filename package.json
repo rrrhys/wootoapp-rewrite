@@ -3,10 +3,12 @@
     "start": "react-native start",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
-    "web": "expo start --web"
+    "web": "expo start --web --offline --web-only --dev",
+    "postinstall": "npx patch-package"
   },
   "dependencies": {
     "expo": "^34.0.1",
+    "he": "^1.2.0",
     "html-entities": "^1.2.1",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
