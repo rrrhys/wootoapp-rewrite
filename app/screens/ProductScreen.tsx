@@ -1,6 +1,7 @@
 import { Attribute, Product, Variation } from "../types/woocommerce";
 import { Button, Icon, Image, Text } from "react-native-elements";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
+import KeyValuePicker, { pickableValue } from "../components/KeyValuePicker";
 import ScrollableTabView, {
   ScrollableTabBar
 } from "react-native-scrollable-tab-view";
@@ -10,7 +11,6 @@ import Actions from "../actions";
 import AddToCartButton from "../components/AddtoCartButton";
 import BackButtonOverlay from "../components/BackButtonOverlay";
 import ImageCarousel from "../components/ImageCarousel";
-import KeyValuePicker from "../components/KeyValuePicker";
 import Loading from "../components/Loading";
 import ProductDescription from "../components/ProductDescription";
 import React from "react";
@@ -34,7 +34,7 @@ export interface IProductScreenProps {
 export interface IProductScreenState {
   activeSlide: number;
   quantity: number;
-  attributesSelected: { [id: string]: string };
+  attributesSelected: pickableValue;
 }
 
 class ProductScreen extends React.Component<
@@ -62,7 +62,19 @@ class ProductScreen extends React.Component<
     return Dimensions.get("window").height - 44;
   };
 
+  productAttributeChanged = (key: string, value: any) => {
+    let existingAttrs = {
+      ...this.state.attributesSelected,
+      ...{ [key]: value }
+    };
+
+    this.setState({
+      attributesSelected: existingAttrs
+    });
+  };
+
   valueChanged = (key: string, value: number) => {
+    console.log("Value changed to", key, value);
     switch (key) {
       case INTERNAL_QUANTITY:
         this.setState({
@@ -75,7 +87,6 @@ class ProductScreen extends React.Component<
   render() {
     const { product, variations } = this.props;
 
-    const { quantity } = this.state;
     const { description } = product;
 
     console.log(product);
@@ -135,6 +146,7 @@ class ProductScreen extends React.Component<
         <KeyValuePicker
           label="quantity"
           key={INTERNAL_QUANTITY}
+          id={INTERNAL_QUANTITY}
           values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
           currentValue={quantity}
           onValueChanged={this.valueChanged}
@@ -156,10 +168,12 @@ length: 1
             a.visible && (
               <KeyValuePicker
                 key={a.id}
+                id={a.id}
                 label={a.name}
                 values={a.options}
-                currentValue={this.state.attributesSelected[a.id]}
+                currentValue={attributesSelected[a.id]}
                 defaultValue={a.options[a.position]}
+                onValueChanged={this.productAttributeChanged}
               />
             )
           );
