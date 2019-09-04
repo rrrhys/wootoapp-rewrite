@@ -1,4 +1,5 @@
 import HtmlEntities from "html-entities";
+import { Product } from "../app/types/woocommerce";
 import config from "../env";
 
 const getEndpoint = () => {
@@ -610,9 +611,9 @@ export default {
   products: {
     variations: {
       get(id) {
-        activeRequest("products.variations.get");
-
         let url = "/products/" + id + "/variations";
+
+        activeRequest("products.variations.get", url);
 
         let args = {};
         args.per_page = 100;
@@ -653,7 +654,7 @@ export default {
           });
       }
     },
-    get(id) {
+    get(id): Promise<Product> {
       // category_id
 
       let url = "/products/" + id;
@@ -669,9 +670,10 @@ export default {
         .then(response => response.json())
         .catch(error => {
           console.error(error);
+          Promise.reject(error);
         });
     },
-    list(args) {
+    list(args): Promise<Array<Product>> {
       // category_id
 
       args.status = "publish";
