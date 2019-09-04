@@ -21,23 +21,6 @@ export interface Dimensions {
   height: string;
 }
 
-export interface Image {
-  id: number;
-  date_created: Date;
-  date_created_gmt: Date;
-  date_modified: Date;
-  date_modified_gmt: Date;
-  src: string;
-  name: string;
-  alt: string;
-  position: number;
-}
-
-export interface Links {
-  self: Self[];
-  collection: Collection[];
-}
-
 export interface MetaDatum {
   id: number;
   key: string;
@@ -53,7 +36,7 @@ export interface Product {
   date_created_gmt: Date;
   date_modified: Date;
   date_modified_gmt: Date;
-  type: string;
+  type: "simple" | "variable" | "grouped";
   status: string;
   featured: boolean;
   catalog_visibility: string;
@@ -96,20 +79,106 @@ export interface Product {
   reviews_allowed: boolean;
   average_rating: string;
   rating_count: number;
-  related_ids: any[];
-  upsell_ids: any[];
-  cross_sell_ids: any[];
+  related_ids: number[];
+  upsell_ids: number[];
+  cross_sell_ids: number[];
   parent_id: number;
   purchase_note: string;
-  categories: Category[];
-  tags: Category[];
+  categories: Partial<Category>[];
+  tags: any[];
   images: Image[];
-  attributes: any[];
+  attributes: Attribute[];
   default_attributes: any[];
-  variations: any[];
+  variations: number[];
   grouped_products: any[];
   menu_order: number;
   meta_data: MetaDatum[];
+  _links: Links;
+}
+
+interface Attribute {
+  id: number;
+  name: string;
+  position: number;
+  visible: boolean;
+  variation: boolean;
+  options: string[];
+}
+
+export interface Image {
+  id: number;
+  date_created: Date;
+  date_created_gmt: Date;
+  date_modified: Date;
+  date_modified_gmt: Date;
+  src: string;
+  name: string;
+  alt: string;
+  position: number;
+}
+
+export interface Attribute {
+  id: number;
+  name: string;
+  option: string;
+}
+
+export interface MetaData {
+  id: number;
+  key: string;
+  value: string;
+}
+
+export interface Up {
+  href: string;
+}
+
+export interface Links {
+  self: Self[];
+  collection: Collection[];
+  up: Up[];
+}
+
+export interface Variation {
+  id: number;
+  date_created: Date;
+  date_created_gmt: Date;
+  date_modified: Date;
+  date_modified_gmt: Date;
+  description: string;
+  permalink: string;
+  sku: string;
+  price: string;
+  regular_price: string;
+  sale_price: string;
+  date_on_sale_from?: any;
+  date_on_sale_from_gmt?: any;
+  date_on_sale_to?: any;
+  date_on_sale_to_gmt?: any;
+  on_sale: boolean;
+  visible: boolean;
+  purchasable: boolean;
+  virtual: boolean;
+  downloadable: boolean;
+  downloads: any[];
+  download_limit: number;
+  download_expiry: number;
+  tax_status: string;
+  tax_class: string;
+  manage_stock: boolean;
+  stock_quantity?: any;
+  in_stock: boolean;
+  backorders: string;
+  backorders_allowed: boolean;
+  backordered: boolean;
+  weight: string;
+  dimensions: Dimensions;
+  shipping_class: string;
+  shipping_class_id: number;
+  image: Image;
+  attributes: Attribute[];
+  menu_order: number;
+  meta_data: MetaData[];
   _links: Links;
 }
 
