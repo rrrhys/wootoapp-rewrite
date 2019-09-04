@@ -1,6 +1,7 @@
 import { NavigationInjectedProps, withNavigation } from "react-navigation";
 import { Text, TouchableOpacity, View, ViewStyle } from "react-native";
 
+import Debug from "./Debug";
 import FavoriteIcon from "./FavoriteIcon";
 import { IStore } from "../types/store";
 import { Image } from "react-native-elements";
@@ -47,6 +48,7 @@ class ProductTile extends React.Component<
             />
 
             <FavoriteIcon id={product.id} size={24} />
+            <Debug>{product.type}</Debug>
 
             <Text style={{ marginBottom: 10 }}>{product.name}</Text>
             <View style={{ flexDirection: "row" }}>
