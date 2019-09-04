@@ -100,7 +100,7 @@ class ProductScreen extends React.Component<
           />
 
           <View>
-            <Text h2 style={styles.productHeading}>
+            <Text h4 style={styles.productHeading}>
               {product.name}
             </Text>
           </View>

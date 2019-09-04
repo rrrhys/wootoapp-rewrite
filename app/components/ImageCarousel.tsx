@@ -34,7 +34,7 @@ class ImageCarousel extends React.Component<Props> {
   render() {
     const { width, height, onSnapToItem, images, activeSlide } = this.props;
     return [
-      <View style={{ maxHeight: width }}>
+      <View style={{ maxHeight: width }} key="carousel-wrapper">
         {images && (
           <Carousel
             ref={c => {
@@ -51,7 +51,7 @@ class ImageCarousel extends React.Component<Props> {
         )}
       </View>,
       images && images.length > 1 && (
-        <View style={{ marginTop: -50 }}>
+        <View style={{ marginTop: -50 }} key="pagination-wrapper">
           <Pagination
             dotsLength={images.length}
             activeDotIndex={activeSlide}

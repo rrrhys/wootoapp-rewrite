@@ -55,11 +55,11 @@ class Price extends React.Component<Props> {
       ),
       !shouldRenderHtmlPrice &&
         product.on_sale == true && [
-          <Text style={styles.productTileSalePrice}>
+          <Text style={styles.productTileSalePrice} key="sale-price">
             {this.priceWithCurrency(product.sale_price)}
           </Text>,
-          <Text> </Text>,
-          <Text style={styles.productTileOldPrice}>
+          <Text key="spacer"> </Text>,
+          <Text style={styles.productTileOldPrice} key="old-price">
             {this.priceWithCurrency(product.regular_price)}
           </Text>
         ],

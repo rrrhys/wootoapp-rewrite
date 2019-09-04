@@ -14,15 +14,12 @@ export interface IKeyValuePickerProps {
   onValueChanged: (key: string, value: number) => void;
 }
 class KeyValuePicker extends React.Component<IKeyValuePickerProps> {
-  openSelector = () => {
-    // open a picker box.
-  };
   render() {
     const { currentValue, defaultValue, label } = this.props;
     return (
       <Card containerStyle={{ padding: 0 }}>
         <ListItem
-          onPress={this.openSelector}
+          containerStyle={{ padding: 8 }}
           rightTitle={currentValue ? currentValue : defaultValue}
           title={label}
           chevron={true}
