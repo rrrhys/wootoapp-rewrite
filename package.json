@@ -7,7 +7,7 @@
     "web-build": "expo build:web",
     "postinstall": "npx patch-package"
   },
-  "homepage": "./",
+  "homepage": "./app/",
   "dependencies": {
     "expo": "^34.0.1",
     "he": "^1.2.0",
