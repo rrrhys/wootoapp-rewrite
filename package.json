@@ -7,7 +7,6 @@
     "web-build": "expo build:web",
     "postinstall": "npx patch-package"
   },
-  "homepage": "./app/",
   "dependencies": {
     "expo": "^34.0.1",
     "he": "^1.2.0",
@@ -38,6 +37,7 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "@expo/webpack-config": "^0.7.4",
     "@types/react": "^16.8.23",
     "@types/react-native": "^0.57.65",
     "babel-preset-expo": "^6.0.0",
