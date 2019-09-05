@@ -5,6 +5,9 @@ jobs:
     docker:
       - image: circleci/node:8
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "26:b6:67:3e:40:0b:94:09:b6:af:d9:1c:fa:00:82:d2"
       - checkout
       - restore_cache:
           key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
@@ -26,3 +29,4 @@ jobs:
 
       - run: yarn global add expo-cli
       - run: CI=false && yarn web-build && CI=true
+      - run: scp -o StrictHostKeyChecking=no -r ./web-build/* ubuntu@35.173.210.36:/var/www/app-test.wootoapp.com/public/app/
