@@ -25,4 +25,4 @@ jobs:
             - node_modules
 
       - run: yarn global add expo-cli
-      - run: yarn web-build
+      - run: CI=false && yarn web-build && CI=true
