@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  node:
+  build:
     working_directory: ~/web
     docker:
       - image: circleci/node:8
