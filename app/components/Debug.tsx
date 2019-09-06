@@ -7,7 +7,7 @@ export interface Props {
   children: any;
 }
 
-const showDebugs = true;
+const showDebugs = false;
 
 const Debug = props => {
   if (!showDebugs) {

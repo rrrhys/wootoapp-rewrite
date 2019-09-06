@@ -28,5 +28,6 @@ jobs:
             - node_modules
 
       - run: yarn global add expo-cli
+      - run: mv prod.webpack.config.js webpack.config.js
       - run: CI=false && yarn web-build && CI=true
       - run: scp -o StrictHostKeyChecking=no -r ./web-build/* ubuntu@35.173.210.36:/var/www/app-test.wootoapp.com/public/app/

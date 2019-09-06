@@ -1,16 +1,16 @@
 const config = {
   version: 0,
   endpoint: "https://edge-test.wootoapp.com",
-  name: "eDgE tEsT Store",
-  store_id: 3,
+  name: "CartCatch LS",
+  store_id: 4,
   scheme: "https://",
   platform: "WooCommerce",
   plugin_endpoint:
     "/wp-admin/admin-ajax.php?action=wootoapp_execute&method={method}",
-  publishable_key: "LbSx3H7n6q",
+  publishable_key: "S1Iey3VF7r",
   facebook_app_id: "1600978189964022",
   access_jwt:
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbGllbnQiOiJNb2JpbGUgQXBwbGljYXRpb24iLCJyZXF1ZXN0IjoiUmVhZCBTdG9yZSIsInN0b3JlIjozLCJpYXQiOjE1NjI0OTIzOTJ9.snNKd_qhZfOYhEaEOe1rys9VR7UxdFJebLMyHCho6jU"
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjbGllbnQiOiJNb2JpbGUgQXBwbGljYXRpb24iLCJyZXF1ZXN0IjoiUmVhZCBTdG9yZSIsInN0b3JlIjo0LCJpYXQiOjE1NjI0OTIzOTJ9.L3eKwpDpFe0jcGu80PX6r7YREr4yw-aTQbgyWA8Rt_8"
 };
 
 export default config;

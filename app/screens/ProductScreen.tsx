@@ -89,6 +89,8 @@ class ProductScreen extends React.Component<
 
     const { description } = product;
 
+    const { quantity } = this.state;
+
     console.log(product);
     console.log(variations);
 
