@@ -2,7 +2,7 @@ const PRODUCTS_IN_CATEGORY_LOADED = "PRODUCTS_IN_CATEGORY_LOADED";
 const VARIATION_BY_PRODUCT_ID_LOADED = "VARIATION_BY_PRODUCT_ID_LOADED";
 const PRODUCT_LOADED = "PRODUCT_LOADED";
 
-import { Product, Variation } from "../types/woocommerce";
+import { Category, Product, Variation } from "../types/woocommerce";
 
 import api from "./../../data/api";
 
@@ -37,14 +37,17 @@ const loadProductById = (id: number) => {
   };
 };
 
-const getProductSuccess = (id, product) => {
+const getProductSuccess = (id, product): productActionTypes => {
   return {
     type: PRODUCT_LOADED,
     id,
     product
   };
 };
-const getVariationByProductIdSuccess = (product_id, variations) => {
+const getVariationByProductIdSuccess = (
+  product_id,
+  variations
+): productActionTypes => {
   return {
     type: VARIATION_BY_PRODUCT_ID_LOADED,
     product_id,
@@ -52,7 +55,11 @@ const getVariationByProductIdSuccess = (product_id, variations) => {
   };
 };
 
-const getProductsInCategorySuccess = (category, results, page) => {
+const getProductsInCategorySuccess = (
+  category,
+  results,
+  page
+): productsInCategorySuccessAction => {
   return {
     type: PRODUCTS_IN_CATEGORY_LOADED,
     category,
@@ -61,9 +68,34 @@ const getProductsInCategorySuccess = (category, results, page) => {
   };
 };
 
+export type productsInCategorySuccessAction = {
+  type: typeof PRODUCTS_IN_CATEGORY_LOADED;
+  category: number;
+  results: Array<Product>;
+  page: number;
+};
+
+export type productSuccessAction = {
+  type: typeof PRODUCT_LOADED;
+  id: number;
+  product: Product;
+};
+
+export type productVariationSuccessAction = {
+  type: typeof VARIATION_BY_PRODUCT_ID_LOADED;
+  product_id: number;
+  variations: Array<Variation>;
+};
+
+export type productActionTypes =
+  | productSuccessAction
+  | productVariationSuccessAction
+  | productsInCategorySuccessAction;
+
 export default {
   PRODUCTS_IN_CATEGORY_LOADED,
   VARIATION_BY_PRODUCT_ID_LOADED,
+  PRODUCT_LOADED,
   loadProductsInCategory,
   loadProductById
 };

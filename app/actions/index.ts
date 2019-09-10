@@ -1,3 +1,4 @@
+import cart from "./cart";
 import categories from "./categories";
 import products from "./products";
 import shop from "./shop";
@@ -7,7 +8,8 @@ const actions = {
   ...shop,
   ...categories,
   ...ui,
-  ...products
+  ...products,
+  ...cart
 };
 
 console.log("actions", actions);

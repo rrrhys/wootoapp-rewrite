@@ -10,6 +10,7 @@ import { rules, styles } from "../styles";
 import Actions from "../actions";
 import AddToCartButton from "../components/AddtoCartButton";
 import BackButtonOverlay from "../components/BackButtonOverlay";
+import CartButton from "../components/CartButton";
 import ImageCarousel from "../components/ImageCarousel";
 import Loading from "../components/Loading";
 import ProductDescription from "../components/ProductDescription";
@@ -34,7 +35,8 @@ export interface IProductScreenProps {
 export interface IProductScreenState {
   activeSlide: number;
   quantity: number;
-  attributesSelected: pickableValue;
+  attributesSelected: any;
+  variation: Variation | null;
 }
 
 class ProductScreen extends React.Component<
@@ -44,7 +46,8 @@ class ProductScreen extends React.Component<
   state = {
     activeSlide: 0,
     quantity: 1,
-    attributesSelected: {}
+    attributesSelected: {},
+    variation: null
   };
 
   static navigationOptions = ({ navigation, navigationOptions }) => {
@@ -58,23 +61,31 @@ class ProductScreen extends React.Component<
     props.loadProductById(props.navigation.state.params.product.id);
   }
 
-  getHeight = () => {
-    return Dimensions.get("window").height - 44;
-  };
-
   productAttributeChanged = (key: string, value: any) => {
-    let existingAttrs = {
+    let attributesSelected = {
       ...this.state.attributesSelected,
       ...{ [key]: value }
     };
 
+    /* which variation has this combination of attributes?
+    If none, then add to cart must be disabled.
+    */
+    //TODO: Disable add to cart if no variation for this combo.
+    const { variations, product } = this.props;
+
+    let variation: Variation | null = this.findVariation(
+      attributesSelected,
+      product,
+      variations
+    );
+
     this.setState({
-      attributesSelected: existingAttrs
+      attributesSelected: attributesSelected,
+      variation: variation
     });
   };
 
   valueChanged = (key: string, value: number) => {
-    console.log("Value changed to", key, value);
     switch (key) {
       case INTERNAL_QUANTITY:
         this.setState({
@@ -84,15 +95,52 @@ class ProductScreen extends React.Component<
     }
   };
 
+  private findVariation(
+    existingAttrs: {},
+    product: Product,
+    variations: Variation[]
+  ) {
+    let variation: Variation | null = null;
+    const hasUnselectedAttributes = this.hasUnselectedAttributes(
+      existingAttrs,
+      product
+    );
+
+    if (!hasUnselectedAttributes) {
+      variation = variations.find((v: Variation) => {
+        let isMatch = true;
+        v.attributes.map((a: Attribute) => {
+          const id = a.id.toString();
+          Object.keys(existingAttrs).map(k => {
+            if (id == k) {
+              if (a.option !== existingAttrs[k]) {
+                isMatch = false;
+              }
+            }
+          });
+        });
+        return isMatch;
+      });
+    }
+    console.log("Matched variation", existingAttrs, variation);
+    return variation;
+  }
+
+  hasUnselectedAttributes = (existingAttrs: {}, product: Product): boolean => {
+    const selectedAttributeIds = Object.keys(existingAttrs);
+    const unselectedAttributes = product.attributes.filter(
+      a => selectedAttributeIds.indexOf(a.id.toString()) === -1
+    );
+    const hasUnselectedAttributes = unselectedAttributes.length > 0;
+    return hasUnselectedAttributes;
+  };
+
   render() {
-    const { product, variations } = this.props;
+    const { product } = this.props;
 
     const { description } = product;
 
-    const { quantity, attributesSelected } = this.state;
-
-    console.log(product);
-    console.log(variations);
+    const { quantity, attributesSelected, variation } = this.state;
 
     const { width, height } = Dimensions.get("window");
     return product ? (
@@ -154,34 +202,38 @@ class ProductScreen extends React.Component<
           onValueChanged={this.valueChanged}
         />
 
-        {product.attributes.map((a: Attribute) => {
-          /* attributes: Array(1)
-0:
-id: 0
-name: "Colours"
-options: (3) ["Khaki", "Green", "Charcoal"]
-position: 0
-variation: true
-visible: true
-__proto__: Object
-length: 1
-*/
-          return (
-            a.visible && (
-              <KeyValuePicker
-                key={a.id}
-                id={a.id}
-                label={a.name}
-                values={a.options}
-                currentValue={attributesSelected[a.id]}
-                defaultValue={a.options[a.position]}
-                onValueChanged={this.productAttributeChanged}
-              />
-            )
-          );
-        })}
+        {product.type == "variable" &&
+          //TODO: Attributes can exist for non variable products.
+          // these belong on the specifications tab.
+
+          //TODO: add to cart button should only be enabled if all variations have been selected.
+          product.attributes.map((a: Attribute) => {
+            return (
+              a.visible && (
+                <KeyValuePicker
+                  key={a.id}
+                  id={a.id}
+                  label={a.name}
+                  values={a.options}
+                  currentValue={attributesSelected[a.id]}
+                  defaultValue={null}
+                  placeholder={`Select ${a.name}`}
+                  onValueChanged={this.productAttributeChanged}
+                />
+              )
+            );
+          })}
         <SafeAreaView>
-          <AddToCartButton product={product} variations={variations} />
+          <View style={{ flexDirection: "row", flex: 1 }}>
+            <AddToCartButton
+              style={{ flex: 1 }}
+              product={product}
+              variation={variation}
+              quantity={quantity}
+              enabled={product.type === "simple" || variation}
+            />
+            <CartButton style={{ flex: 1 }} />
+          </View>
         </SafeAreaView>
       </View>
     ) : (

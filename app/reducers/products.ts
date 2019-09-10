@@ -1,4 +1,10 @@
 import { Product, Variation } from "../types/woocommerce";
+import {
+  productActionTypes,
+  productSuccessAction,
+  productVariationSuccessAction,
+  productsInCategorySuccessAction
+} from "../actions/products";
 
 import Actions from "../actions";
 import _ from "lodash";
@@ -29,18 +35,16 @@ const initialState: IProducts = {
 
 const products = (
   state = initialState,
-  action: {
-    results: Array<Product>;
-    category: number;
-    page: number;
-    type: string;
-  }
-) => {
+  action: productActionTypes
+): IProducts => {
   // type category results page
   switch (action.type) {
     case VARIATION_BY_PRODUCT_ID_LOADED:
       let variations = _.cloneDeep(state.variations);
-      const { product_id, variations: thisVariations } = action;
+      const {
+        product_id,
+        variations: thisVariations
+      } = action as productVariationSuccessAction;
       if (product_id) {
         variations[product_id] = thisVariations;
 
@@ -49,14 +53,18 @@ const products = (
       break;
     case PRODUCT_LOADED:
       let products = _.cloneDeep(state.products);
-      const { id, product } = action;
+      const { id, product } = action as productSuccessAction;
       products[id] = product;
 
       return { ...state, products };
       break;
     case PRODUCTS_IN_CATEGORY_LOADED:
       const newState = _.cloneDeep(state);
-      const { results, category, page } = action;
+      const {
+        results,
+        category,
+        page
+      } = action as productsInCategorySuccessAction;
       if (results) {
         _.forEach(results, p => {
           newState.products[p.id] = p;

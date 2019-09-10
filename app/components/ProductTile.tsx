@@ -11,14 +11,14 @@ import { Product } from "../types/woocommerce";
 import React from "react";
 import { connect } from "react-redux";
 
-export interface Props {
+export interface IProps {
   id: number;
   product: Product;
   style?: ViewStyle;
 }
 
 class ProductTile extends React.Component<
-  Partial<NavigationInjectedProps> & Partial<Props>
+  Partial<NavigationInjectedProps> & Partial<IProps>
 > {
   navigateToProduct = () => {
     const { product } = this.props;
@@ -63,19 +63,19 @@ class ProductTile extends React.Component<
   }
 }
 
-const select = (store: IStore, ownProps: Props) => {
+const mapStateToProps = (store: IStore, ownProps: IProps) => {
   return {
     product: store.products.products[ownProps.id]
   };
 };
 
-const actions = dispatch => {
+const mapDispatchToProps = dispatch => {
   return {};
 };
 
 export default withNavigation(
   connect(
-    select,
-    actions
+    mapStateToProps,
+    mapDispatchToProps
   )(ProductTile)
 );

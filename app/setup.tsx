@@ -2,6 +2,7 @@ import { Alert, AsyncStorage, Image, Platform, Text, View } from "react-native";
 import React, { Component } from "react";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 
+import CartScreen from "./screens/CartScreen";
 import CategoryScreen from "./screens/CategoryScreen";
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
@@ -14,7 +15,8 @@ const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
     Category: CategoryScreen,
-    Product: ProductScreen
+    Product: ProductScreen,
+    Cart: CartScreen
   },
   {
     initialRouteName: "Home",

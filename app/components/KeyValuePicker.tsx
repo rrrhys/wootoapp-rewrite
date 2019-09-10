@@ -6,10 +6,11 @@ import React from "react";
 export type pickableValue = number | string | { id: number; label: string };
 export interface IKeyValuePickerProps {
   label: string;
-  key: string;
+  key: string | number;
   values: Array<pickableValue>;
   currentValue: pickableValue;
   defaultValue: pickableValue;
+  placeholder?: string;
   onValueChanged: (key: string, value: number) => void;
 }
 
@@ -20,6 +21,8 @@ class KeyValuePicker extends React.Component<
   IKeyValuePickerProps,
   IKeyValuePickerState
 > {
+  simplePicker;
+
   state = {
     showPicker: false
   };
@@ -54,7 +57,7 @@ class KeyValuePicker extends React.Component<
   }
 
   render() {
-    const { currentValue, defaultValue, label } = this.props;
+    const { currentValue, defaultValue, label, placeholder } = this.props;
 
     const { values } = this.state;
     return [
@@ -62,7 +65,13 @@ class KeyValuePicker extends React.Component<
         <ListItem
           onPress={() => this.showPicker()}
           containerStyle={{ padding: 8 }}
-          rightTitle={currentValue ? currentValue : defaultValue}
+          rightTitle={
+            currentValue
+              ? currentValue
+              : defaultValue
+              ? defaultValue
+              : placeholder
+          }
           title={label}
           chevron={true}
         />
