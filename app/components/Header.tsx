@@ -19,7 +19,6 @@ import { connect } from "react-redux";
 export interface IProps {
   backButton?: boolean;
   title: string;
-  hideHeader?: boolean;
   openDrawer: () => void;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
@@ -42,9 +41,7 @@ class Header extends React.PureComponent<IProps> {
     );
     const leftComponent = backButton ? backButtonElement : menuButtonElement;
 
-    const { hideHeader } = this.props;
-
-    return hideHeader ? null : (
+    return (
       <View>
         <HeaderComponent
           statusBarProps={{

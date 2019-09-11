@@ -52,7 +52,7 @@ class ProductScreen extends React.Component<
 
   static navigationOptions = ({ navigation, navigationOptions }) => {
     return {
-      hideHeader: true
+      header: null
     };
   };
 
