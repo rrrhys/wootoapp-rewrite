@@ -10,7 +10,9 @@ The app builder is being rewritten using better practices and better tooling.
 
 The current bleeding edge build is available at https://app-test.wootoapp.com/app/ (via React Native Web)
 
-It's a functionally complete preview of the native mobile app. Make sure to enable responsive view/mobile device view if you're on desktop.
+http://troy.labs.daum.net/?url=https%3A%2F%2Fapp-test.wootoapp.com%2Fapp%2F&device=A1549 (wrapped with phone chrome)
+
+It's a functionally complete preview of the native mobile app.
 
 It's not yet configurable with client stores.
 
