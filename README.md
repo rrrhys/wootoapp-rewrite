@@ -6,6 +6,16 @@ The original version was a learning tool and proof of concept.
 
 The app builder is being rewritten using better practices and better tooling.
 
+## Demo
+
+The current bleeding edge build is available at https://app-test.wootoapp.com/app/ (via React Native Web)
+
+http://troy.labs.daum.net/?url=https%3A%2F%2Fapp-test.wootoapp.com%2Fapp%2F&device=A1549 (wrapped with phone chrome)
+
+It's a functionally complete preview of the native mobile app.
+
+It's not yet configurable with client stores.
+
 ## Where to from here
 
 The original data layer (data/woo.ts, data/api.ts) are clean and concise and are not being changed.
