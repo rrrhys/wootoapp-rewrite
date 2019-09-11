@@ -1,4 +1,12 @@
-import { Alert, AsyncStorage, Image, Platform, Text, View } from "react-native";
+import {
+  Alert,
+  AsyncStorage,
+  Dimensions,
+  Image,
+  Platform,
+  Text,
+  View
+} from "react-native";
 import React, { Component } from "react";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 
@@ -7,6 +15,7 @@ import CategoryScreen from "./screens/CategoryScreen";
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
 import HomeScreen from "./screens/HomeScreen";
+import MobileModeIfDesktop from "./components/MobileModeIfDesktop";
 import ProductScreen from "./screens/ProductScreen";
 import { Provider } from "react-redux";
 import configureStore from "./store/configureStore";
@@ -66,15 +75,17 @@ class Root extends React.Component {
     }
 
     return (
-      <Provider store={this.state.store}>
-        <View style={{ flex: 1 }}>
-          <Drawer>
-            <View style={{ flex: 1 }} accessibilityLabel={"test-label"}>
-              <Navigation />
-            </View>
-          </Drawer>
-        </View>
-      </Provider>
+      <MobileModeIfDesktop>
+        <Provider store={this.state.store}>
+          <View style={{ flex: 1 }}>
+            <Drawer>
+              <View style={{ flex: 1 }} accessibilityLabel={"test-label"}>
+                <Navigation />
+              </View>
+            </Drawer>
+          </View>
+        </Provider>
+      </MobileModeIfDesktop>
     );
   }
 }

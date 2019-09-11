@@ -39,6 +39,7 @@ export interface IProductScreenState {
   variation: Variation | null;
 }
 
+const DEFAULT_WIDTH = 375;
 class ProductScreen extends React.Component<
   IProductScreenProps,
   IProductScreenState
@@ -47,7 +48,8 @@ class ProductScreen extends React.Component<
     activeSlide: 0,
     quantity: 1,
     attributesSelected: {},
-    variation: null
+    variation: null,
+    viewWidth: DEFAULT_WIDTH
   };
 
   static navigationOptions = ({ navigation, navigationOptions }) => {
@@ -135,17 +137,27 @@ class ProductScreen extends React.Component<
     return hasUnselectedAttributes;
   };
 
+  onLayout = event => {
+    var { x, y, width, height } = event.nativeEvent.layout;
+
+    this.setState({
+      viewWidth: width
+    });
+  };
+
   render() {
     const { product } = this.props;
 
     const { description } = product;
 
-    const { quantity, attributesSelected, variation } = this.state;
+    const { quantity, attributesSelected, variation, viewWidth } = this.state;
 
-    const { width, height } = Dimensions.get("window");
+    const { height } = Dimensions.get("window");
+
     return product ? (
       <View
         accessibilityLabel={"productScreenBaseView"}
+        onLayout={this.onLayout}
         style={{
           flex: 1,
           height
@@ -153,8 +165,8 @@ class ProductScreen extends React.Component<
       >
         <ScrollView>
           <ImageCarousel
-            height={width}
-            width={width}
+            height={viewWidth}
+            width={viewWidth}
             onSnapToItem={index => this.setState({ activeSlide: index })}
             activeSlide={this.state.activeSlide}
             images={product && product.images}

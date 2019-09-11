@@ -16,8 +16,8 @@ export interface Props {
 class ImageCarousel extends React.Component<Props> {
   _carousel;
 
-  _renderItem({ item, index }) {
-    const { width } = Dimensions.get("window");
+  _renderItem = ({ item, index }) => {
+    const { width } = this.props;
     let imageStyle = {
       width: width,
       height: width,
@@ -29,7 +29,7 @@ class ImageCarousel extends React.Component<Props> {
         <Image source={{ uri: item.src }} style={imageStyle} />
       </View>
     );
-  }
+  };
 
   render() {
     const { width, height, onSnapToItem, images, activeSlide } = this.props;
