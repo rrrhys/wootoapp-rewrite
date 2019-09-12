@@ -3,6 +3,7 @@ import { Product, Variation } from "../types/woocommerce";
 import api from "./../../data/api";
 
 const ADD_PRODUCT_TO_CART = "ADD_PRODUCT_TO_CART";
+const REMOVE_PRODUCT_FROM_CART = "REMOVE_PRODUCT_FROM_CART";
 const addProductToCart = (
   product: Product,
   variation: Variation,
@@ -16,6 +17,18 @@ const addProductToCart = (
   };
 };
 
+export type removeProductFromCartAction = {
+  type: typeof REMOVE_PRODUCT_FROM_CART;
+  line_item_id: number;
+};
+
+const removeProductFromCart = (line_item_id: number) => {
+  return {
+    type: REMOVE_PRODUCT_FROM_CART,
+    line_item_id
+  };
+};
+
 export type addProductToCartAction = {
   type: typeof ADD_PRODUCT_TO_CART;
   product: Product;
@@ -23,6 +36,13 @@ export type addProductToCartAction = {
   quantity: number;
 };
 
-export type cartActionTypes = addProductToCartAction;
+export type cartActionTypes =
+  | addProductToCartAction
+  | removeProductFromCartAction;
 
-export default { addProductToCart, ADD_PRODUCT_TO_CART };
+export default {
+  addProductToCart,
+  ADD_PRODUCT_TO_CART,
+  removeProductFromCart,
+  REMOVE_PRODUCT_FROM_CART
+};

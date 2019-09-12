@@ -12,8 +12,10 @@ import {
 } from "react-navigation";
 
 import Actions from "../actions";
+import HeaderCartButton from "./HeaderCartButton";
 import React from "react";
 import { View } from "react-native";
+import { colors } from "../styles";
 import { connect } from "react-redux";
 
 export interface IProps {
@@ -24,23 +26,39 @@ export interface IProps {
 }
 
 class Header extends React.PureComponent<IProps> {
+  navigateToCart = () => {
+    this.props.navigation.navigate("Cart");
+  };
+  navigateBack = () => {
+    this.props.navigation.goBack();
+  };
   render() {
     const { backButton } = this.props;
 
+    const ICON_SIZE = 24;
     const menuButtonElement = (
       <Button
         onPress={this.props.openDrawer}
-        icon={<Icon name="menu" size={24} color="white" />}
+        icon={<Icon name="menu" size={ICON_SIZE} color={colors.headerIcon} />}
       />
     );
     const backButtonElement = (
       <Button
-        onPress={() => this.props.navigation.goBack()}
-        icon={<Icon name="chevron-left" size={24} color="white" />}
+        onPress={this.navigateBack}
+        icon={
+          <Icon
+            name="chevron-left"
+            size={ICON_SIZE}
+            color={colors.headerIcon}
+          />
+        }
       />
     );
     const leftComponent = backButton ? backButtonElement : menuButtonElement;
 
+    const cartElement = (
+      <HeaderCartButton size={ICON_SIZE} onPress={this.navigateToCart} />
+    );
     return (
       <View>
         <HeaderComponent
@@ -54,7 +72,7 @@ class Header extends React.PureComponent<IProps> {
             text: this.props.title,
             style: { color: "#fff" }
           }}
-          rightComponent={{ icon: "home", color: "#fff" }}
+          rightComponent={cartElement}
         />
       </View>
     );

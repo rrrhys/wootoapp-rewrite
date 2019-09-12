@@ -6,16 +6,17 @@ import React from "react";
 export type pickableValue = number | string | { id: number; label: string };
 export interface IKeyValuePickerProps {
   label: string;
-  key: string | number;
-  values: Array<pickableValue>;
-  currentValue: pickableValue;
-  defaultValue: pickableValue;
-  placeholder?: string;
-  onValueChanged: (key: string, value: number) => void;
+  id: string | number;
+  values: Array<string | number>;
+  currentValue: string | number;
+  defaultValue: string | number;
+  placeholder?: string | number;
+  onValueChanged: (key: string | number, value: string | number) => void;
 }
 
 export interface IKeyValuePickerState {
   showPicker: boolean;
+  values: Array<string | number>;
 }
 class KeyValuePicker extends React.Component<
   IKeyValuePickerProps,
@@ -24,7 +25,8 @@ class KeyValuePicker extends React.Component<
   simplePicker;
 
   state = {
-    showPicker: false
+    showPicker: false,
+    values: []
   };
   showPicker = () => {
     this.simplePicker.setModalVisible(true);
@@ -41,15 +43,9 @@ class KeyValuePicker extends React.Component<
       nextProps.values.length > 0 && typeof nextProps.values[0] == "object";
 
     let values = [];
-    if (isObject) {
-      values = nextProps.values.map((v, i) => {
-        return { value: v.id, name: v.label };
-      });
-    } else {
-      values = nextProps.values.map((v, i) => {
-        return { name: v, value: v };
-      });
-    }
+    values = nextProps.values.map((v, i) => {
+      return { name: v, value: v };
+    });
     return {
       showPicker,
       values
