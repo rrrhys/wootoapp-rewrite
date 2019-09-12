@@ -8,6 +8,7 @@ export interface IShop {
     currency_symbol: string;
     currency_code: string;
     currency_position: string;
+    number_of_decimals: number;
   };
 }
 

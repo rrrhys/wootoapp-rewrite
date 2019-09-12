@@ -7,9 +7,12 @@ import he from "he";
 import products from "../actions/products";
 import { styles } from "../styles";
 
+// if a price is supplied, use that
+// if no price supplied, use product.
 export interface Props {
   onPress: () => void;
-  product: Product;
+  product?: Product;
+  price?: number;
   currency_symbol: string;
   currency_position: "left" | "right";
   number_of_decimals: number;
@@ -41,12 +44,15 @@ class Price extends React.Component<Props> {
   };
 
   render() {
-    const { product, currency_symbol, currency_position } = this.props;
+    const { product, price, currency_symbol, currency_position } = this.props;
+
+    if (price) {
+      return <Text>{this.priceWithCurrency(price)}</Text>;
+    }
 
     const shouldRenderHtmlPrice =
       product.type === "grouped" || product.type === "variable";
 
-    console.log("shouldRenderHtmlPrice", shouldRenderHtmlPrice);
     return [
       shouldRenderHtmlPrice && (
         <Text style={styles.productTileRegularPrice}>

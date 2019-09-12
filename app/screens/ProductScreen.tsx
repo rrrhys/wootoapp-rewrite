@@ -37,6 +37,7 @@ export interface IProductScreenState {
   quantity: number;
   attributesSelected: any;
   variation: Variation | null;
+  viewWidth: number;
 }
 
 const DEFAULT_WIDTH = 375;
