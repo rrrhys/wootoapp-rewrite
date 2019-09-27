@@ -15,105 +15,98 @@ import { connect } from "react-redux";
 import { styles } from "../styles";
 
 export interface IProps {
-  lineItem: ICartLineItem;
-  style?: ViewStyle;
-  removeProductFromCart: (id: number) => void;
+	lineItem: ICartLineItem;
+	style?: ViewStyle;
+	removeProductFromCart: (id: number) => void;
 }
 
 const AttributesList = props => {
-  const { variation, quantity } = props;
+	const { variation, quantity } = props;
 
-  return [
-    !!(variation && variation.attributes) &&
-      variation.attributes.map((att, index) => {
-        return (
-          <Text key={att.name}>{`${index ? "\n" : ""}${att.name}: ${
-            att.option
-          }`}</Text>
-        );
-      }),
-    <Text key={"quantity"}>Quantity: {quantity}</Text>
-  ];
+	return [
+		!!(variation && variation.attributes) &&
+			variation.attributes.map((att, index) => {
+				return <Text key={att.name}>{`${att.name}: ${att.option}`}</Text>;
+			}),
+		<Text key={"quantity"}>Quantity: {quantity}</Text>,
+	];
 };
 
-class CartLineItem extends React.Component<
-  Partial<NavigationInjectedProps> & Partial<IProps>
-> {
-  navigateToProduct = () => {
-    const { product } = this.props;
-    this.props.navigation.navigate("Product", { product });
-  };
+class CartLineItem extends React.Component<Partial<NavigationInjectedProps> & Partial<IProps>> {
+	navigateToProduct = () => {
+		const { lineItem } = this.props;
 
-  removeProductFromCart = () => {
-    const { id } = this.props.lineItem;
-    this.props.removeProductFromCart(id);
-  };
+		const { product, variation } = lineItem;
 
-  render() {
-    const { lineItem } = this.props;
+		this.props.navigation.navigate("Product", { product });
+	};
 
-    const { product, variation } = lineItem;
-    let image;
+	removeProductFromCart = () => {
+		const { id } = this.props.lineItem;
+		this.props.removeProductFromCart(id);
+	};
 
-    try {
-      image =
-        product.images && product.images.length > 0 ? product.images[0] : null;
-    } catch (e) {
-      debugger;
-    }
+	render() {
+		const { lineItem } = this.props;
 
-    return (
-      <ListItem
-        onPress={this.navigateToProduct}
-        chevron={true}
-        leftAvatar={{
-          source: image && { uri: image.src },
-          title: lineItem.product.name
-        }}
-        title={
-          <View style={{ paddingHorizontal: 10 }}>
-            <Text>{lineItem.product.name}</Text>
-            <AttributesList
-              variation={variation}
-              quantity={lineItem.quantity}
-            />
-            <Text>
-              <Price price={lineItem.price} />
-            </Text>
-          </View>
-        }
-        subtitle={
-          <Button
-            onPress={this.removeProductFromCart}
-            title="Remove"
-            buttonStyle={{ justifyContent: "flex-start" }}
-            titleStyle={{ fontSize: 12 }}
-            type="clear"
-          />
-        }
-      />
-    );
-  }
+		const { product, variation } = lineItem;
+		let image;
+
+		try {
+			image = product.images && product.images.length > 0 ? product.images[0] : null;
+		} catch (e) {
+			debugger;
+		}
+
+		return (
+			<ListItem
+				onPress={this.navigateToProduct}
+				chevron={true}
+				leftAvatar={{
+					source: image && { uri: image.src },
+					title: lineItem.product.name,
+				}}
+				title={
+					<View style={{ paddingHorizontal: 10 }}>
+						<Text>{lineItem.product.name}</Text>
+						<AttributesList variation={variation} quantity={lineItem.quantity} />
+						<Text>
+							<Price price={lineItem.price} />
+						</Text>
+					</View>
+				}
+				subtitle={
+					<Button
+						onPress={this.removeProductFromCart}
+						title="Remove"
+						buttonStyle={{ justifyContent: "flex-start" }}
+						titleStyle={{ fontSize: 12 }}
+						type="clear"
+					/>
+				}
+			/>
+		);
+	}
 }
 
 const mapStateToProps = (store: IStore, ownProps: IProps) => {
-  return {
-    product: store.products.products[ownProps.id]
-  };
+	return {
+		product: store.products.products[ownProps.id],
+	};
 };
 
 const mapDispatchToProps = dispatch => {
-  const { removeProductFromCart } = actions;
-  return {
-    removeProductFromCart: lineItem => {
-      dispatch(removeProductFromCart(lineItem));
-    }
-  };
+	const { removeProductFromCart } = actions;
+	return {
+		removeProductFromCart: lineItem => {
+			dispatch(removeProductFromCart(lineItem));
+		},
+	};
 };
 
 export default withNavigation(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(CartLineItem)
+	connect(
+		mapStateToProps,
+		mapDispatchToProps
+	)(CartLineItem)
 );

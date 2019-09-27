@@ -4,24 +4,24 @@ import config from "../../env";
 const { TOGGLE_DRAWER } = Actions;
 
 export interface Iui {
-  drawerOpen: boolean;
-  name: string;
+	drawerOpen: boolean;
+	name: string;
 }
 const initialState: Iui = {
-  drawerOpen: false,
-  name: config.name
+	drawerOpen: false,
+	name: config.name,
 };
 
 const ui = (state = initialState, action) => {
-  if (action.type === TOGGLE_DRAWER) {
-    console.log("action.data", action.type, action.data);
-    return {
-      ...state,
-      drawerOpen: true
-    };
-  }
+	if (action.type === TOGGLE_DRAWER) {
+		console.log("action.data", action.type, action.data);
+		return {
+			...state,
+			drawerOpen: action.data,
+		};
+	}
 
-  return state;
+	return state;
 };
 
 export default ui;

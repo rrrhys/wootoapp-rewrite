@@ -22,12 +22,8 @@ class AddToCartButton extends React.Component<IProps> {
 		this.props.addProductToCart(product, variation, quantity);
 	};
 	render() {
-		const { enabled } = this.props;
-		return (
-			<View style={[{ padding: rules.padding }, this.props.style]}>
-				<Button title="Add to Cart" disabled={!enabled} onPress={this.addProductToCart} />
-			</View>
-		);
+		const { enabled, style } = this.props;
+		return <Button title="Add to Cart" disabled={!enabled} style={style} onPress={this.addProductToCart} />;
 	}
 }
 

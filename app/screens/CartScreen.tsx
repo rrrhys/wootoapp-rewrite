@@ -1,5 +1,5 @@
 import { Attribute, Product, Variation } from "../types/woocommerce";
-import { Icon, Image, Text } from "react-native-elements";
+import { Icon, Image, Text, ListItem } from "react-native-elements";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
 import { ICart, ICartLineItem } from "../reducers/cart";
 
@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import React from "react";
 import { connect } from "react-redux";
 import FooterNavigationArea from "../components/FooterNavigationArea";
+import { rules } from "../styles";
 
 export interface ICartScreenProps {
 	navigation: {
@@ -24,6 +25,22 @@ export interface ICartScreenProps {
 }
 
 export interface ICartScreenState {}
+
+const SubtotalLineItem = connect(
+	(store, ownProps) => {
+		return { cart: store.cart };
+	},
+	dispatch => {
+		return {};
+	}
+)(props => {
+	let total = 0;
+	props.cart.lineItems.map((li: ICartLineItem) => {
+		total += li.totalLine;
+	});
+	debugger;
+	return <ListItem title={<Text>{total}</Text>} />;
+});
 
 class CartScreen extends React.Component<ICartScreenProps, ICartScreenState> {
 	state = {};
@@ -42,23 +59,29 @@ class CartScreen extends React.Component<ICartScreenProps, ICartScreenState> {
 	render() {
 		const { height } = Dimensions.get("window");
 		const { cart } = this.props;
+
+		const effectiveHeight = height - rules.headerHeight;
 		return (
 			<View
 				accessibilityLabel={"cartScreenBaseView"}
 				style={{
 					flex: 1,
-					height,
+					height: effectiveHeight,
+					flexDirection: "column",
 				}}
 			>
-				<ScrollView>
+				<ScrollView style={{ flex: 1 }}>
 					{cart.lineItems.map((li: ICartLineItem) => {
 						return <CartLineItem lineItem={li} />;
 					})}
-					<Text>test {JSON.stringify(this.props.cart)}</Text>
+
+					<SubtotalLineItem />
 				</ScrollView>
-				<FooterNavigationArea>
-					<Button title="Proceed to Checkout" style={{ flex: 1 }} />
-				</FooterNavigationArea>
+				<View>
+					<FooterNavigationArea>
+						<Button title="Proceed to Checkout" style={{ flex: 1 }} />
+					</FooterNavigationArea>
+				</View>
 			</View>
 		);
 	}
