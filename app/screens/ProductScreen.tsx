@@ -17,6 +17,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 export const INTERNAL_QUANTITY = "INTERNAL_QUANTITY";
+export const ATTRIBUTE_MATCHING_PROPERTY = "name";
 export interface IProductScreenProps {
 	navigation: {
 		state: {
@@ -91,6 +92,12 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 	};
 
 	private findVariation(existingAttrs: {}, product: Product, variations: Variation[]) {
+		/*
+      Take each attribute that has been selected by the user and try to match it to a product.
+
+      Find a variatiion where every attribute matches those selected by the user.
+
+    */
 		let variation: Variation | null = null;
 		const hasUnselectedAttributes = this.hasUnselectedAttributes(existingAttrs, product);
 
@@ -98,7 +105,7 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 			variation = variations.find((v: Variation) => {
 				let isMatch = true;
 				v.attributes.map((a: Attribute) => {
-					const id = a.id.toString();
+					const id = a[ATTRIBUTE_MATCHING_PROPERTY].toString();
 					Object.keys(existingAttrs).map(k => {
 						if (id == k) {
 							if (a.option !== existingAttrs[k]) {
@@ -110,14 +117,16 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 				return isMatch;
 			});
 		}
-		console.log("Matched variation", existingAttrs, variation);
 		return variation;
 	}
 
+	/**
+	 * returns true if the selected attribute set is incomplete.
+	 */
 	hasUnselectedAttributes = (existingAttrs: {}, product: Product): boolean => {
 		const selectedAttributeIds = Object.keys(existingAttrs);
 		const unselectedAttributes = product.attributes.filter(
-			a => selectedAttributeIds.indexOf(a.id.toString()) === -1
+			a => selectedAttributeIds.indexOf(a[ATTRIBUTE_MATCHING_PROPERTY].toString()) === -1
 		);
 		const hasUnselectedAttributes = unselectedAttributes.length > 0;
 		return hasUnselectedAttributes;
@@ -139,6 +148,8 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 		const { quantity, attributesSelected, variation, viewWidth } = this.state;
 
 		const { height } = Dimensions.get("window");
+
+		console.log(attributesSelected);
 
 		return product ? (
 			<View
@@ -204,10 +215,10 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 							a.visible && (
 								<KeyValuePicker
 									key={a.id}
-									id={a.id}
+									id={a[ATTRIBUTE_MATCHING_PROPERTY]}
 									label={a.name}
 									values={a.options}
-									currentValue={attributesSelected[a.id]}
+									currentValue={attributesSelected[a[ATTRIBUTE_MATCHING_PROPERTY]]}
 									defaultValue={null}
 									placeholder={`Select ${a.name}`}
 									onValueChanged={this.productAttributeChanged}
@@ -235,12 +246,14 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 const select = (store, ownProps: IProductScreenProps) => {
 	const { product } = ownProps.navigation.state.params;
 
+	const variations = store.products.variations ? store.products.variations[product.id] : [];
+
 	return {
 		cart: store.cart,
 		ui: store.ui,
 		categories: store.categories,
 		product: store.products.products[product.id],
-		variations: store.products.variations ? store.products.variations[product.id] : [],
+		variations,
 	};
 };
 
