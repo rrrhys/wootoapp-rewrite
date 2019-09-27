@@ -1,7 +1,7 @@
 import { Product, Variation } from "../types/woocommerce";
 
 import Actions from "../actions";
-import { Button } from "react-native-elements";
+import Button from "../components/Button";
 import React from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
@@ -12,6 +12,7 @@ export interface IProps {
 	variation: Variation;
 	quantity: number;
 	enabled: boolean;
+	style: ViewStyle;
 	addProductToCart: (product: Product, variation: Variation, quantity) => void;
 }
 

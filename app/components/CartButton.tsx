@@ -1,13 +1,13 @@
+import Button from "../components/Button";
+import React from "react";
+import { NavigationScreenProp, NavigationState, NavigationParams } from "react-navigation";
+import { ViewStyle } from "react-native";
 import { NavigationInjectedProps, withNavigation } from "react-navigation";
 
-import Actions from "../actions";
-import { Button } from "react-native-elements";
-import React from "react";
-import { View } from "react-native";
-import { connect } from "react-redux";
-import { rules } from "../styles";
-
-export interface IProps {}
+export interface IProps {
+	style: ViewStyle;
+	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
 
 class CartButton extends React.Component<IProps> {
 	navigateToCart = () => {
@@ -15,26 +15,8 @@ class CartButton extends React.Component<IProps> {
 	};
 
 	render() {
-		return (
-			<View style={[{ padding: rules.padding }, this.props.style]}>
-				<Button title="View Cart" onPress={this.navigateToCart} />
-			</View>
-		);
+		return <Button title="View Cart" style={this.props.style} onPress={this.navigateToCart} />;
 	}
 }
 
-const mapStateToProps = (state: IStore, ownProps: IProps) => {
-	return {};
-};
-
-const mapDispatchToProps = dispatch => {
-	const {} = Actions;
-
-	return {};
-};
-export default withNavigation(
-	connect(
-		mapStateToProps,
-		mapDispatchToProps
-	)(CartButton)
-);
+export default withNavigation(CartButton);
