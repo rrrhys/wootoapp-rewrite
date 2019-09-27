@@ -1,23 +1,22 @@
 import { NavigationInjectedProps, withNavigation } from "react-navigation";
 
 import Actions from "../actions";
-import { Button } from "react-native-elements";
+import { Button as RNEButton } from "react-native-elements";
 import React from "react";
 import { View } from "react-native";
 import { connect } from "react-redux";
 import { rules } from "../styles";
 
-export interface IProps {}
+export interface IProps {
+	onPress: () => void;
+	title: string;
+}
 
-class CartButton extends React.Component<IProps> {
-	navigateToCart = () => {
-		this.props.navigation.navigate("Cart");
-	};
-
+class Button extends React.Component<IProps> {
 	render() {
 		return (
 			<View style={[{ padding: rules.padding }, this.props.style]}>
-				<Button title="View Cart" onPress={this.navigateToCart} />
+				<RNEButton title={this.props.title} onPress={this.props.onPress} />
 			</View>
 		);
 	}
@@ -36,5 +35,5 @@ export default withNavigation(
 	connect(
 		mapStateToProps,
 		mapDispatchToProps
-	)(CartButton)
+	)(Button)
 );

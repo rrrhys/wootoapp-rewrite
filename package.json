@@ -1,52 +1,52 @@
 {
-  "scripts": {
-    "start": "react-native start",
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "web": "expo start --web --offline --web-only --dev",
-    "web-build": "expo build:web",
-    "postinstall": "npx patch-package"
-  },
-  "dependencies": {
-    "expo": "^34.0.1",
-    "he": "^1.2.0",
-    "html-entities": "^1.2.1",
-    "js-base64": "^2.5.1",
-    "modal-react-native-web": "^0.2.0",
-    "query-string": "^6.8.3",
-    "react": "16.8.3",
-    "react-dom": "^16.8.6",
-    "react-native": "0.59.8",
-    "react-native-code-push": "^5.6.1",
-    "react-native-drawer": "^2.5.1",
-    "react-native-elements": "^1.1.0",
-    "react-native-gesture-handler": "^1.3.0",
-    "react-native-htmlview": "^0.15.0",
-    "react-native-reanimated": "^1.2.0",
-    "react-native-scrollable-tab-view": "^0.10.0",
-    "react-native-simple-modal-picker": "^0.1.3",
-    "react-native-snap-carousel": "^3.8.0",
-    "react-native-storage": "^1.0.1",
-    "react-native-unimodules": "~0.5.2",
-    "react-native-web": "^0.11.4",
-    "react-navigation": "^3.11.1",
-    "react-redux": "^7.0.2",
-    "redux": "^3.7.2",
-    "redux-api-middleware": "^2.0.0-beta.3",
-    "redux-logger": "^3.0.6",
-    "redux-persist": "^5.10.0",
-    "redux-persist-filesystem-storage": "^1.1.1",
-    "redux-thunk": "^2.2.0"
-  },
-  "devDependencies": {
-    "@expo/webpack-config": "^0.7.4",
-    "@types/react": "^16.8.23",
-    "@types/react-native": "^0.57.65",
-    "babel-preset-expo": "^6.0.0",
-    "typescript": "^3.4.5"
-  },
-  "resolutions": {
-    "mem": "^4.0.0"
-  },
-  "private": true
+	"scripts": {
+		"start": "react-native start",
+		"android": "react-native run-android",
+		"ios": "react-native run-ios --simulator='iPhone X'",
+		"web": "expo start --web --offline --web-only --dev",
+		"web-build": "expo build:web",
+		"postinstall": "npx patch-package"
+	},
+	"dependencies": {
+		"expo": "^34.0.1",
+		"he": "^1.2.0",
+		"html-entities": "^1.2.1",
+		"js-base64": "^2.5.1",
+		"modal-react-native-web": "^0.2.0",
+		"query-string": "^6.8.3",
+		"react": "16.8.3",
+		"react-dom": "^16.8.6",
+		"react-native": "0.59.8",
+		"react-native-code-push": "^5.6.1",
+		"react-native-drawer": "^2.5.1",
+		"react-native-elements": "^1.1.0",
+		"react-native-gesture-handler": "^1.3.0",
+		"react-native-htmlview": "^0.15.0",
+		"react-native-reanimated": "^1.2.0",
+		"react-native-scrollable-tab-view": "^0.10.0",
+		"react-native-simple-modal-picker": "^0.1.3",
+		"react-native-snap-carousel": "^3.8.0",
+		"react-native-storage": "^1.0.1",
+		"react-native-unimodules": "~0.5.2",
+		"react-native-web": "^0.11.4",
+		"react-navigation": "^3.11.1",
+		"react-redux": "^7.0.2",
+		"redux": "^3.7.2",
+		"redux-api-middleware": "^2.0.0-beta.3",
+		"redux-logger": "^3.0.6",
+		"redux-persist": "^5.10.0",
+		"redux-persist-filesystem-storage": "^1.1.1",
+		"redux-thunk": "^2.2.0"
+	},
+	"devDependencies": {
+		"@expo/webpack-config": "^0.7.4",
+		"@types/react": "^16.8.23",
+		"@types/react-native": "^0.57.65",
+		"babel-preset-expo": "^6.0.0",
+		"typescript": "^3.4.5"
+	},
+	"resolutions": {
+		"mem": "^4.0.0"
+	},
+	"private": true
 }
