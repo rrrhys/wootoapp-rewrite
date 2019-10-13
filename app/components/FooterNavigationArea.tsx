@@ -4,7 +4,7 @@ import { rules } from "../styles";
 
 const FooterNavigationArea = props => {
 	return (
-		<SafeAreaView style={{ flex: 1, minHeight: rules.headerHeight }}>
+		<SafeAreaView style={{ flexDirection: "row" }}>
 			<View style={{ flexDirection: "row", flex: 1 }}>{props.children}</View>
 		</SafeAreaView>
 	);

@@ -147,8 +147,6 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 
 		const { quantity, attributesSelected, variation, viewWidth } = this.state;
 
-		const { height } = Dimensions.get("window");
-
 		console.log(attributesSelected);
 
 		return product ? (
@@ -157,7 +155,6 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 				onLayout={this.onLayout}
 				style={{
 					flex: 1,
-					height,
 				}}
 			>
 				<ScrollView>
