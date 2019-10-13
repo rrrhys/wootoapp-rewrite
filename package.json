@@ -12,6 +12,7 @@
 		"he": "^1.2.0",
 		"html-entities": "^1.2.1",
 		"js-base64": "^2.5.1",
+		"jwt-decode": "^2.2.0",
 		"modal-react-native-web": "^0.2.0",
 		"query-string": "^6.8.3",
 		"react": "16.8.3",
