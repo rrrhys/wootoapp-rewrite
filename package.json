@@ -5,7 +5,8 @@
 		"ios": "react-native run-ios --simulator='iPhone X'",
 		"web": "expo start --web --offline --web-only --dev",
 		"web-build": "expo build:web",
-		"postinstall": "npx patch-package"
+		"postinstall": "npx patch-package",
+		"deploy": "rm -rf web-build/* && yarn web-build && aws s3 sync web-build/ s3://dev-mobileapp.wootoapp.com && echo \"Open https://dev-mobileapp.wootoapp.com/ \""
 	},
 	"dependencies": {
 		"expo": "^34.0.1",
