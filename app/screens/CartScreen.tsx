@@ -38,7 +38,6 @@ const SubtotalLineItem = connect(
 	props.cart.lineItems.map((li: ICartLineItem) => {
 		total += li.totalLine;
 	});
-	debugger;
 	return <ListItem title={<Text>{total}</Text>} />;
 });
 
