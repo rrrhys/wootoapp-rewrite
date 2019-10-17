@@ -1,6 +1,7 @@
 import { NavigationInjectedProps, withNavigation } from "react-navigation";
-import { Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { TouchableOpacity, View, ViewStyle } from "react-native";
 
+import Text from "./../primitives/Text";
 import Debug from "./Debug";
 import FavoriteIcon from "./FavoriteIcon";
 import { IStore } from "../types/store";

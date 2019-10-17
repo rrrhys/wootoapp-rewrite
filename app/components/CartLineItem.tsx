@@ -1,7 +1,7 @@
-import { Button, Card, Image, ListItem } from "react-native-elements";
+import { Button, Card, Image, ListItem, withTheme } from "react-native-elements";
 import { NavigationInjectedProps, withNavigation } from "react-navigation";
-import { Text, TouchableOpacity, View, ViewStyle } from "react-native";
-
+import { TouchableOpacity, View, ViewStyle } from "react-native";
+import Text from "../primitives/Text";
 import Debug from "./Debug";
 import FavoriteIcon from "./FavoriteIcon";
 import { ICartLineItem } from "../reducers/cart";
@@ -47,7 +47,7 @@ class CartLineItem extends React.Component<Partial<NavigationInjectedProps> & Pa
 	};
 
 	render() {
-		const { lineItem } = this.props;
+		const { lineItem, theme } = this.props;
 
 		const { product, variation } = lineItem;
 		let image;
@@ -66,6 +66,7 @@ class CartLineItem extends React.Component<Partial<NavigationInjectedProps> & Pa
 					source: image && { uri: image.src },
 					title: lineItem.product.name,
 				}}
+				containerStyle={{ backgroundColor: theme.colors.backgroundColor }}
 				title={
 					<View style={{ paddingHorizontal: 10 }}>
 						<Text>{lineItem.product.name}</Text>
@@ -108,5 +109,5 @@ export default withNavigation(
 	connect(
 		mapStateToProps,
 		mapDispatchToProps
-	)(CartLineItem)
+	)(withTheme(CartLineItem))
 );

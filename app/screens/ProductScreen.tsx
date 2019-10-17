@@ -1,10 +1,11 @@
 import { Attribute, Product, Variation } from "../types/woocommerce";
-import { Button, Icon, Image, Text } from "react-native-elements";
+import { Button, Icon, Image, withTheme } from "react-native-elements";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
 import KeyValuePicker, { pickableValue } from "../components/KeyValuePicker";
 import ScrollableTabView, { ScrollableTabBar } from "react-native-scrollable-tab-view";
 import { rules, styles } from "../styles";
 
+import Text from "../primitives/Text";
 import Actions from "../actions";
 import AddToCartButton from "../components/AddtoCartButton";
 import FooterNavigationArea from "../components/FooterNavigationArea";
@@ -141,7 +142,7 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 	};
 
 	render() {
-		const { product } = this.props;
+		const { product, theme } = this.props;
 
 		const { description } = product;
 
@@ -155,6 +156,7 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 				onLayout={this.onLayout}
 				style={{
 					flex: 1,
+					backgroundColor: theme.colors.backgroundColor,
 				}}
 			>
 				<ScrollView>
@@ -264,4 +266,4 @@ const actions = dispatch => {
 export default connect(
 	select,
 	actions
-)(ProductScreen);
+)(withTheme(ProductScreen));

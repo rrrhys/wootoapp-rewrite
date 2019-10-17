@@ -9,6 +9,7 @@ import { Iui } from "../reducers/ui";
 import React from "react";
 import config from "../../env";
 import { connect } from "react-redux";
+import { withTheme } from "react-native-elements";
 
 export interface IAppProps {
 	categories: ICategories;
@@ -39,9 +40,9 @@ class HomeScreen extends React.Component<IAppProps> {
 	}
 
 	render() {
-		const { categories } = this.props;
+		const { categories, theme } = this.props;
 		return (
-			<View>
+			<View style={{ backgroundColor: theme.colors.backgroundColor }}>
 				<ScrollView>
 					{categories.data.map(category => (
 						<CategoryTile key={category.id} category={category} />
@@ -71,4 +72,4 @@ const actions = dispatch => {
 export default connect(
 	select,
 	actions
-)(HomeScreen);
+)(withTheme(HomeScreen));

@@ -1,5 +1,5 @@
 import { Attribute, Product, Variation } from "../types/woocommerce";
-import { Icon, Image, Text, ListItem } from "react-native-elements";
+import { Icon, Image, Text, ListItem, withTheme } from "react-native-elements";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
 import { ICart, ICartLineItem } from "../reducers/cart";
 
@@ -57,7 +57,7 @@ class CartScreen extends React.Component<ICartScreenProps, ICartScreenState> {
 
 	render() {
 		const { height } = Dimensions.get("window");
-		const { cart } = this.props;
+		const { cart, theme } = this.props;
 
 		const effectiveHeight = height - rules.headerHeight;
 		return (
@@ -67,6 +67,7 @@ class CartScreen extends React.Component<ICartScreenProps, ICartScreenState> {
 					flex: 1,
 					height: effectiveHeight,
 					flexDirection: "column",
+					backgroundColor: theme.colors.backgroundColor,
 				}}
 			>
 				<ScrollView style={{ flex: 1 }}>
@@ -100,4 +101,4 @@ const actions = dispatch => {
 export default connect(
 	select,
 	actions
-)(CartScreen);
+)(withTheme(CartScreen));

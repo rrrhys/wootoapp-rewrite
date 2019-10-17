@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationInjectedProps, withNavigation, NavigationActions } from "react-navigation";
-import { View, Text } from "react-native";
-import { ListItem } from "react-native-elements";
+import { View } from "react-native";
+import { ListItem, Text } from "react-native-elements";
 import { colors } from "../styles";
 
 import Actions from "../actions";

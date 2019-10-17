@@ -1,7 +1,7 @@
 import { IStore } from "../types/store";
 import { Product } from "../types/woocommerce";
 import React from "react";
-import { Text } from "react-native";
+import Text from "./../primitives/Text";
 import { connect } from "react-redux";
 import he from "he";
 import products from "../actions/products";

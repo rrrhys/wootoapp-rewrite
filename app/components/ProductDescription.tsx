@@ -1,7 +1,7 @@
 import { NavigationInjectedProps, withNavigation } from "react-navigation";
-import { Text, TouchableOpacity, View, ViewStyle } from "react-native";
+import { View, ViewStyle, StyleSheet } from "react-native";
 
-import { Card } from "react-native-elements";
+import { Card, withTheme } from "react-native-elements";
 import HTMLView from "react-native-htmlview";
 import { IStore } from "../types/store";
 import Loading from "./Loading";
@@ -11,21 +11,24 @@ import { connect } from "react-redux";
 import { rules } from "../styles";
 
 export interface Props {
-  description: string;
+	description: string;
 }
 
-class ProductDescription extends React.Component<
-  Partial<NavigationInjectedProps> & Partial<Props>
-> {
-  render() {
-    const { description } = this.props;
+class ProductDescription extends React.Component<Partial<NavigationInjectedProps> & Partial<Props>> {
+	render() {
+		const { description, theme } = this.props;
+		const styles = StyleSheet.create({
+			p: {
+				color: theme.colors.text,
+			},
+		});
 
-    return (
-      <View style={{ padding: rules.padding }}>
-        <HTMLView value={description} />
-      </View>
-    );
-  }
+		return (
+			<View style={{ padding: rules.padding }}>
+				<HTMLView stylesheet={styles} value={description} />
+			</View>
+		);
+	}
 }
 
-export default ProductDescription;
+export default withTheme(ProductDescription);
