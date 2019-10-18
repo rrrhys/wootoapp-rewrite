@@ -150,6 +150,7 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 
 		console.log(attributesSelected);
 
+		const OUTER_MARGIN = 8;
 		return product ? (
 			<View
 				accessibilityLabel={"productScreenBaseView"}
@@ -196,6 +197,7 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 				<BackButtonOverlay onPress={() => this.props.navigation.goBack()} />
 
 				<KeyValuePicker
+					containerStyle={{ margin: OUTER_MARGIN }}
 					label="quantity"
 					key={INTERNAL_QUANTITY}
 					id={INTERNAL_QUANTITY}
@@ -213,6 +215,7 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 						return (
 							a.visible && (
 								<KeyValuePicker
+									containerStyle={{ margin: OUTER_MARGIN }}
 									key={a.id}
 									id={a[ATTRIBUTE_MATCHING_PROPERTY]}
 									label={a.name}

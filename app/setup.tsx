@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 
 import CartScreen from "./screens/CartScreen";
+import CheckoutScreen from "./screens/CheckoutScreen";
 import SearchScreen from "./screens/SearchScreen";
 import CategoryScreen from "./screens/CategoryScreen";
 import Drawer from "./components/Drawer";
@@ -21,6 +22,7 @@ const RootStack = createStackNavigator(
 		Category: CategoryScreen,
 		Product: ProductScreen,
 		Cart: CartScreen,
+		Checkout: CheckoutScreen,
 		Search: SearchScreen,
 	},
 	{
@@ -85,11 +87,16 @@ class Root extends React.Component {
 			greyOutline: "#ccff00",
 			searchbg: "#ccccaa",
 			success: "#ffcc00",
-			divider: "#000000",
+			divider: "#cccccc",
 		};
 		const lightMode = {};
 		const theme: Theme = {
-			colors: lightMode,
+			colors: darkMode,
+			Text: {
+				h4Style: {
+					fontSize: 20,
+				},
+			},
 		};
 
 		return (

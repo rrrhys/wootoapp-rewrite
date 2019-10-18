@@ -13,6 +13,8 @@ import React from "react";
 import actions from "../actions";
 import { connect } from "react-redux";
 import { styles } from "../styles";
+import KeyValuePicker from "./KeyValuePicker";
+import { INTERNAL_QUANTITY } from "../screens/ProductScreen";
 
 export interface IProps {
 	lineItem: ICartLineItem;
@@ -20,6 +22,7 @@ export interface IProps {
 	removeProductFromCart: (id: number) => void;
 }
 
+export const CART_CARD_HORIZONTAL_PADDING = 10;
 const AttributesList = props => {
 	const { variation, quantity } = props;
 
@@ -28,8 +31,12 @@ const AttributesList = props => {
 			variation.attributes.map((att, index) => {
 				return <Text key={att.name}>{`${att.name}: ${att.option}`}</Text>;
 			}),
-		<Text key={"quantity"}>Quantity: {quantity}</Text>,
+		quantity !== null && <Text key={"quantity"}>Quantity: {quantity}</Text>,
 	];
+};
+
+AttributesList.defaultProps = {
+	quantity: null,
 };
 
 class CartLineItem extends React.Component<Partial<NavigationInjectedProps> & Partial<IProps>> {
@@ -61,29 +68,42 @@ class CartLineItem extends React.Component<Partial<NavigationInjectedProps> & Pa
 		return (
 			<ListItem
 				onPress={this.navigateToProduct}
-				chevron={true}
 				leftAvatar={{
 					source: image && { uri: image.src },
 					title: lineItem.product.name,
 				}}
 				containerStyle={{ backgroundColor: theme.colors.backgroundColor }}
 				title={
-					<View style={{ paddingHorizontal: 10 }}>
-						<Text>{lineItem.product.name}</Text>
-						<AttributesList variation={variation} quantity={lineItem.quantity} />
-						<Text>
+					<View style={{ paddingHorizontal: CART_CARD_HORIZONTAL_PADDING }}>
+						<Text h4 style={{ marginBottom: 10 }}>
+							{lineItem.product.name}
+						</Text>
+
+						<AttributesList variation={variation} />
+
+						<KeyValuePicker
+							label="Qty"
+							key={INTERNAL_QUANTITY}
+							id={INTERNAL_QUANTITY}
+							values={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
+							currentValue={lineItem.quantity}
+							onValueChanged={this.valueChanged}
+						/>
+						<Button
+							onPress={this.removeProductFromCart}
+							title="Remove"
+							buttonStyle={{ justifyContent: "flex-start" }}
+							titleStyle={{ fontSize: 12, color: theme.colors.text }}
+							type="clear"
+						/>
+					</View>
+				}
+				rightTitle={
+					<View style={{ marginHorizontal: CART_CARD_HORIZONTAL_PADDING }}>
+						<Text style={{ textAlign: "right" }}>
 							<Price price={lineItem.price} />
 						</Text>
 					</View>
-				}
-				subtitle={
-					<Button
-						onPress={this.removeProductFromCart}
-						title="Remove"
-						buttonStyle={{ justifyContent: "flex-start" }}
-						titleStyle={{ fontSize: 12 }}
-						type="clear"
-					/>
 				}
 			/>
 		);

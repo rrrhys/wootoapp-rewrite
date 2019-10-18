@@ -6,10 +6,12 @@ import {
 	withNavigation,
 } from "react-navigation";
 
-import { Card, withTheme } from "react-native-elements";
+import { withTheme } from "react-native-elements";
 import { Category } from "../types/woocommerce";
 import React from "react";
 import { TouchableOpacity } from "react-native";
+
+import Card from "../primitives/Card";
 
 export interface Props {
 	category: Category;

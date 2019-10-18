@@ -1,9 +1,10 @@
 import { Attribute, Product, Variation } from "../types/woocommerce";
-import { Icon, Image, ListItem, withTheme } from "react-native-elements";
+import { Icon, Image, ListItem, withTheme, Theme } from "react-native-elements";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
 import { ICart, ICartLineItem } from "../reducers/cart";
 
 import Text from "../primitives/Text";
+import Card from "../primitives/Card";
 import Actions from "../actions";
 import CartLineItem, { CART_CARD_HORIZONTAL_PADDING } from "../components/CartLineItem";
 import Button from "../components/Button";
@@ -13,7 +14,7 @@ import FooterNavigationArea from "../components/FooterNavigationArea";
 import { rules } from "../styles";
 import Price from "../components/Price";
 
-export interface ICartScreenProps {
+export interface ICheckoutScreenProps {
 	navigation: {
 		state: {
 			params: {
@@ -23,70 +24,38 @@ export interface ICartScreenProps {
 	};
 
 	cart: ICart;
+	theme: Theme;
 	goBack: () => void;
 }
 
-export interface ICartScreenState {}
+export interface ICheckoutScreenState {}
 
-const SubtotalLineItem = connect(
-	(store, ownProps) => {
-		return { cart: store.cart };
-	},
-	dispatch => {
-		return {};
-	}
-)(
-	withTheme(props => {
-		let total = 0;
-		const { theme, cart } = props;
-
-		cart.lineItems.map((li: ICartLineItem) => {
-			total += li.totalLine;
-		});
-		return (
-			<ListItem
-				containerStyle={{ backgroundColor: theme.colors.backgroundColor }}
-				title={
-					<View style={{ paddingHorizontal: CART_CARD_HORIZONTAL_PADDING }}>
-						<Text h4>Subtotal</Text>
-					</View>
-				}
-				rightTitle={
-					<Text style={{ paddingHorizontal: CART_CARD_HORIZONTAL_PADDING }}>
-						<Price price={total} />
-					</Text>
-				}
-			/>
-		);
-	})
-);
-
-class CartScreen extends React.Component<ICartScreenProps, ICartScreenState> {
+class CheckoutScreen extends React.Component<ICheckoutScreenProps, ICheckoutScreenState> {
 	state = {};
 
 	static navigationOptions = ({ navigation, navigationOptions }) => {
 		return {
-			title: "View Cart",
+			title: "Checkout",
 			backButton: true,
 		};
 	};
 
-	constructor(props: ICartScreenProps) {
+	constructor(props: ICheckoutScreenProps) {
 		super(props);
 	}
-
-	navigateToCheckout = () => {
-		this.props.navigation.navigate("Checkout");
-	};
 
 	render() {
 		const { height } = Dimensions.get("window");
 		const { cart, theme } = this.props;
 
 		const effectiveHeight = height - rules.headerHeight;
+
+		const titleStyle = {
+			textAlign: "left",
+		};
 		return (
 			<View
-				accessibilityLabel={"cartScreenBaseView"}
+				accessibilityLabel={"checkoutScreenBaseView"}
 				style={{
 					flex: 1,
 					height: effectiveHeight,
@@ -95,15 +64,25 @@ class CartScreen extends React.Component<ICartScreenProps, ICartScreenState> {
 				}}
 			>
 				<ScrollView style={{ flex: 1 }}>
-					{cart.lineItems.map((li: ICartLineItem) => {
-						return <CartLineItem lineItem={li} />;
-					})}
-
-					<SubtotalLineItem />
+					<Card title="Delivery Address" titleStyle={titleStyle}>
+						<Text>Delivery address</Text>
+					</Card>
+					<Card title="Billing Address" titleStyle={titleStyle}>
+						<Text>Billing Address</Text>
+					</Card>
+					<Card title="Delivery Method" titleStyle={titleStyle}>
+						<Text>Delivery Method</Text>
+					</Card>
+					<Card title="Payment Method" titleStyle={titleStyle}>
+						<Text>Payment Method</Text>
+					</Card>
+					<Card title="Got a coupon code?" titleStyle={titleStyle}>
+						<Text>Got a coupon code?</Text>
+					</Card>
 				</ScrollView>
 				<View>
 					<FooterNavigationArea>
-						<Button title="Proceed to Checkout" onPress={this.navigateToCheckout} style={{ flex: 1 }} />
+						<Button title="Pay with XYZ" disabled style={{ flex: 1 }} />
 					</FooterNavigationArea>
 				</View>
 			</View>
@@ -125,4 +104,4 @@ const actions = dispatch => {
 export default connect(
 	select,
 	actions
-)(withTheme(CartScreen));
+)(withTheme(CheckoutScreen));
