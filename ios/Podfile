@@ -32,4 +32,6 @@ target 'MobileTEST' do
   use_unimodules!
   pod 'CodePush', :path => '../node_modules/react-native-code-push'
 
+  pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
+
 end

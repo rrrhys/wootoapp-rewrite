@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import FooterNavigationArea from "../components/FooterNavigationArea";
 import { rules } from "../styles";
 import Price from "../components/Price";
+import FBLoginButton from "../components/FBLoginButton";
 
 export interface ICheckoutScreenProps {
 	navigation: {
@@ -78,6 +79,9 @@ class CheckoutScreen extends React.Component<ICheckoutScreenProps, ICheckoutScre
 					</Card>
 					<Card title="Got a coupon code?" titleStyle={titleStyle}>
 						<Text>Got a coupon code?</Text>
+					</Card>
+					<Card title="Got a coupon code?" titleStyle={titleStyle}>
+						<FBLoginButton style={{ flex: 1 }} />
 					</Card>
 				</ScrollView>
 				<View>

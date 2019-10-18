@@ -33,6 +33,20 @@ PODS:
     - UMFileSystemInterface
   - EXWebBrowser (6.0.0):
     - UMCore
+  - FBSDKCoreKit (5.8.0):
+    - FBSDKCoreKit/Basics (= 5.8.0)
+    - FBSDKCoreKit/Core (= 5.8.0)
+  - FBSDKCoreKit/Basics (5.8.0)
+  - FBSDKCoreKit/Core (5.8.0):
+    - FBSDKCoreKit/Basics
+  - FBSDKLoginKit (5.8.0):
+    - FBSDKLoginKit/Login (= 5.8.0)
+  - FBSDKLoginKit/Login (5.8.0):
+    - FBSDKCoreKit (~> 5.0)
+  - FBSDKShareKit (5.8.0):
+    - FBSDKShareKit/Share (= 5.8.0)
+  - FBSDKShareKit/Share (5.8.0):
+    - FBSDKCoreKit (~> 5.0)
   - Folly (2018.10.22.00):
     - boost-for-react-native
     - DoubleConversion
@@ -42,6 +56,20 @@ PODS:
     - Base64 (~> 1.1.2)
   - React (0.59.8):
     - React/Core (= 0.59.8)
+  - react-native-fbsdk (1.0.4):
+    - React
+    - react-native-fbsdk/Core (= 1.0.4)
+    - react-native-fbsdk/Login (= 1.0.4)
+    - react-native-fbsdk/Share (= 1.0.4)
+  - react-native-fbsdk/Core (1.0.4):
+    - FBSDKCoreKit (~> 5.5)
+    - React
+  - react-native-fbsdk/Login (1.0.4):
+    - FBSDKLoginKit (~> 5.5)
+    - React
+  - react-native-fbsdk/Share (1.0.4):
+    - FBSDKShareKit (~> 5.5)
+    - React
   - React/Core (0.59.8):
     - yoga (= 0.59.8.React)
   - React/CxxBridge (0.59.8):
@@ -132,6 +160,7 @@ DEPENDENCIES:
   - EXWebBrowser (from `../node_modules/expo-web-browser/ios`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - React/Core (from `../node_modules/react-native`)
   - React/CxxBridge (from `../node_modules/react-native`)
   - React/DevSupport (from `../node_modules/react-native`)
@@ -166,6 +195,9 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Base64
     - boost-for-react-native
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - FBSDKShareKit
     - JWT
     - SSZipArchive
 
@@ -210,6 +242,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../node_modules/react-native"
+  react-native-fbsdk:
+    :path: "../node_modules/react-native-fbsdk"
   RNGestureHandler:
     :podspec: "../node_modules/react-native-gesture-handler/RNGestureHandler.podspec"
   RNReanimated:
@@ -268,10 +302,14 @@ SPEC CHECKSUMS:
   EXPermissions: 332e6241b48d34a8363a78d87d90a20436a9eff9
   EXSQLite: 2c18c50ce378e047c902f50fd45f9097ae5ca14f
   EXWebBrowser: 80d1c7fc02cc459528b9e04863c8837f242bc3b4
+  FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
+  FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
+  FBSDKShareKit: abc29e1bb4f9f59f679adf1ae191006d68455f96
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   JWT: 05028b9624591bba9681bb57df2c5f95fa258bad
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
+  react-native-fbsdk: b5bd72cb3884096398de0ad7c2ee43e28724a0c0
   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
   RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
@@ -289,6 +327,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 739ea05d5ee490f5befe35201fb683eb9a1fc4b8
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: 7214c4fe7595b0e7ace5101bd031faf8cb76bf5c
+PODFILE CHECKSUM: 9b02b845ef65a183aa4c818115760ce1819ab43d
 
 COCOAPODS: 1.5.3

@@ -3,8 +3,8 @@ import queryString from "query-string";
 
 let querystringConfig: boolean | any = false;
 
-const parsed = queryString.parse(location.search);
-if (parsed.config) {
+const parsed = typeof location !== "undefined" ? queryString.parse(location.search) : null;
+if (parsed && parsed.config) {
 	querystringConfig = Base64.decode(parsed.config);
 	querystringConfig = JSON.parse(querystringConfig);
 }
