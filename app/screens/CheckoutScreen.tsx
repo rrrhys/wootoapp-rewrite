@@ -47,7 +47,7 @@ class CheckoutScreen extends React.Component<ICheckoutScreenProps, ICheckoutScre
 
 	render() {
 		const { height } = Dimensions.get("window");
-		const { cart, theme } = this.props;
+		const { cart, theme, customer } = this.props;
 
 		const effectiveHeight = height - rules.headerHeight;
 
@@ -65,6 +65,13 @@ class CheckoutScreen extends React.Component<ICheckoutScreenProps, ICheckoutScre
 				}}
 			>
 				<ScrollView style={{ flex: 1 }}>
+					<Card title="User" titleStyle={titleStyle}>
+						{customer.customer && (
+							<Text>
+								DEBUG: {customer.customer.email} {customer.customer.name} {customer.provider}
+							</Text>
+						)}
+					</Card>
 					<Card title="Delivery Address" titleStyle={titleStyle}>
 						<Text>Delivery address</Text>
 					</Card>
@@ -97,6 +104,7 @@ class CheckoutScreen extends React.Component<ICheckoutScreenProps, ICheckoutScre
 const select = (store, ownProps: ICartScreenProps) => {
 	return {
 		cart: store.cart,
+		customer: store.customer,
 	};
 };
 

@@ -49,6 +49,11 @@ const customPreflight = url => {
 	return finalUrl;
 };
 
+const providerAuthenticateUrl = () => {
+	let endpoint = getEndpoint();
+	return `${endpoint}?requestType=PROVIDERAUTHENTICATE&endpoint=${config.endpoint}`;
+};
+
 const storeInfoUrl = () => {
 	let endpoint = getEndpoint();
 	return `${endpoint}?requestType=STORECONFIG&endpoint=${config.endpoint}`;
@@ -217,6 +222,30 @@ export default {
 		},
 	},
 	customers: {
+		authenticateSocial(provider, payload) {
+			// send the access token to the server.
+			// the server will corroborate the provider ID/key from the store info
+			// and request the details from the provider.
+
+			// providerAuthenticateUrl
+
+			let url = providerAuthenticateUrl();
+			let req = activeRequest("store", url);
+
+			const { accessToken } = payload;
+
+			return fetch(url, {
+				method: "POST",
+				headers: getRegularHeaders(),
+				body: JSON.stringify({
+					provider,
+					accessToken,
+				}),
+			}).then(response => {
+				finishedRequest(req);
+				return response.json();
+			});
+		},
 		authenticate(account) {
 			//https://livestore.payitlater.com.au/wp-admin/admin-ajax.php?action=wootoapp_execute&method=authenticate&XDEBUG_SESSION_START=1
 
