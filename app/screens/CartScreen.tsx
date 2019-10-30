@@ -1,8 +1,9 @@
 import { Attribute, Product, Variation } from "../types/woocommerce";
-import { Icon, Image, ListItem, withTheme } from "react-native-elements";
+import { Icon, Image, withTheme } from "react-native-elements";
 import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
 import { ICart, ICartLineItem } from "../reducers/cart";
 
+import ListItem from "../primitives/ListItem";
 import Text from "../primitives/Text";
 import Actions from "../actions";
 import CartLineItem, { CART_CARD_HORIZONTAL_PADDING } from "../components/CartLineItem";
@@ -10,8 +11,10 @@ import Button from "../components/Button";
 import React from "react";
 import { connect } from "react-redux";
 import FooterNavigationArea from "../components/FooterNavigationArea";
-import { rules } from "../styles";
+import { rules, DIVIDER_HEIGHT } from "../styles";
 import Price from "../components/Price";
+import Card from "../primitives/Card";
+import ShippingMethodsModal from "../components/ShippingMethodsModal";
 
 export interface ICartScreenProps {
 	navigation: {
@@ -36,16 +39,21 @@ const SubtotalLineItem = connect(
 		return {};
 	}
 )(
-	withTheme(props => {
+	withTheme((props: { cart: ICart }) => {
 		let total = 0;
 		const { theme, cart } = props;
 
 		cart.lineItems.map((li: ICartLineItem) => {
 			total += li.totalLine;
 		});
+
+		if (cart.shippingMethod) {
+			total += parseFloat(cart.shippingMethod.amount);
+		}
 		return (
 			<ListItem
-				containerStyle={{ backgroundColor: theme.colors.backgroundColor }}
+				separator
+				bottomDivider
 				title={
 					<View style={{ paddingHorizontal: CART_CARD_HORIZONTAL_PADDING }}>
 						<Text h4>Subtotal</Text>
@@ -84,6 +92,11 @@ class CartScreen extends React.Component<ICartScreenProps, ICartScreenState> {
 		const { cart, theme } = this.props;
 
 		const effectiveHeight = height - rules.headerHeight;
+
+		const titleStyle = {
+			textAlign: "left",
+		};
+
 		return (
 			<View
 				accessibilityLabel={"cartScreenBaseView"}
@@ -95,10 +108,39 @@ class CartScreen extends React.Component<ICartScreenProps, ICartScreenState> {
 				}}
 			>
 				<ScrollView style={{ flex: 1 }}>
-					{cart.lineItems.map((li: ICartLineItem) => {
-						return <CartLineItem lineItem={li} />;
-					})}
+					<View
+						style={{
+							marginTop: DIVIDER_HEIGHT,
+						}}
+					>
+						{cart.lineItems.map((li: ICartLineItem) => {
+							return <CartLineItem key={li.id} lineItem={li} />;
+						})}
+					</View>
 
+					<Card
+						title="Delivery Method"
+						titleStyle={titleStyle}
+						onPress={() => {
+							this.setState({
+								shippingMethodsVisible: true,
+							});
+						}}
+					>
+						{!cart.shippingMethod && <Text>Select Shipping Method</Text>}
+						{cart.shippingMethod && (
+							<ListItem
+								containerStyle={{ margin: 0, padding: 0 }}
+								title={cart.shippingMethod.label}
+								rightTitle={<Price price={cart.shippingMethod.amount} />}
+							/>
+						)}
+					</Card>
+
+					<ShippingMethodsModal
+						visible={this.state.shippingMethodsVisible}
+						modalClosed={() => this.setState({ shippingMethodsVisible: false })}
+					/>
 					<SubtotalLineItem />
 				</ScrollView>
 				<View>

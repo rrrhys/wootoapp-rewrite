@@ -4,7 +4,6 @@ import { withTheme, Icon, Card, ListItem } from "react-native-elements";
 import { connect } from "react-redux";
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 import Actions from "../actions";
-import { ShippingQuote } from "../actions/cart";
 
 /* 
 when this component initialises, we will send off a request for a shipping quote.
@@ -48,7 +47,9 @@ class ShippingMethodsModal extends React.Component {
 										<ListItem
 											key={p.identifier}
 											title={p.label}
-											checkmark={cart.shippingMethod.identifier === p.identifier}
+											checkmark={
+												cart.shippingMethod && cart.shippingMethod.identifier === p.identifier
+											}
 											onPress={() => {
 												cart.shippingMethod === p
 													? this.setShippingMethodAndClose(null)

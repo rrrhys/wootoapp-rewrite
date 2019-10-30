@@ -63,6 +63,7 @@ class CheckoutScreen extends React.Component<ICheckoutScreenProps, ICheckoutScre
 		const { height } = Dimensions.get("window");
 		const { cart, theme, customer, shop } = this.props;
 
+		console.log(cart);
 		const effectiveHeight = height - rules.headerHeight;
 
 		const titleStyle = {
