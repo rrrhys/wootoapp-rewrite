@@ -1,9 +1,10 @@
-import { ListItem, withTheme } from "react-native-elements";
+import { withTheme } from "react-native-elements";
 
 import Picker from "react-native-simple-modal-picker";
 import React from "react";
 
 import Card from "../primitives/Card";
+import ListItem from "../primitives/ListItem";
 
 export type pickableValue = number | string | { id: number; label: string };
 export interface IKeyValuePickerProps {
@@ -55,7 +56,7 @@ class KeyValuePicker extends React.Component<IKeyValuePickerProps, IKeyValuePick
 			<Card containerStyle={{ padding: 0, margin: 0, ...containerStyle }}>
 				<ListItem
 					onPress={() => this.showPicker()}
-					containerStyle={{ padding: 8, margin: 0, backgroundColor: theme.colors.backgroundColor }}
+					containerStyle={{ padding: 8, margin: 0 }}
 					titleStyle={{ color: theme.colors.text }}
 					rightTitleStyle={{ color: theme.colors.text }}
 					rightTitle={currentValue ? currentValue : defaultValue ? defaultValue : placeholder}

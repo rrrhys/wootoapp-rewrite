@@ -16,6 +16,7 @@ import Loading from "../components/Loading";
 import ProductDescription from "../components/ProductDescription";
 import React from "react";
 import { connect } from "react-redux";
+import ThemedScrollableTabView from "../primitives/ThemedScrollableTabView";
 
 export const INTERNAL_QUANTITY = "INTERNAL_QUANTITY";
 export const ATTRIBUTE_MATCHING_PROPERTY = "name";
@@ -175,11 +176,7 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 						</Text>
 					</View>
 
-					<ScrollableTabView
-						style={{ marginTop: 20, minHeight: 500 }}
-						initialPage={0}
-						renderTabBar={() => <ScrollableTabBar />}
-					>
+					<ThemedScrollableTabView>
 						<ScrollView tabLabel="Description">
 							<ProductDescription description={description} />
 						</ScrollView>
@@ -189,7 +186,7 @@ class ProductScreen extends React.Component<IProductScreenProps, IProductScreenS
 						<ScrollView style={{ height: 300, backgroundColor: "#00ff00" }} tabLabel="Reviews">
 							<Text>(Reviews)</Text>
 						</ScrollView>
-					</ScrollableTabView>
+					</ThemedScrollableTabView>
 
 					{/* Sticky add to cart on the bottom. Left side */}
 				</ScrollView>

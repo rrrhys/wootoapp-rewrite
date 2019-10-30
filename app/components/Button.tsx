@@ -16,9 +16,16 @@ export interface IProps {
 
 class Button extends React.Component<IProps> {
 	render() {
+		const strippedProps = { ...this.props, style: undefined };
+
 		return (
 			<View style={[{ padding: rules.padding }, this.props.style]}>
-				<RNEButton disabled={this.props.disabled} title={this.props.title} onPress={this.props.onPress} />
+				<RNEButton
+					disabled={this.props.disabled}
+					title={this.props.title}
+					onPress={this.props.onPress}
+					{...strippedProps}
+				/>
 			</View>
 		);
 	}
