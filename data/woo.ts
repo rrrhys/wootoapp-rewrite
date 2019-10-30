@@ -35,7 +35,7 @@ const getAppAuthHeaderValue = () => {
 	return `Bearer ${jwt}`;
 };
 
-const getJsonStyleHeaders = function(WITH_APP_AUTH = false, WITH_TRUSTED_USER_AUTH = false) {
+export const getJsonStyleHeaders = function(WITH_APP_AUTH = false, WITH_TRUSTED_USER_AUTH = false) {
 	let headersJson = new Headers();
 
 	headersJson.append("Accept", "application/json, text/plain, */*");
@@ -80,6 +80,11 @@ const storeInfoUrl = () => {
 	return `${endpoint}?requestType=STORECONFIG&endpoint=${config.endpoint}`;
 };
 
+export const initiatePaymentUrl = () => {
+	let endpoint = getEndpoint();
+	return `${endpoint}?requestType=INITIATEPAYMENT&endpoint=${config.endpoint}`;
+};
+
 const edgeUrl = () => {
 	let endpoint = getEndpoint();
 	return `${endpoint}?requestType=STOREPROXY&endpoint=${config.endpoint}`;
@@ -104,7 +109,7 @@ const Entities = HtmlEntities.AllHtmlEntities;
 let entities = new Entities();
 
 let logRequests = true;
-const activeRequest = (name, url) => {
+export const activeRequest = (name, url) => {
 	let req = {
 		name: name,
 		id: randId(),
@@ -114,7 +119,7 @@ const activeRequest = (name, url) => {
 
 	return req;
 };
-const finishedRequest = (req, response) => {
+export const finishedRequest = (req, response) => {
 	logRequests && console.log(req.id, "END", req.name, req.url, response);
 };
 

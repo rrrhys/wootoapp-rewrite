@@ -17,6 +17,7 @@ import { Provider } from "react-redux";
 import configureStore from "./store/configureStore";
 import { ThemeProvider, Theme, withTheme } from "react-native-elements";
 import { setTheme } from "./styles";
+import PayScreen from "./screens/PayScreen";
 
 const RootStack = createStackNavigator(
 	{
@@ -28,6 +29,7 @@ const RootStack = createStackNavigator(
 		Order: OrderScreen,
 		Search: SearchScreen,
 		MyAccount: MyAccountScreen,
+		Pay: PayScreen,
 	},
 	{
 		initialRouteName: "Home",

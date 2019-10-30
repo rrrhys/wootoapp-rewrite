@@ -1,5 +1,5 @@
 import config from "../env";
-import woo from "./woo";
+import woo, { initiatePaymentUrl, finishedRequest, activeRequest, getJsonStyleHeaders } from "./woo";
 
 function notifyServerAddressChanged() {
 	let customer = cart.getCust;
@@ -7,6 +7,32 @@ function notifyServerAddressChanged() {
 
 export default {
 	woo: woo,
+	payments: {
+		paypal: {
+			initiate: ({ id, order_key, total, customer }) => {
+				const url = initiatePaymentUrl();
+
+				let req = activeRequest("store", url);
+
+				const WITH_APP_AUTH = true;
+				const WITH_TRUSTED_USER_AUTH = customer.jwt;
+				let headersJson = getJsonStyleHeaders(WITH_APP_AUTH, WITH_TRUSTED_USER_AUTH);
+
+				return fetch(url, {
+					method: "POST",
+					body: JSON.stringify({
+						id,
+						order_key,
+						total,
+					}),
+					headers: headersJson,
+				}).then(response => {
+					finishedRequest(req);
+					return response.json();
+				});
+			},
+		},
+	},
 	push: {
 		async register() {
 			const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);

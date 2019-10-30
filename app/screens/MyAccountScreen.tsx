@@ -70,7 +70,10 @@ class MyAccountScreen extends React.Component<IMyAccountScreenProps> {
 										subtitle={"Status: " + o.status}
 										rightElement={
 											o.status === "pending" && (
-												<Button title={<Price prefix="Pay " price={o.total} />} />
+												<Button
+													title={<Price prefix="Pay " price={o.total} />}
+													onPress={() => this.props.navigation.navigate("Pay", { order: o })}
+												/>
 											)
 										}
 										chevron
