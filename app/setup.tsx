@@ -4,8 +4,10 @@ import { createAppContainer, createStackNavigator } from "react-navigation";
 
 import CartScreen from "./screens/CartScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
+import MyAccountScreen from "./screens/MyAccountScreen";
 import SearchScreen from "./screens/SearchScreen";
 import CategoryScreen from "./screens/CategoryScreen";
+import OrderScreen from "./screens/OrderScreen";
 import Drawer from "./components/Drawer";
 import Header from "./components/Header";
 import HomeScreen from "./screens/HomeScreen";
@@ -23,7 +25,9 @@ const RootStack = createStackNavigator(
 		Product: ProductScreen,
 		Cart: CartScreen,
 		Checkout: CheckoutScreen,
+		Order: OrderScreen,
 		Search: SearchScreen,
+		MyAccount: MyAccountScreen,
 	},
 	{
 		initialRouteName: "Home",
@@ -75,8 +79,10 @@ class Root extends React.Component {
 
 		const darkMode = {
 			text: "#ffffff",
-			primary: "#000000", // header bg, button bg ,
+			primary: "#cccccc", // header bg, button bg ,
+			navbarText: "#000000",
 			backgroundColor: "#121212",
+			listBackgroundColor: "#000000",
 			secondary: "#0000ff",
 			grey0: "#ff00ff",
 			grey1: "#cf6679", // heading text ,
@@ -89,7 +95,11 @@ class Root extends React.Component {
 			success: "#ffcc00",
 			divider: "#cccccc",
 		};
-		const lightMode = {};
+		const lightMode = {
+			navbarText: "#ffffff",
+			backgroundColor: "#fafafa",
+			listBackgroundColor: "#ffffff",
+		};
 		const theme: Theme = {
 			colors: darkMode,
 			Text: {

@@ -4,6 +4,7 @@ import customer from "./customer";
 import products from "./products";
 import shop from "./shop";
 import ui from "./ui";
+import orders from "./orders";
 
 const actions = {
 	...shop,
@@ -12,6 +13,7 @@ const actions = {
 	...products,
 	...cart,
 	...customer,
+	...orders,
 };
 
 console.log("actions", actions);

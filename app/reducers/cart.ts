@@ -1,10 +1,30 @@
+import {
+	selectShippingMethodAction,
+	getShippingQuoteAction as getShippingQuotesAction,
+	ShippingQuote,
+} from "./../actions/cart";
+import { PaymentMethod } from "./cart";
 import { Product, Variation } from "../types/woocommerce";
-import { addProductToCartAction, cartActionTypes, removeProductFromCartAction } from "../actions/cart";
+import {
+	addProductToCartAction,
+	cartActionTypes,
+	removeProductFromCartAction,
+	selectPaymentMethodAction,
+} from "../actions/cart";
 
 import Actions from "../actions";
 
-const { ADD_PRODUCT_TO_CART, REMOVE_PRODUCT_FROM_CART } = Actions;
+const {
+	ADD_PRODUCT_TO_CART,
+	REMOVE_PRODUCT_FROM_CART,
+	SET_PAYMENT_METHOD,
+	SET_SHIPPING_METHOD,
+	SHIPPING_QUOTES_RECEIVED,
+	RESET_SHIPPING_QUOTES,
+	ORDER_CREATED_FROM_CART,
+} = Actions;
 
+export type PaymentMethod = "Stripe" | "Paypal" | null;
 export interface ICart {
 	lineItems: Array<ICartLineItem>;
 	shippingLineItems: Array<ICartLineItem>;
@@ -16,6 +36,9 @@ export interface ICart {
 	shippingTotal: number; // the total of the shipping
 	couponTotalDiscount: number;
 	grandTotal: number; //the amount to be charged. line items + shipping - coupon.
+	paymentMethod: PaymentMethod;
+	shippingMethod: ShippingQuote;
+	shippingQuotes: Array<ShippingQuote> | null;
 }
 
 export interface ICartLineItem {
@@ -39,10 +62,28 @@ const initialState: ICart = {
 	shippingTotal: 0,
 	couponTotalDiscount: 0,
 	grandTotal: 0,
+	paymentMethod: null,
+	shippingMethod: null,
+	shippingQuotes: null,
 };
 
 const cart = (state = initialState, action: cartActionTypes) => {
+	let shippingMethod;
+	let shippingQuotes;
 	switch (action.type) {
+		case RESET_SHIPPING_QUOTES:
+			shippingMethod = null;
+			shippingQuotes = null;
+			return {
+				...state,
+				shippingMethod,
+				shippingQuotes,
+			};
+			break;
+		case ORDER_CREATED_FROM_CART:
+			debugger;
+			return { ...initialState };
+			break;
 		case REMOVE_PRODUCT_FROM_CART:
 			const { line_item_id } = action as removeProductFromCartAction;
 
@@ -51,6 +92,29 @@ const cart = (state = initialState, action: cartActionTypes) => {
 				lineItems: state.lineItems.filter(l => l.id !== line_item_id),
 			};
 
+			break;
+		case SET_SHIPPING_METHOD:
+			({ shippingMethod } = action as selectShippingMethodAction);
+			return {
+				...state,
+				shippingMethod,
+			};
+			break;
+		case SET_PAYMENT_METHOD:
+			const { paymentMethod } = action as selectPaymentMethodAction;
+			return {
+				...state,
+				paymentMethod,
+			};
+			break;
+		case RESET_SHIPPING_QUOTES:
+			break;
+		case SHIPPING_QUOTES_RECEIVED:
+			({ shippingQuotes } = action as getShippingQuotesAction);
+			return {
+				...state,
+				shippingQuotes,
+			};
 			break;
 		case ADD_PRODUCT_TO_CART:
 			const { product, variation, quantity } = action as addProductToCartAction;

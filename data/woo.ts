@@ -1,5 +1,7 @@
+import { ICustomer } from "./../app/reducers/customer";
+import { ICart } from "./../app/reducers/cart";
 import HtmlEntities from "html-entities";
-import { Product } from "../app/types/woocommerce";
+import { Product, Cart, LineItem, Meta_Data_Line_Item } from "../app/types/woocommerce";
 import config from "../env";
 var jwtDecode = require("jwt-decode");
 let endpoint;
@@ -22,19 +24,29 @@ const getEndpoint = () => {
 };
 
 const getRegularHeaders = () => {
-	let jwt = config.access_jwt;
 	let headers = new Headers();
-	headers.append("Authorization", `Bearer ${jwt}`);
+	headers.append("Authorization", getAppAuthHeaderValue());
 
 	return headers;
 };
 
-const getJsonStyleHeaders = function() {
+const getAppAuthHeaderValue = () => {
+	let jwt = config.access_jwt;
+	return `Bearer ${jwt}`;
+};
+
+const getJsonStyleHeaders = function(WITH_APP_AUTH = false, WITH_TRUSTED_USER_AUTH = false) {
 	let headersJson = new Headers();
 
 	headersJson.append("Accept", "application/json, text/plain, */*");
 	headersJson.append("Content-Type", "application/json");
 
+	if (WITH_APP_AUTH) {
+		headersJson.append("Authorization", getAppAuthHeaderValue());
+	}
+	if (WITH_TRUSTED_USER_AUTH) {
+		headersJson.append("Authorization-Customer", `Bearer ${WITH_TRUSTED_USER_AUTH}`);
+	}
 	return headersJson;
 };
 
@@ -44,7 +56,16 @@ const customPreflight = url => {
 	}
 
 	let finalUrl = edgeUrl();
-	finalUrl += encodeURIComponent(url);
+	finalUrl += "&storeQuery=" + encodeURIComponent(url);
+
+	return finalUrl;
+};
+
+const preflight = url => {
+	url = "/wp-json/wc/v2" + url;
+
+	let finalUrl = edgeUrl();
+	finalUrl += "&storeQuery=" + encodeURIComponent(url);
 
 	return finalUrl;
 };
@@ -62,15 +83,6 @@ const storeInfoUrl = () => {
 const edgeUrl = () => {
 	let endpoint = getEndpoint();
 	return `${endpoint}?requestType=STOREPROXY&endpoint=${config.endpoint}`;
-};
-
-const preflight = url => {
-	url = "/wp-json/wc/v2" + url;
-
-	let finalUrl = edgeUrl();
-	finalUrl += "&storeQuery=" + encodeURIComponent(url);
-
-	return finalUrl;
 };
 const randomString = function(length, chars) {
 	let result = "";
@@ -247,6 +259,7 @@ export default {
 			});
 		},
 		authenticate(account) {
+			throw new Error("Needs checking.");
 			//https://livestore.payitlater.com.au/wp-admin/admin-ajax.php?action=wootoapp_execute&method=authenticate&XDEBUG_SESSION_START=1
 
 			let endpoint_custom = config.scheme + getEndpoint() + config.plugin_endpoint;
@@ -403,57 +416,58 @@ export default {
 		},
 	},
 	orders: {
-		create(args) {
+		create(args: { cart: ICart; customer: ICustomer; meta_data: Array<Meta_Data_Line_Item> }) {
 			activeRequest("orders.create");
 			let url = "/orders";
 
-			if (args.order_id) {
+			/*if (args.order_id) {
 				url += "/" + args.order_id;
-			}
+			}*/
 
 			// translate args.cart to suit the WC api.
-			let wc_cart = {
+			let wc_cart: Cart = {
 				payment_method: "",
 				payment_method_title: "",
 				set_paid: false,
-				billing: {},
-				shipping: {},
+				billing: null,
+				shipping: null,
 				line_items: [],
 				shipping_lines: [],
+				customer_id: null,
 			};
 
-			if (args.cart && args.cart.customer) {
-				wc_cart.billing = args.cart.customer.billing;
-				wc_cart.shipping = args.cart.customer.shipping;
-				wc_cart.payment_method = args.payment_method;
-				wc_cart.payment_method_title = args.payment_method;
-				wc_cart.customer_id = args.cart.customer.id;
+			if (args.customer.wc_customer) {
+				wc_cart.billing = args.customer.wc_customer.billing;
+				wc_cart.shipping = args.customer.wc_customer.shipping;
+				wc_cart.payment_method = args.cart.paymentMethod;
+				wc_cart.payment_method_title = args.cart.paymentMethod;
+				wc_cart.customer_id = args.customer.wc_customer.id;
 
 				if (!wc_cart.billing.email) {
-					wc_cart.billing.email = args.cart.customer.email;
+					wc_cart.billing.email = args.customer.wc_customer.email;
 				}
 				if (!wc_cart.shipping.email) {
-					wc_cart.shipping.email = args.cart.customer.email;
+					wc_cart.shipping.email = args.customer.wc_customer.email;
 				}
 			}
 
 			if (args.cart) {
-				for (let i = 0; i < args.cart.line_items.length; i++) {
+				for (let i = 0; i < args.cart.lineItems.length; i++) {
 					let li = {
-						product_id: args.cart.line_items[i].product.id,
-						quantity: args.cart.line_items[i].quantity,
-					};
+						product_id: args.cart.lineItems[i].product.id,
+						quantity: args.cart.lineItems[i].quantity,
+					} as LineItem;
 
-					if (args.cart.line_items[i].variation) {
-						li.variation_id = args.cart.line_items[i].variation.id;
+					if (args.cart.lineItems[i].variation) {
+						li.variation_id = args.cart.lineItems[i].variation.id;
 					}
 
-					if (args.cart.line_items[i].addon_fields) {
+					if (args.cart.lineItems[i].addon_fields) {
 						li.meta_data = [];
-						for (var key in args.cart.line_items[i].addon_fields) {
+						for (var key in args.cart.lineItems[i].addon_fields) {
 							li.meta_data.push({
 								key: key,
-								value: args.cart.line_items[i].addon_fields[key].value,
+								value: args.cart.lineItems[i].addon_fields[key].value,
 							});
 						}
 					}
@@ -462,15 +476,16 @@ export default {
 				}
 			}
 
-			if (args.cart && args.cart.shipping_line_items && args.cart.shipping_line_items.length > 0) {
-				let sli = args.cart.shipping_line_items[0];
+			if (args.cart && args.cart.shippingMethod) {
+				const { identifier, label, amount } = args.cart.shippingMethod;
 				wc_cart.shipping_lines.push({
-					method_id: sli.identifier,
-					method_title: sli.label,
-					total: sli.amount,
+					method_id: identifier,
+					method_title: label,
+					total: amount,
 				});
 			} else {
 				console.log("NO SHIPPING LINE ITEMS.");
+				throw new Error("No shipping line items.");
 			}
 
 			if (args.meta_data) {
@@ -483,15 +498,23 @@ export default {
 				});
 			}
 
-			let headersJson = getJsonStyleHeaders();
+			const WITH_APP_AUTH = true;
+			const WITH_TRUSTED_USER_AUTH = args.customer.jwt;
+			let headersJson = getJsonStyleHeaders(WITH_APP_AUTH, WITH_TRUSTED_USER_AUTH);
 
 			url = preflight(url);
+
+			console.log(wc_cart, url, headersJson);
 			return fetch(url, {
 				method: "POST",
 				body: JSON.stringify(wc_cart),
-				headers: getJsonStyleHeaders(),
+				headers: headersJson,
 			})
 				.then(response => response.json())
+				.then(response => {
+					console.log("RESP", response);
+					return response;
+				})
 				.catch(error => {
 					console.error(error);
 				});
@@ -519,9 +542,14 @@ export default {
 			url = includeArgs(url, args);
 
 			url = preflight(url);
+
+			const WITH_APP_AUTH = true;
+			const WITH_TRUSTED_USER_AUTH = args.customer.jwt;
+			let headersJson = getJsonStyleHeaders(WITH_APP_AUTH, WITH_TRUSTED_USER_AUTH);
+
 			return fetch(url, {
 				method: "GET",
-				headers: getRegularHeaders(),
+				headers: headersJson,
 			})
 				.then(response => response.json())
 				.catch(error => {
@@ -531,34 +559,41 @@ export default {
 	},
 	shipping: {
 		quote(args) {
+			/* we're not going to send the user JWT for this request
+			because it shouldn't change any server state and shouldn't leak anything interesting. */
+
 			let endpoint_custom = config.plugin_endpoint;
 
 			let url = endpoint_custom.replace("{method}", "get_shipping_quotation");
 
 			url = customPreflight(url);
 
-			let headersJson = getJsonStyleHeaders();
-
-			let cart = args.cart;
-			delete args.cart;
+			let { cart, customer } = args;
 			args.line_items = [];
-			cart.line_items.map(function(l) {
+			cart.lineItems.map(function(l) {
 				args.line_items.push({
 					product_id: l.product.id,
 					quantity: l.quantity,
 				});
 			});
 
-			args.user_id = cart.customer.id;
+			args.user_id = args.customer.wc_customer.id;
+
+			delete args.cart;
+			delete args.customer;
 
 			let data = JSON.stringify(args);
 
-			console.log(data);
+			const WITH_APP_AUTH = true;
+			let headersJson = getJsonStyleHeaders(WITH_APP_AUTH);
+
 			activeRequest("shipping.quote", url);
+
+			console.log(headersJson);
 			return fetch(url, {
 				method: "POST",
 				body: data,
-				headers: getJsonStyleHeaders(),
+				headers: headersJson,
 			})
 				.then(response => {
 					try {

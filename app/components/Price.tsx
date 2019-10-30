@@ -26,12 +26,13 @@ export const parsePriceFromHtml = product => {
 
 class Price extends React.Component<Props> {
 	priceWithCurrency = price => {
-		const { currency_position, currency_symbol, number_of_decimals } = this.props;
+		const { currency_position, currency_symbol, number_of_decimals, prefix } = this.props;
 
 		price = parseFloat(price).toFixed(number_of_decimals);
 
 		return (
 			<Text>
+				{prefix}
 				{currency_position == "left" && currency_symbol}
 				{price}
 				{currency_position == "right" && currency_symbol}
@@ -40,9 +41,9 @@ class Price extends React.Component<Props> {
 	};
 
 	render() {
-		const { product, price, currency_symbol, currency_position } = this.props;
+		const { product, price, currency_symbol, currency_position, prefix } = this.props;
 
-		if (price) {
+		if (typeof price !== "undefined") {
 			return <Text>{this.priceWithCurrency(price)}</Text>;
 		}
 

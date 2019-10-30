@@ -9,7 +9,6 @@ const Text = props => {
 			{({ theme }) => {
 				const style: TextStyle = { ...{ color: theme.colors.text }, ...props.style };
 
-				console.log(style);
 				return (
 					<NativeElementsText {...props} style={style}>
 						{props.children}

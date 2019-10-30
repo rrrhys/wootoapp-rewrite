@@ -37,7 +37,14 @@ const Sidebar = (props: SidebarProps) => {
 				dispatchToRoute("Home", {});
 			},
 		},
-		{ id: ids++, title: "My Account", icon: "account-circle", onPress: () => {} },
+		{
+			id: ids++,
+			title: "My Account",
+			icon: "account-circle",
+			onPress: () => {
+				dispatchToRoute("MyAccount", {});
+			},
+		},
 		{ id: ids++, title: "Shop", icon: "store", onPress: () => {} },
 		{ id: ids++, title: "Favorites", icon: "favorite", onPress: () => {} },
 		{
@@ -71,8 +78,10 @@ const Sidebar = (props: SidebarProps) => {
 	);
 };
 
-const mapStateToProps = () => {
-	return {};
+const mapStateToProps = store => {
+	return {
+		customer: store.customer,
+	};
 };
 const mapDispatchToProps = dispatch => {
 	const { closeDrawer } = Actions;

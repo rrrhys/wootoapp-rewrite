@@ -18,7 +18,16 @@ class ProductDescription extends React.Component<Partial<NavigationInjectedProps
 	render() {
 		const { description, theme } = this.props;
 		const styles = StyleSheet.create({
+			body: {
+				color: theme.colors.text,
+			},
 			p: {
+				color: theme.colors.text,
+			},
+			li: {
+				color: theme.colors.text,
+			},
+			ul: {
 				color: theme.colors.text,
 			},
 		});

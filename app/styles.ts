@@ -15,6 +15,8 @@ const rules = {
 	headerHeight: 44,
 };
 
+export const DIVIDER_HEIGHT = 16;
+
 export { styles, colors, rules, setTheme };
 function getStylesheet() {
 	const style = {
@@ -46,7 +48,6 @@ function getColors() {
 		price: "#00ff00",
 		regularPrice: theme.colors.text,
 		oldPrice: "#ff0000",
-		headerIcon: "#ffffff",
 		textLink: "#0000ff",
 		darkGreyBg: "#232323",
 		lightGreyText: "#eeeeee",

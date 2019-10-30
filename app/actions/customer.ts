@@ -1,13 +1,14 @@
+import { Customer } from "./../types/woocommerce.d";
 const TRUSTED_USER_AUTHENTICATED = "TRUSTED_USER_AUTHENTICATED";
 const SIGNOUT_USER = "SIGNOUT_USER";
 import api from "./../../data/api";
 import { AccessToken } from "react-native-fbsdk";
 export type SocialProvider = "facebook";
 
-const trustedUserAuthenticatedSuccess = (jwt, provider) => {
+const trustedUserAuthenticatedSuccess = (jwt, provider, wc_customer: Customer) => {
 	return {
 		type: TRUSTED_USER_AUTHENTICATED,
-		data: { jwt, provider },
+		data: { jwt, provider, wc_customer },
 	};
 };
 
@@ -23,7 +24,7 @@ const authenticateSocialUser = (provider: SocialProvider) => {
 			case "facebook":
 				return AccessToken.getCurrentAccessToken().then(data => {
 					api.customers.authenticateSocial(provider, data).then(r => {
-						dispatch(trustedUserAuthenticatedSuccess(r.jwt, provider));
+						dispatch(trustedUserAuthenticatedSuccess(r.jwt, provider, r.wc_customer));
 					});
 				});
 
