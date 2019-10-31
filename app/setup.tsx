@@ -18,7 +18,8 @@ import configureStore from "./store/configureStore";
 import { ThemeProvider, Theme, withTheme } from "react-native-elements";
 import { setTheme } from "./styles";
 import PayScreen from "./screens/PayScreen";
-
+import OrderPaidScreen from "./screens/OrderPaidScreen";
+import config from "../env";
 const RootStack = createStackNavigator(
 	{
 		Home: HomeScreen,
@@ -30,6 +31,10 @@ const RootStack = createStackNavigator(
 		Search: SearchScreen,
 		MyAccount: MyAccountScreen,
 		Pay: PayScreen,
+		OrderPaid: {
+			screen: OrderPaidScreen,
+			path: "order-paid/:order_id",
+		},
 	},
 	{
 		initialRouteName: "Home",
@@ -120,6 +125,7 @@ class Root extends React.Component {
 								<Drawer navigatorRef={navigatorRef}>
 									<View style={{ flex: 1 }} accessibilityLabel={"test-label"}>
 										<Navigation
+											uriPrefix={config.scheme}
 											ref={_navigatorRef => {
 												!this.state.navigatorRef &&
 													this.setState({ navigatorRef: _navigatorRef });

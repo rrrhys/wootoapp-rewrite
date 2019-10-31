@@ -13,6 +13,7 @@ const config = querystringConfig
 	? querystringConfig
 	: {
 			version: 0,
+			scheme: "wootoapp://",
 			endpoint: "livestore.cartcatch.com",
 			name: "CartCatch LS",
 			platform: "WooCommerce",

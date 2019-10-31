@@ -26,7 +26,7 @@ export interface IOrderScreenProps {
 export interface IOrderScreenState {}
 
 const DEFAULT_WIDTH = 375;
-class PayScreen extends React.Component<IOrderScreenProps, IOrderScreenState> {
+class OrderPaidScreen extends React.Component<IOrderScreenProps, IOrderScreenState> {
 	state = {
 		activeSlide: 0,
 		quantity: 1,
@@ -47,44 +47,26 @@ class PayScreen extends React.Component<IOrderScreenProps, IOrderScreenState> {
 	}
 
 	componentWillMount() {
-		const { order } = this.props.navigation.state.params;
+		const { order_id } = this.props.navigation.state.params;
 
-		const { customer } = this.props;
-		const payment_method: PaymentMethod = order.payment_method;
-		switch (payment_method) {
-			case "Paypal":
-				const { id, order_key, total } = order;
-				//ding the server for a redirect URI, and then put that in a webview.
-				api.payments.paypal
-					.initiate({ id, order_key, total, customer })
-					.then((response: { id: string; redirect: string }) => {
-						InAppBrowser.open(response.redirect, {
-							forceCloseOnRedirection: true,
-						});
-					});
-				break;
-		}
+		// go find the order.
+	}
+	componentDidMount() {
+		InAppBrowser.close();
 	}
 
 	render() {
 		const { theme } = this.props;
 		return (
 			<View
-				accessibilityLabel={"orderScreenBaseView"}
+				accessibilityLabel={"orderPaidScreenBaseView"}
 				style={{
 					flex: 1,
 					flexDirection: "column",
 					backgroundColor: theme.colors.backgroundColor,
 				}}
 			>
-				<Text>
-					I'm the pay screen. I should probably be an action :) #{this.props.navigation.state.params.order.id}
-				</Text>
-				<Text>(DONE) Send off initiate. All the order details, get back a link. Give it an IPN endpoint.</Text>
-				<Text>(DONE) Store the pending payment in a pending payments table.</Text>
-				<Text>(DONE) Open the paypal window (user makes payment) (paypal hits IPN)</Text>
-				<Text>(DONE) When the IPN is received, tell the WC store it's paid</Text>
-				<Text>TODO: Capture deep link and redirect to paid screen</Text>
+				<Text>I'm the order paid screen. {this.props.navigation.state.params.order_id}</Text>
 			</View>
 		);
 	}
@@ -106,4 +88,4 @@ const actions = dispatch => {
 export default connect(
 	select,
 	actions
-)(withTheme(PayScreen));
+)(withTheme(OrderPaidScreen));
