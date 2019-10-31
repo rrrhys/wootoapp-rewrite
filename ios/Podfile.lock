@@ -33,19 +33,15 @@ PODS:
     - UMFileSystemInterface
   - EXWebBrowser (6.0.0):
     - UMCore
-  - FBSDKCoreKit (5.8.0):
-    - FBSDKCoreKit/Basics (= 5.8.0)
-    - FBSDKCoreKit/Core (= 5.8.0)
-  - FBSDKCoreKit/Basics (5.8.0)
-  - FBSDKCoreKit/Core (5.8.0):
+  - FBSDKCoreKit (5.0.2):
+    - FBSDKCoreKit/Basics (= 5.0.2)
+    - FBSDKCoreKit/Core (= 5.0.2)
+  - FBSDKCoreKit/Basics (5.0.2)
+  - FBSDKCoreKit/Core (5.0.2):
     - FBSDKCoreKit/Basics
-  - FBSDKLoginKit (5.8.0):
-    - FBSDKLoginKit/Login (= 5.8.0)
-  - FBSDKLoginKit/Login (5.8.0):
+  - FBSDKLoginKit (5.0.2):
     - FBSDKCoreKit (~> 5.0)
-  - FBSDKShareKit (5.8.0):
-    - FBSDKShareKit/Share (= 5.8.0)
-  - FBSDKShareKit/Share (5.8.0):
+  - FBSDKShareKit (5.0.2):
     - FBSDKCoreKit (~> 5.0)
   - Folly (2018.10.22.00):
     - boost-for-react-native
@@ -56,19 +52,19 @@ PODS:
     - Base64 (~> 1.1.2)
   - React (0.59.8):
     - React/Core (= 0.59.8)
-  - react-native-fbsdk (1.0.4):
+  - react-native-fbsdk (0.10.0):
     - React
-    - react-native-fbsdk/Core (= 1.0.4)
-    - react-native-fbsdk/Login (= 1.0.4)
-    - react-native-fbsdk/Share (= 1.0.4)
-  - react-native-fbsdk/Core (1.0.4):
-    - FBSDKCoreKit (~> 5.5)
+    - react-native-fbsdk/Core (= 0.10.0)
+    - react-native-fbsdk/Login (= 0.10.0)
+    - react-native-fbsdk/Share (= 0.10.0)
+  - react-native-fbsdk/Core (0.10.0):
+    - FBSDKCoreKit (~> 5.0.0)
     - React
-  - react-native-fbsdk/Login (1.0.4):
-    - FBSDKLoginKit (~> 5.5)
+  - react-native-fbsdk/Login (0.10.0):
+    - FBSDKLoginKit (~> 5.0.0)
     - React
-  - react-native-fbsdk/Share (1.0.4):
-    - FBSDKShareKit (~> 5.5)
+  - react-native-fbsdk/Share (0.10.0):
+    - FBSDKShareKit (~> 5.0.0)
     - React
   - React/Core (0.59.8):
     - yoga (= 0.59.8.React)
@@ -125,6 +121,8 @@ PODS:
     - React/RCTBlob
   - RNGestureHandler (1.3.0):
     - React
+  - RNInAppBrowser (3.1.0):
+    - React
   - RNReanimated (1.2.0):
     - React
   - SSZipArchive (2.2.2)
@@ -176,6 +174,7 @@ DEPENDENCIES:
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
+  - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
   - RNReanimated (from `../node_modules/react-native-reanimated/RNReanimated.podspec`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
   - UMCameraInterface (from `../node_modules/unimodules-camera-interface/ios`)
@@ -246,6 +245,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fbsdk"
   RNGestureHandler:
     :podspec: "../node_modules/react-native-gesture-handler/RNGestureHandler.podspec"
+  RNInAppBrowser:
+    :path: "../node_modules/react-native-inappbrowser-reborn"
   RNReanimated:
     :podspec: "../node_modules/react-native-reanimated/RNReanimated.podspec"
   UMBarCodeScannerInterface:
@@ -302,15 +303,16 @@ SPEC CHECKSUMS:
   EXPermissions: 332e6241b48d34a8363a78d87d90a20436a9eff9
   EXSQLite: 2c18c50ce378e047c902f50fd45f9097ae5ca14f
   EXWebBrowser: 80d1c7fc02cc459528b9e04863c8837f242bc3b4
-  FBSDKCoreKit: e7dcac0aabcfb09d0166998edd95fe3b05a0ce5d
-  FBSDKLoginKit: 1b0cf04df0370b37404213157b060d6666ede814
-  FBSDKShareKit: abc29e1bb4f9f59f679adf1ae191006d68455f96
+  FBSDKCoreKit: 3e41c402eb64ea7799c71833ff9e5690f27b9c42
+  FBSDKLoginKit: a88f36da648e4c5d60eb261c63eac067abb97130
+  FBSDKShareKit: 8695bbb97c18a381bbf2851a3f24f95a59121b82
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   JWT: 05028b9624591bba9681bb57df2c5f95fa258bad
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
-  react-native-fbsdk: b5bd72cb3884096398de0ad7c2ee43e28724a0c0
+  react-native-fbsdk: 73370971d27ac3c73716e9431093e1a4388289cc
   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
+  RNInAppBrowser: 13e6fe396c274632dbbcc9f963edbf82f5dc24b3
   RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   UMBarCodeScannerInterface: f623227f2f6e8fa5c45fef1cc2b5ae200dd14918
@@ -327,6 +329,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 739ea05d5ee490f5befe35201fb683eb9a1fc4b8
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: 9b02b845ef65a183aa4c818115760ce1819ab43d
+PODFILE CHECKSUM: 3ee519ddcbd9ce950133d2ad11215aa5657d6bac
 
 COCOAPODS: 1.5.3

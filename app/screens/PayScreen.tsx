@@ -1,25 +1,14 @@
 import { Attribute, Product, Variation, Order } from "../types/woocommerce";
 import { Button, Icon, Image, withTheme } from "react-native-elements";
-import { Dimensions, SafeAreaView, ScrollView, View } from "react-native";
-import KeyValuePicker, { pickableValue } from "../components/KeyValuePicker";
-import ScrollableTabView, { ScrollableTabBar } from "react-native-scrollable-tab-view";
-import { rules, styles } from "../styles";
+import { View } from "react-native";
+
+import InAppBrowser from "react-native-inappbrowser-reborn";
 
 import Text from "../primitives/Text";
-import Actions from "../actions";
-import AddToCartButton from "../components/AddtoCartButton";
-import FooterNavigationArea from "../components/FooterNavigationArea";
-import BackButtonOverlay from "../components/BackButtonOverlay";
-import CartButton from "../components/CartButton";
-import ImageCarousel from "../components/ImageCarousel";
-import Loading from "../components/Loading";
-import ProductDescription from "../components/ProductDescription";
 import React from "react";
 import { connect } from "react-redux";
-import ThemedScrollableTabView from "../primitives/ThemedScrollableTabView";
 import { PaymentMethod } from "../reducers/cart";
 import api from "../../data/api";
-import shop from "../actions/shop";
 
 export const INTERNAL_QUANTITY = "INTERNAL_QUANTITY";
 export const ATTRIBUTE_MATCHING_PROPERTY = "name";
@@ -69,7 +58,7 @@ class PayScreen extends React.Component<IOrderScreenProps, IOrderScreenState> {
 				api.payments.paypal
 					.initiate({ id, order_key, total, customer })
 					.then((response: { id: string; redirect: string }) => {
-						debugger;
+						InAppBrowser.open(response.redirect);
 					});
 				break;
 		}
@@ -86,11 +75,14 @@ class PayScreen extends React.Component<IOrderScreenProps, IOrderScreenState> {
 					backgroundColor: theme.colors.backgroundColor,
 				}}
 			>
-				<Text>I'm the pay screen. #{this.props.navigation.state.params.order.id}</Text>
-				<Text>Send off initiate. All the order details, get back a link. Give it an IPN endpoint.</Text>
-				<Text>Store the pending payment in a pending payments table.</Text>
-				<Text>Open the paypal window (user makes payment) (paypal hits IPN)</Text>
-				<Text>When the IPN is received, tell the WC store it's paid</Text>
+				<Text>
+					I'm the pay screen. I should probably be an action :) #{this.props.navigation.state.params.order.id}
+				</Text>
+				<Text>(DONE) Send off initiate. All the order details, get back a link. Give it an IPN endpoint.</Text>
+				<Text>(DONE) Store the pending payment in a pending payments table.</Text>
+				<Text>(DONE) Open the paypal window (user makes payment) (paypal hits IPN)</Text>
+				<Text>(DONE) When the IPN is received, tell the WC store it's paid</Text>
+				<Text>TODO: Capture deep link and redirect to paid screen</Text>
 			</View>
 		);
 	}

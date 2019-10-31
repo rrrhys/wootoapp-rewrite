@@ -3,6 +3,7 @@ package com.mobiletest;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.proyecto26.inappbrowser.RNInAppBrowserPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.microsoft.codepush.react.CodePush;
 import com.swmansion.reanimated.ReanimatedPackage;
@@ -46,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNInAppBrowserPackage(),
             new FBSDKPackage(),
             new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
           new ReanimatedPackage(),

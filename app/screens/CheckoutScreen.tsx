@@ -56,7 +56,7 @@ class CheckoutScreen extends React.Component<ICheckoutScreenProps, ICheckoutScre
 
 		createOrderFromCart().then((order: Order) => {
 			// user needs to pay.
-			this.props.navigation.navigate("PayScreen", { order });
+			this.props.navigation.navigate("Pay", { order });
 		});
 	};
 	render() {
