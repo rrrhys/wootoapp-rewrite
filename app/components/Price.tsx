@@ -50,7 +50,11 @@ class Price extends React.Component<Props> {
 		const shouldRenderHtmlPrice = product.type === "grouped" || product.type === "variable";
 
 		return [
-			shouldRenderHtmlPrice && <Text style={styles.productTileRegularPrice}>{parsePriceFromHtml(product)}</Text>,
+			shouldRenderHtmlPrice && (
+				<Text style={styles.productTileRegularPrice} key="html-price">
+					{parsePriceFromHtml(product)}
+				</Text>
+			),
 			!shouldRenderHtmlPrice &&
 				product.on_sale == true && [
 					<Text style={styles.productTileSalePrice} key="sale-price">
@@ -62,7 +66,7 @@ class Price extends React.Component<Props> {
 					</Text>,
 				],
 			!shouldRenderHtmlPrice && product.on_sale == false && (
-				<Text style={styles.productTileRegularPrice}>
+				<Text style={styles.productTileRegularPrice} key="regular-price">
 					{this.priceWithCurrency(product.regular_price !== "" ? product.regular_price : product.price)}
 				</Text>
 			),

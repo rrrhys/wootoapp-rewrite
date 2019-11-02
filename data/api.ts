@@ -186,6 +186,12 @@ export default {
 				return orderPromise;
 			}
 		},
+		get(args) {
+			if (config.platform === "WooCommerce") {
+				let orderPromise = woo.orders.get(args);
+				return orderPromise;
+			}
+		},
 		update(args) {
 			if (config.platform === "WooCommerce") {
 				let orderPromise = woo.orders.update(args);

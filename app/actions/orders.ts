@@ -3,6 +3,7 @@ import { Order } from "./../types/woocommerce.d";
 import api from "../../data/api";
 
 const ORDERS_LOADED = "ORDERS_LOADED";
+const ORDER_LOADED = "ORDER_LOADED";
 
 const loadOrders = (page: number = 1) => {
 	//TODO: Add status filtering etc.
@@ -15,14 +16,36 @@ const loadOrders = (page: number = 1) => {
 	};
 };
 
+const loadOrderById = (order_id: number) => {
+	return (dispatch, getState) => {
+		const { customer } = getState();
+		return api.orders
+			.get({ order_id, customer })
+			.then((order: Order) => dispatch(getOrderSuccess(order_id, order)));
+	};
+};
+
 export type ordersSuccessAction = {
 	type: typeof ORDERS_LOADED;
 	results: Array<Order>;
 	page: number;
 	customer_id: number;
 };
+export type orderSuccessAction = {
+	type: typeof ORDER_LOADED;
+	id: number;
+	order: Order;
+};
 
-export type orderActionTypes = ordersSuccessAction;
+export type orderActionTypes = ordersSuccessAction | orderSuccessAction;
+
+const getOrderSuccess = (id, order): orderSuccessAction => {
+	return {
+		type: ORDER_LOADED,
+		id,
+		order,
+	};
+};
 
 const getOrdersSuccess = (results, page, customer_id): ordersSuccessAction => {
 	return {
@@ -35,5 +58,7 @@ const getOrdersSuccess = (results, page, customer_id): ordersSuccessAction => {
 
 export default {
 	ORDERS_LOADED,
+	ORDER_LOADED,
 	loadOrders,
+	loadOrderById,
 };

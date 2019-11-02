@@ -20,6 +20,7 @@ import { setTheme } from "./styles";
 import PayScreen from "./screens/PayScreen";
 import OrderPaidScreen from "./screens/OrderPaidScreen";
 import config from "../env";
+import OrderDetailsScreen from "./screens/OrderDetailsScreen";
 const RootStack = createStackNavigator(
 	{
 		Home: HomeScreen,
@@ -31,6 +32,7 @@ const RootStack = createStackNavigator(
 		Search: SearchScreen,
 		MyAccount: MyAccountScreen,
 		Pay: PayScreen,
+		OrderDetails: OrderDetailsScreen,
 		OrderPaid: {
 			screen: OrderPaidScreen,
 			path: "order-paid/:order_id",
@@ -101,14 +103,16 @@ class Root extends React.Component {
 			searchbg: "#ccccaa",
 			success: "#ffcc00",
 			divider: "#cccccc",
+			overlayBackground: "#eeeeee33",
 		};
 		const lightMode = {
 			navbarText: "#ffffff",
 			backgroundColor: "#fafafa",
 			listBackgroundColor: "#ffffff",
+			overlayBackground: "#333333cc",
 		};
 		const theme: Theme = {
-			colors: darkMode,
+			colors: lightMode,
 			Text: {
 				h4Style: {
 					fontSize: 20,

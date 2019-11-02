@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, SectionList, View, Text, ScrollView } from "react-native";
+import { Dimensions, FlatList, SectionList, View, Text, ScrollView, SafeAreaView } from "react-native";
 
 import Actions from "../actions";
 import { Category, Order } from "../types/woocommerce";
@@ -14,6 +14,7 @@ import ThemedScrollableTabView from "../primitives/ThemedScrollableTabView";
 import { IOrders } from "../reducers/orders";
 import Button from "../components/Button";
 import Price from "../components/Price";
+import { ICustomer } from "../reducers/customer";
 
 export interface IMyAccountScreenProps {
 	navigation: {
@@ -24,6 +25,7 @@ export interface IMyAccountScreenProps {
 		};
 	};
 	orders: IOrders;
+	customer: ICustomer;
 }
 
 class MyAccountScreen extends React.Component<IMyAccountScreenProps> {
@@ -35,7 +37,13 @@ class MyAccountScreen extends React.Component<IMyAccountScreenProps> {
 	};
 
 	componentWillMount() {
-		this.props.loadOrders();
+		this.props.customer.customer && this.props.loadOrders();
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (!this.props.customer.customer && nextProps.customer.customer) {
+			this.props.loadOrders();
+		}
 	}
 
 	constructor(props: IMyAccountScreenProps) {
@@ -47,7 +55,7 @@ class MyAccountScreen extends React.Component<IMyAccountScreenProps> {
 
 		return (
 			<RequiresAuthenticatedUser>
-				<View
+				<SafeAreaView
 					accessibilityLabel={"MyAccountScreenBaseView"}
 					style={{
 						flex: 1,
@@ -56,7 +64,8 @@ class MyAccountScreen extends React.Component<IMyAccountScreenProps> {
 				>
 					<ThemedScrollableTabView>
 						<ScrollView tabLabel="My Orders">
-							{orders.orders.map((o: Order, i) => {
+							{orders.byId.map((order_id: number, i) => {
+								const order = orders.orders[order_id];
 								return (
 									<ListItem
 										contentContainerStyle={{
@@ -66,19 +75,21 @@ class MyAccountScreen extends React.Component<IMyAccountScreenProps> {
 										leftIcon={
 											<Icon name="shopping-bag" type="font-awesome" color={theme.colors.text} />
 										}
-										title={`Order #${o.id}`}
-										subtitle={"Status: " + o.status}
+										title={`Order #${order.id}`}
+										subtitle={"Status: " + order.status}
 										rightElement={
-											o.status === "pending" && (
+											order.status === "pending" && (
 												<Button
-													title={<Price prefix="Pay " price={o.total} />}
-													onPress={() => this.props.navigation.navigate("Pay", { order: o })}
+													title={<Price prefix="Pay " price={order.total} />}
+													onPress={() =>
+														this.props.navigation.navigate("Pay", { order: order })
+													}
 												/>
 											)
 										}
 										chevron
 										onPress={() => {
-											this.props.navigation.navigate("Order", { order: o });
+											this.props.navigation.navigate("OrderDetails", { order_id: order.id });
 										}}
 									/>
 								);
@@ -102,7 +113,7 @@ class MyAccountScreen extends React.Component<IMyAccountScreenProps> {
 							this.props.navigation.navigate("Home");
 						}}
 					/>
-				</View>
+				</SafeAreaView>
 			</RequiresAuthenticatedUser>
 		);
 	}
@@ -114,6 +125,7 @@ const select = (store, ownProps: IMyAccountScreenProps) => {
 		orders: store.orders,
 		ui: store.ui,
 		categories: store.categories,
+		customer: store.customer,
 	};
 };
 

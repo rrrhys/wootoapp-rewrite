@@ -5,6 +5,9 @@ import { Product, Cart, LineItem, Meta_Data_Line_Item } from "../app/types/wooco
 import config from "../env";
 var jwtDecode = require("jwt-decode");
 let endpoint;
+
+let logRequests = false;
+
 const getEndpoint = () => {
 	if (!endpoint) {
 		// not verified.
@@ -108,7 +111,6 @@ const includeArgs = function(url, args) {
 const Entities = HtmlEntities.AllHtmlEntities;
 let entities = new Entities();
 
-let logRequests = true;
 export const activeRequest = (name, url) => {
 	let req = {
 		name: name,
@@ -193,13 +195,12 @@ export default {
 
 			let headers = getRegularHeaders();
 
-			console.log(url, headers.get("Authorization"));
+			logRequests && console.log(url, headers.get("Authorization"));
 			return fetch(url, {
 				method: "GET",
 				headers: headers,
 			})
 				.then(response => {
-					console.log(response);
 					finishedRequest(req);
 
 					return response.json();
@@ -520,6 +521,28 @@ export default {
 					console.log("RESP", response);
 					return response;
 				})
+				.catch(error => {
+					console.error(error);
+				});
+		},
+		get(args) {
+			activeRequest("orders.get");
+			// list orders.
+			// category_id
+
+			let url = `/orders/${args.order_id}`;
+
+			url = preflight(url);
+
+			const WITH_APP_AUTH = true;
+			const WITH_TRUSTED_USER_AUTH = args.customer.jwt;
+			let headersJson = getJsonStyleHeaders(WITH_APP_AUTH, WITH_TRUSTED_USER_AUTH);
+
+			return fetch(url, {
+				method: "GET",
+				headers: headersJson,
+			})
+				.then(response => response.json())
 				.catch(error => {
 					console.error(error);
 				});

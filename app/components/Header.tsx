@@ -23,7 +23,7 @@ class Header extends React.PureComponent<IProps> {
 		this.props.navigation.goBack();
 	};
 	render() {
-		const { backButton, theme } = this.props;
+		const { backButton, theme, showCartButton } = this.props;
 
 		const ICON_SIZE = 24;
 		const menuButtonElement = (
@@ -40,7 +40,7 @@ class Header extends React.PureComponent<IProps> {
 		);
 		const leftComponent = backButton ? backButtonElement : menuButtonElement;
 
-		const cartElement = <HeaderCartButton size={ICON_SIZE} onPress={this.navigateToCart} />;
+		const cartElement = showCartButton ? <HeaderCartButton size={ICON_SIZE} onPress={this.navigateToCart} /> : null;
 		return (
 			<View>
 				<HeaderComponent
@@ -74,6 +74,9 @@ const actions = dispatch => {
 	};
 };
 
+Header.defaultProps = {
+	showCartButton: true,
+};
 export default connect(
 	select,
 	actions

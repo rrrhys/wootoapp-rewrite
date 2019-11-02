@@ -13,6 +13,7 @@ let setTheme = _theme => {
 const rules = {
 	padding: 7,
 	headerHeight: 44,
+	divPadding: 16,
 };
 
 export const DIVIDER_HEIGHT = 16;
