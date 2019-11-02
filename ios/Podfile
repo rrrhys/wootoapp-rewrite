@@ -36,4 +36,6 @@ target 'MobileTEST' do
 
   pod 'RNInAppBrowser', :path => '../node_modules/react-native-inappbrowser-reborn'
 
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
+
 end
