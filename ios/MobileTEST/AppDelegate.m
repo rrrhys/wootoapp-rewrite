@@ -16,6 +16,7 @@
 #import <UMReactNativeAdapter/UMModuleRegistryAdapter.h>
 #import <React/RCTLinkingManager.h>
 
+#import <RNGoogleSignin/RNGoogleSignin.h>
 @implementation AppDelegate
 
 @synthesize window = _window;
@@ -57,6 +58,6 @@
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-  return [RCTLinkingManager application:app openURL:url options:options];
+  return [RCTLinkingManager application:app openURL:url options:options] || [RNGoogleSignin application:app openURL:url options:options];
 }
 @end

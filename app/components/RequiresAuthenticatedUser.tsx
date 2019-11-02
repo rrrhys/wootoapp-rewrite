@@ -9,6 +9,8 @@ import { withTheme, Icon } from "react-native-elements";
 import { SocialProvider } from "../actions/customer";
 
 import { LoginManager } from "react-native-fbsdk";
+import { GoogleSignin, statusCodes } from "react-native-google-signin";
+import config from "../../env";
 
 class RequiresAuthenticatedUser extends React.Component {
 	componentDidMount() {
@@ -37,6 +39,31 @@ class RequiresAuthenticatedUser extends React.Component {
 				alert("Login failed with error: " + error);
 			}
 		);
+	};
+	signinWithGoogle = async () => {
+		const { authenticateSocialUser } = this.props;
+		try {
+			await GoogleSignin.hasPlayServices();
+			GoogleSignin.configure({
+				iosClientId: config.google_ios_client_id,
+				webClientId: config.google_web_client_id,
+				offlineAccess: true,
+			});
+			const userInfo = await GoogleSignin.signIn();
+			authenticateSocialUser("google", userInfo);
+			this.setState({ userInfo });
+		} catch (error) {
+			console.log(error);
+			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+				// user cancelled the login flow
+			} else if (error.code === statusCodes.IN_PROGRESS) {
+				// operation (e.g. sign in) is in progress already
+			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+				// play services not available or outdated
+			} else {
+				// some other error happened
+			}
+		}
 	};
 
 	render() {
@@ -67,6 +94,19 @@ class RequiresAuthenticatedUser extends React.Component {
 						title={`Sign in with Facebook`}
 						onPress={this.signinWithFacebook}
 					/>
+					<Button
+						icon={
+							<Icon
+								name="google"
+								type="font-awesome"
+								size={15}
+								color="white"
+								iconStyle={{ paddingRight: 16 }}
+							/>
+						}
+						title={`Sign in with Google`}
+						onPress={this.signinWithGoogle}
+					/>
 				</Modal>
 
 				{this.props.children}
@@ -84,7 +124,8 @@ const select = (store, ownProps: ICartScreenProps) => {
 const actions = dispatch => {
 	const { authenticateSocialUser, signoutCustomer } = Actions;
 	return {
-		authenticateSocialUser: (provider: SocialProvider) => dispatch(authenticateSocialUser(provider)),
+		authenticateSocialUser: (provider: SocialProvider, additionalInfo = null) =>
+			dispatch(authenticateSocialUser(provider, additionalInfo)),
 	};
 };
 

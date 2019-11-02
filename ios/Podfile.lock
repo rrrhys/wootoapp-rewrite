@@ -1,4 +1,9 @@
 PODS:
+  - AppAuth (1.2.0):
+    - AppAuth/Core (= 1.2.0)
+    - AppAuth/ExternalUserAgent (= 1.2.0)
+  - AppAuth/Core (1.2.0)
+  - AppAuth/ExternalUserAgent (1.2.0)
   - Base64 (1.1.2)
   - boost-for-react-native (1.63.0)
   - CodePush (5.6.1):
@@ -48,6 +53,18 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
+  - GoogleSignIn (5.0.1):
+    - AppAuth (~> 1.2)
+    - GTMAppAuth (~> 1.0)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GTMAppAuth (1.0.0):
+    - AppAuth/Core (~> 1.0)
+    - GTMSessionFetcher (~> 1.1)
+  - GTMSessionFetcher (1.3.0):
+    - GTMSessionFetcher/Full (= 1.3.0)
+  - GTMSessionFetcher/Core (1.3.0)
+  - GTMSessionFetcher/Full (1.3.0):
+    - GTMSessionFetcher/Core (= 1.3.0)
   - JWT (3.0.0-beta.11):
     - Base64 (~> 1.1.2)
   - React (0.59.8):
@@ -123,6 +140,9 @@ PODS:
     - React
   - RNGestureHandler (1.3.0):
     - React
+  - RNGoogleSignin (2.1.0):
+    - GoogleSignIn (~> 5.0.0)
+    - React
   - RNInAppBrowser (3.1.0):
     - React
   - RNReanimated (1.2.0):
@@ -177,6 +197,7 @@ DEPENDENCIES:
   - React/RCTWebSocket (from `../node_modules/react-native`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler/RNGestureHandler.podspec`)
+  - RNGoogleSignin (from `../node_modules/react-native-google-signin`)
   - RNInAppBrowser (from `../node_modules/react-native-inappbrowser-reborn`)
   - RNReanimated (from `../node_modules/react-native-reanimated/RNReanimated.podspec`)
   - UMBarCodeScannerInterface (from `../node_modules/unimodules-barcode-scanner-interface/ios`)
@@ -195,11 +216,15 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - AppAuth
     - Base64
     - boost-for-react-native
     - FBSDKCoreKit
     - FBSDKLoginKit
     - FBSDKShareKit
+    - GoogleSignIn
+    - GTMAppAuth
+    - GTMSessionFetcher
     - JWT
     - SSZipArchive
 
@@ -250,6 +275,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/async-storage"
   RNGestureHandler:
     :podspec: "../node_modules/react-native-gesture-handler/RNGestureHandler.podspec"
+  RNGoogleSignin:
+    :path: "../node_modules/react-native-google-signin"
   RNInAppBrowser:
     :path: "../node_modules/react-native-inappbrowser-reborn"
   RNReanimated:
@@ -294,6 +321,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  AppAuth: bce82c76043657c99d91e7882e8a9e1a93650cd4
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CodePush: f6b348759cdc42c734d9c3a46ceb2997c270b12e
@@ -313,11 +341,15 @@ SPEC CHECKSUMS:
   FBSDKShareKit: 8695bbb97c18a381bbf2851a3f24f95a59121b82
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
+  GoogleSignIn: 3a51b9bb8e48b635fd7f4272cee06ca260345b86
+  GTMAppAuth: 4deac854479704f348309e7b66189e604cf5e01e
+  GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
   JWT: 05028b9624591bba9681bb57df2c5f95fa258bad
   React: 1d605e098d69bdf08960787f3446f0a9dc2e2ccf
   react-native-fbsdk: 73370971d27ac3c73716e9431093e1a4388289cc
   RNCAsyncStorage: e99188b8a89ea0edddc82d8831cd5142f4550fdc
   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
+  RNGoogleSignin: ba310637094912a035b28de70adbf03a6c78d7d4
   RNInAppBrowser: 13e6fe396c274632dbbcc9f963edbf82f5dc24b3
   RNReanimated: 1b52415c4302f198cb581282a0166690bad62c43
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
@@ -335,6 +367,6 @@ SPEC CHECKSUMS:
   UMTaskManagerInterface: 739ea05d5ee490f5befe35201fb683eb9a1fc4b8
   yoga: 128daf064cacaede0c3bb27424b6b4c71052e6cd
 
-PODFILE CHECKSUM: fe78267eaa4bbace0498771b1f165c759836165c
+PODFILE CHECKSUM: d864113064fa787462b9f4dbec6de03e91dae391
 
 COCOAPODS: 1.5.3

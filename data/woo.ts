@@ -240,7 +240,7 @@ export default {
 		},
 	},
 	customers: {
-		authenticateSocial(provider, payload) {
+		authenticateSocial(provider, payload: { accessToken: string }) {
 			// send the access token to the server.
 			// the server will corroborate the provider ID/key from the store info
 			// and request the details from the provider.
@@ -252,6 +252,7 @@ export default {
 
 			const { accessToken } = payload;
 
+			debugger;
 			return fetch(url, {
 				method: "POST",
 				headers: getRegularHeaders(),

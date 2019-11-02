@@ -18,7 +18,24 @@ const signoutCustomer = () => {
 		data: true,
 	};
 };
-const authenticateSocialUser = (provider: SocialProvider) => {
+
+export interface User {}
+
+export interface GoogleOauthResult {
+	idToken: string;
+	serverAuthCode: string;
+	user: {
+		givenName: string;
+		email: string;
+		id: string;
+		familyName: string;
+		photo: string;
+		name: string;
+	};
+	scopes: string[];
+}
+type ProviderOauthResult = GoogleOauthResult;
+const authenticateSocialUser = (provider: SocialProvider, additionalData?: ProviderOauthResult) => {
 	return (dispatch, getState) => {
 		switch (provider) {
 			case "facebook":
@@ -28,6 +45,13 @@ const authenticateSocialUser = (provider: SocialProvider) => {
 					});
 				});
 
+				break;
+			case "google":
+				const { serverAuthCode } = additionalData as GoogleOauthResult;
+
+				return api.customers.authenticateSocial(provider, { accessToken: serverAuthCode }).then(r => {
+					dispatch(trustedUserAuthenticatedSuccess(r.jwt, provider, r.wc_customer));
+				});
 				break;
 			default:
 				debugger;
