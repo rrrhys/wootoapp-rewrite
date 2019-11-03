@@ -3,7 +3,7 @@ import Actions from "../actions";
 import { Customer } from "../types/woocommerce";
 
 var jwtDecode = require("jwt-decode");
-const { TRUSTED_USER_AUTHENTICATED, SIGNOUT_USER } = Actions;
+const { TRUSTED_USER_AUTHENTICATED, SIGNOUT_USER, SKIP_SIGNIN } = Actions;
 
 export interface JWTTrustedUser {
 	sub: number /* user id */;
@@ -19,6 +19,7 @@ export interface ICustomer {
 	wc_customer: Customer;
 	provider: SocialProvider;
 	lastUpdated: boolean | Date;
+	hasSignedInOrSkippedWelcome: boolean;
 }
 const initialState: ICustomer = {
 	jwt: null,
@@ -26,6 +27,7 @@ const initialState: ICustomer = {
 	wc_customer: null,
 	provider: null,
 	lastUpdated: false,
+	hasSignedInOrSkippedWelcome: false,
 };
 
 const customer = (state = initialState, action) => {
@@ -37,6 +39,13 @@ const customer = (state = initialState, action) => {
 			wc_customer: null,
 			provider: null,
 			lastUpdated: new Date(),
+		};
+	}
+	if (action.type === SKIP_SIGNIN) {
+		return {
+			...state,
+			lastUpdated: new Date(),
+			hasSignedInOrSkippedWelcome: true,
 		};
 	}
 	if (action.type === TRUSTED_USER_AUTHENTICATED) {
@@ -52,6 +61,7 @@ const customer = (state = initialState, action) => {
 				customer,
 				wc_customer: wc_customer,
 				provider,
+				hasSignedInOrSkippedWelcome: true,
 				lastUpdated: new Date(),
 			};
 		}

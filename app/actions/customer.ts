@@ -1,6 +1,7 @@
 import { Customer } from "./../types/woocommerce.d";
 const TRUSTED_USER_AUTHENTICATED = "TRUSTED_USER_AUTHENTICATED";
 const SIGNOUT_USER = "SIGNOUT_USER";
+const SKIP_SIGNIN = "SKIP_SIGNIN";
 import api from "./../../data/api";
 import { AccessToken } from "react-native-fbsdk";
 export type SocialProvider = "facebook";
@@ -15,6 +16,13 @@ const trustedUserAuthenticatedSuccess = (jwt, provider, wc_customer: Customer) =
 const signoutCustomer = () => {
 	return {
 		type: SIGNOUT_USER,
+		data: true,
+	};
+};
+
+const skipSignin = () => {
+	return {
+		type: SKIP_SIGNIN,
 		data: true,
 	};
 };
@@ -62,4 +70,11 @@ const authenticateSocialUser = (provider: SocialProvider, additionalData?: Provi
 	};
 };
 
-export default { TRUSTED_USER_AUTHENTICATED, authenticateSocialUser, signoutCustomer, SIGNOUT_USER };
+export default {
+	TRUSTED_USER_AUTHENTICATED,
+	authenticateSocialUser,
+	signoutCustomer,
+	SIGNOUT_USER,
+	SKIP_SIGNIN,
+	skipSignin,
+};

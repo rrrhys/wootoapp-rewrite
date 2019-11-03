@@ -1,7 +1,6 @@
 import { Text, View } from "react-native";
 import React, { Component } from "react";
 import { createAppContainer, createStackNavigator } from "react-navigation";
-
 import CartScreen from "./screens/CartScreen";
 import CheckoutScreen from "./screens/CheckoutScreen";
 import MyAccountScreen from "./screens/MyAccountScreen";

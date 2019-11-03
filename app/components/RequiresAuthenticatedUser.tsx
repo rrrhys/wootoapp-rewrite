@@ -1,16 +1,14 @@
 import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-import Button from "../components/Button";
 import Actions from "../actions";
 import { connect } from "react-redux";
 import Modal from "react-native-modalbox";
 import { withTheme, Icon } from "react-native-elements";
 import { SocialProvider } from "../actions/customer";
 
-import { LoginManager } from "react-native-fbsdk";
-import { GoogleSignin, statusCodes } from "react-native-google-signin";
-import config from "../../env";
+import SocialSignin from "./SocialSignin";
+import { withNavigation } from "react-navigation";
 
 class RequiresAuthenticatedUser extends React.Component {
 	componentDidMount() {
@@ -24,47 +22,6 @@ class RequiresAuthenticatedUser extends React.Component {
 			this.refs.modal1.close();
 		}
 	}
-
-	signinWithFacebook = () => {
-		const { authenticateSocialUser } = this.props;
-		LoginManager.logInWithPermissions(["public_profile", "email"]).then(
-			function(result) {
-				if (result.isCancelled) {
-					alert("Login was cancelled");
-				} else {
-					authenticateSocialUser("facebook");
-				}
-			},
-			function(error) {
-				alert("Login failed with error: " + error);
-			}
-		);
-	};
-	signinWithGoogle = async () => {
-		const { authenticateSocialUser } = this.props;
-		try {
-			await GoogleSignin.hasPlayServices();
-			GoogleSignin.configure({
-				iosClientId: config.google_ios_client_id,
-				webClientId: config.google_web_client_id,
-				offlineAccess: true,
-			});
-			const userInfo = await GoogleSignin.signIn();
-			authenticateSocialUser("google", userInfo);
-			this.setState({ userInfo });
-		} catch (error) {
-			console.log(error);
-			if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-				// user cancelled the login flow
-			} else if (error.code === statusCodes.IN_PROGRESS) {
-				// operation (e.g. sign in) is in progress already
-			} else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-				// play services not available or outdated
-			} else {
-				// some other error happened
-			}
-		}
-	};
 
 	render() {
 		return (
@@ -81,31 +38,11 @@ class RequiresAuthenticatedUser extends React.Component {
 					onClosingState={this.onClosingState}
 					position={"bottom"}
 				>
-					<Button
-						icon={
-							<Icon
-								name="facebook-f"
-								type="font-awesome"
-								size={15}
-								color="white"
-								iconStyle={{ paddingRight: 16 }}
-							/>
-						}
-						title={`Sign in with Facebook`}
-						onPress={this.signinWithFacebook}
-					/>
-					<Button
-						icon={
-							<Icon
-								name="google"
-								type="font-awesome"
-								size={15}
-								color="white"
-								iconStyle={{ paddingRight: 16 }}
-							/>
-						}
-						title={`Sign in with Google`}
-						onPress={this.signinWithGoogle}
+					<SocialSignin
+						goBack={() => {
+							this.refs.modal1.close();
+							this.props.navigation.goBack();
+						}}
 					/>
 				</Modal>
 
@@ -132,10 +69,11 @@ const actions = dispatch => {
 export default connect(
 	select,
 	actions
-)(withTheme(RequiresAuthenticatedUser));
+)(withNavigation(withTheme(RequiresAuthenticatedUser)));
 
 const styles = StyleSheet.create({
 	modal: {
-		height: 300,
+		height: "auto",
+		paddingBottom: 30,
 	},
 });

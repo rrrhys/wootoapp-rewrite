@@ -182,7 +182,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=$(which node)\n../node_modules/react-native/scripts/react-native-xcode.sh index.ts\n";
 		};
 		1D744B6BC3C3841C953322EF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -292,6 +292,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wootoapp.MobileTEST;
 				PRODUCT_NAME = MobileTEST;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -311,6 +312,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.wootoapp.MobileTEST;
 				PRODUCT_NAME = MobileTEST;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

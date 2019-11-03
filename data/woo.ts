@@ -252,7 +252,6 @@ export default {
 
 			const { accessToken } = payload;
 
-			debugger;
 			return fetch(url, {
 				method: "POST",
 				headers: getRegularHeaders(),

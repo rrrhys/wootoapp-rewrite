@@ -1,5 +1,5 @@
 import { NavigationParams, NavigationScreenProp, NavigationState } from "react-navigation";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, Image, StyleSheet, Dimensions } from "react-native";
 
 import Actions from "../actions";
 import CategoryTile from "../components/CategoryTile";
@@ -9,8 +9,14 @@ import { Iui } from "../reducers/ui";
 import React from "react";
 import config from "../../env";
 import { connect } from "react-redux";
-import { withTheme } from "react-native-elements";
+import RequiresAuthenticatedUser from "../components/RequiresAuthenticatedUser";
+import SplashScreen from "react-native-splash-screen";
 
+import Button from "../components/Button";
+import Modal from "react-native-modalbox";
+import { withTheme, Icon, SocialIcon, Text, Divider } from "react-native-elements";
+import SocialSignin from "../components/SocialSignin";
+import shop from "../actions/shop";
 export interface IAppProps {
 	categories: ICategories;
 	loadCategories: () => void;
@@ -19,9 +25,15 @@ export interface IAppProps {
 }
 class HomeScreen extends React.Component<IAppProps> {
 	static navigationOptions = ({ navigation, navigationOptions }) => {
-		return {
-			title: navigation.getParam("title"),
-		};
+		if (navigation.getParam("showHeader") == false) {
+			return {
+				header: null,
+			};
+		} else {
+			return {
+				title: navigation.getParam("title"),
+			};
+		}
 	};
 
 	constructor(props: IAppProps) {
@@ -29,7 +41,6 @@ class HomeScreen extends React.Component<IAppProps> {
 
 		// we need an app definition.
 		const { store_id, publishable_key, access_jwt } = config;
-
 		props.navigation.setParams({ title: props.ui.name });
 
 		props.loadShop();
@@ -39,15 +50,64 @@ class HomeScreen extends React.Component<IAppProps> {
 		}, 300);*/
 	}
 
+	componentDidMount() {
+		if (this.props.customer && this.props.customer.hasSignedInOrSkippedWelcome) {
+			SplashScreen.hide();
+		} else {
+			this.props.navigation.setParams({ showHeader: false });
+			this.refs.modal1.open();
+			SplashScreen.hide();
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (nextProps.customer.hasSignedInOrSkippedWelcome && !this.props.customer.hasSignedInOrSkippedWelcome) {
+			this.props.navigation.setParams({ showHeader: true });
+			this.refs.modal1.close();
+		}
+		if (!nextProps.customer.hasSignedInOrSkippedWelcome && this.props.customer.hasSignedInOrSkippedWelcome) {
+			this.props.navigation.setParams({ showHeader: false });
+			this.refs.modal1.open();
+		}
+	}
+
 	render() {
-		const { categories, theme } = this.props;
+		const { categories, theme, shop, customer } = this.props;
+		const { hasSignedInOrSkippedWelcome } = customer;
 		return (
-			<View style={{ backgroundColor: theme.colors.backgroundColor }}>
-				<ScrollView>
-					{categories.data.map(category => (
-						<CategoryTile key={category.id} category={category} />
-					))}
-				</ScrollView>
+			<View style={{ backgroundColor: theme.colors.backgroundColor, marginLeft: 3 }}>
+				{!hasSignedInOrSkippedWelcome && (
+					<Image style={{ width: "100%", height: "100%" }} source={require("../../assets/elsplasho.jpg")} />
+				)}
+
+				<Modal
+					backdropPressToClose={false}
+					swipeToClose={false}
+					coverScreen={true}
+					backButtonClose={false}
+					backdrop={false}
+					style={[styles.modal]}
+					ref={"modal1"}
+					onClosed={this.onClose}
+					onOpened={this.onOpen}
+					onClosingState={this.onClosingState}
+					entry={"bottom"}
+				>
+					<View style={{ padding: 8 }}>
+						<Text h4 style={{ textAlign: "center", marginBottom: 6 }}>
+							Sign in
+						</Text>
+						<Divider />
+					</View>
+					<SocialSignin canSkip={true} />
+				</Modal>
+				{hasSignedInOrSkippedWelcome && (
+					<ScrollView>
+						{categories.data.map(category => (
+							<CategoryTile key={category.id} category={category} />
+						))}
+					</ScrollView>
+				)}
 			</View>
 		);
 	}
@@ -58,6 +118,8 @@ const select = (store: IStore) => {
 		cart: store.cart,
 		ui: store.ui,
 		categories: store.categories,
+		customer: store.customer,
+		shop: store.shop,
 	};
 };
 
@@ -73,3 +135,15 @@ export default connect(
 	select,
 	actions
 )(withTheme(HomeScreen));
+
+const { width } = Dimensions.get("window");
+const styles = StyleSheet.create({
+	modal: {
+		height: "auto",
+		backgroundColor: "#ffffff88",
+		padding: 8,
+		marginLeft: 0,
+		width: width - 32,
+		borderRadius: 8,
+	},
+});

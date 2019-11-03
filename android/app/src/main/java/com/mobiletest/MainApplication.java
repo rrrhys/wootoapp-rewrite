@@ -3,6 +3,7 @@ package com.mobiletest;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.proyecto26.inappbrowser.RNInAppBrowserPackage;
@@ -49,6 +50,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new SplashScreenReactPackage(),
             new RNGoogleSigninPackage(),
             new AsyncStoragePackage(),
             new RNInAppBrowserPackage(),

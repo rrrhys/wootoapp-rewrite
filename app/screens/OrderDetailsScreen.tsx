@@ -44,6 +44,7 @@ class OrderDetailsScreen extends React.Component<IOrderScreenProps, IOrderScreen
 		return {
 			title: `View order #${navigation.state.params.order_id}`,
 			showCartButton: false,
+			backButton: !!!navigation.state.params.show_thanks,
 		};
 	};
 
