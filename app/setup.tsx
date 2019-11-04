@@ -54,6 +54,32 @@ const RootStack = createStackNavigator(
 
 const Navigation = createAppContainer(RootStack);
 
+const darkMode = {
+	text: "#ffffff",
+	primary: "#cccccc", // header bg, button bg ,
+	navbarText: "#000000",
+	backgroundColor: "#121212",
+	listBackgroundColor: "#000000",
+	secondary: "#0000ff",
+	grey0: "#ff00ff",
+	grey1: "#cf6679", // heading text ,
+	grey2: "#ccccff",
+	grey3: "#00ffcc",
+	grey4: "#ffff00",
+	grey5: "#333333", //card borders, input borders ,
+	greyOutline: "#ccff00",
+	searchbg: "#ccccaa",
+	success: "#ffcc00",
+	divider: "#cccccc",
+	overlayBackground: "#eeeeee33",
+};
+const lightMode = {
+	navbarText: "#ffffff",
+	backgroundColor: "#fafafa",
+	listBackgroundColor: "#ffffff",
+	overlayBackground: "#333333cc",
+};
+
 class Root extends React.Component {
 	state: {
 		isLoadingStore?: any;
@@ -85,33 +111,7 @@ class Root extends React.Component {
 			);
 		}
 
-		const darkMode = {
-			text: "#ffffff",
-			primary: "#cccccc", // header bg, button bg ,
-			navbarText: "#000000",
-			backgroundColor: "#121212",
-			listBackgroundColor: "#000000",
-			secondary: "#0000ff",
-			grey0: "#ff00ff",
-			grey1: "#cf6679", // heading text ,
-			grey2: "#ccccff",
-			grey3: "#00ffcc",
-			grey4: "#ffff00",
-			grey5: "#333333", //card borders, input borders ,
-			greyOutline: "#ccff00",
-			searchbg: "#ccccaa",
-			success: "#ffcc00",
-			divider: "#cccccc",
-			overlayBackground: "#eeeeee33",
-		};
-		const lightMode = {
-			navbarText: "#ffffff",
-			backgroundColor: "#fafafa",
-			listBackgroundColor: "#ffffff",
-			overlayBackground: "#333333cc",
-		};
 		const theme: Theme = {
-			colors: lightMode,
 			Text: {
 				h4Style: {
 					fontSize: 20,
@@ -123,7 +123,7 @@ class Root extends React.Component {
 			<MobileModeIfDesktop>
 				<Provider store={this.state.store}>
 					<ThemeProvider theme={theme}>
-						<MergeToColors>
+						<MergeToColors store={this.state.store}>
 							<View style={{ flex: 1 }}>
 								<Drawer navigatorRef={navigatorRef}>
 									<View style={{ flex: 1 }} accessibilityLabel={"test-label"}>
@@ -146,6 +146,9 @@ class Root extends React.Component {
 }
 
 const MergeToColors = withTheme(props => {
+	const { branding } = props.store.getState().shop.business;
+
+	props.theme.colors = branding.darkMode ? darkMode : lightMode;
 	setTheme(props.theme);
 	return props.children;
 });

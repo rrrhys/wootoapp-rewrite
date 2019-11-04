@@ -25,6 +25,7 @@ class Header extends React.PureComponent<IProps> {
 	render() {
 		const { backButton, theme, showCartButton } = this.props;
 
+		console.log("Header theme", theme);
 		const ICON_SIZE = 24;
 		const menuButtonElement = (
 			<Button
