@@ -50,7 +50,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>11</string>
 	<key>CodePushDeploymentKey</key>
 	<string>deployment-key-here</string>
 	<key>FacebookAppID</key>
@@ -94,7 +94,7 @@
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow MobileTEST to access your microphone</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Allow MobileTEST to access your device's accelerometer</string>
+	<string>Allow MobileTEST to access your device&apos;s accelerometer</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Give MobileTEST periences permission to save photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -103,6 +103,8 @@
 	<string>Allow MobileTEST to access your reminders</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>armv7</string>
@@ -112,6 +114,8 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 </dict>
 </plist>

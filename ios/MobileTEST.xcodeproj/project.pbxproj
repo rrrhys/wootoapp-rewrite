@@ -26,6 +26,7 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		76E3BCED70A2F544149864AC /* Pods-MobileTEST.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileTEST.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileTEST/Pods-MobileTEST.debug.xcconfig"; sourceTree = "<group>"; };
 		84EFC1A4C199FCB979B4A5E5 /* Pods-MobileTEST.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileTEST.release.xcconfig"; path = "Pods/Target Support Files/Pods-MobileTEST/Pods-MobileTEST.release.xcconfig"; sourceTree = "<group>"; };
+		98FAF1CF237032BF003CB580 /* MobileTEST.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = MobileTEST.entitlements; path = MobileTEST/MobileTEST.entitlements; sourceTree = "<group>"; };
 		A6F5BE528A7AC9A2A007B940 /* libPods-MobileTEST.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MobileTEST.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -55,6 +56,7 @@
 		13B07FAE1A68108700A75B9A /* MobileTEST */ = {
 			isa = PBXGroup;
 			children = (
+				98FAF1CF237032BF003CB580 /* MobileTEST.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -138,6 +140,16 @@
 			attributes = {
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = Facebook;
+				TargetAttributes = {
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 75KZKS56YM;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MobileTEST" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -281,9 +293,13 @@
 			baseConfigurationReference = 76E3BCED70A2F544149864AC /* Pods-MobileTEST.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = MobileTEST/MobileTEST.entitlements;
+				CURRENT_PROJECT_VERSION = 11;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = 75KZKS56YM;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MobileTEST/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -302,8 +318,12 @@
 			baseConfigurationReference = 84EFC1A4C199FCB979B4A5E5 /* Pods-MobileTEST.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 1;
+				CODE_SIGN_ENTITLEMENTS = MobileTEST/MobileTEST.entitlements;
+				CURRENT_PROJECT_VERSION = 11;
+				DEVELOPMENT_TEAM = 75KZKS56YM;
+				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MobileTEST/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
