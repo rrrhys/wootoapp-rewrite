@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-native-elements/src/list/ListItem.js b/node_modules/react-native-elements/src/list/ListItem.js
+index 9a1db6d..c1fbef7 100644
+--- a/node_modules/react-native-elements/src/list/ListItem.js
++++ b/node_modules/react-native-elements/src/list/ListItem.js
+@@ -4,7 +4,7 @@ import {
+   Platform,
+   StyleSheet,
+   Switch,
+-  TouchableHighlight,
++  TouchableOpacity,
+   View,
+ } from 'react-native';
+ 
+@@ -63,7 +63,7 @@ const ListItem = props => {
+     containerStyle,
+     onPress,
+     onLongPress,
+-    Component = onPress || onLongPress ? TouchableHighlight : View,
++    Component = onPress || onLongPress ? TouchableOpacity : View,
+     leftIcon,
+     leftAvatar,
+     leftElement,

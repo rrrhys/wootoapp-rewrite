@@ -13,65 +13,74 @@ import React from "react";
 import { connect } from "react-redux";
 
 export interface IProps {
-	id: number;
-	product: Product;
-	style?: ViewStyle;
+  id: number;
+  product: Product;
+  style?: ViewStyle;
 }
 
-class ProductTile extends React.Component<Partial<NavigationInjectedProps> & Partial<IProps>> {
-	navigateToProduct = () => {
-		const { product } = this.props;
-		this.props.navigation.navigate("Product", { product });
-	};
+class ProductTile extends React.Component<
+  Partial<NavigationInjectedProps> & Partial<IProps>
+> {
+  navigateToProduct = () => {
+    const { product } = this.props;
+    this.props.navigation.navigate("Product", {
+      product,
+      product_id: product.id
+    });
+  };
 
-	render() {
-		const { product, style } = this.props;
+  render() {
+    const { product, style } = this.props;
 
-		let image;
+    let image;
 
-		if (product) {
-			try {
-				image = product.images && product.images.length > 0 ? product.images[0] : null;
-			} catch (e) {
-				debugger;
-			}
-		}
+    if (product) {
+      try {
+        image =
+          product.images && product.images.length > 0
+            ? product.images[0]
+            : null;
+      } catch (e) {
+        debugger;
+      }
+    }
 
-		return (
-			<View style={style}>
-				{product ? (
-					<TouchableOpacity onPress={this.navigateToProduct}>
-						<Image source={{ uri: image && image.src }} style={{ height: 180 }} resizeMode="contain" />
+    return (
+      <View style={style}>
+        {product ? (
+          <TouchableOpacity onPress={this.navigateToProduct}>
+            <Image
+              source={{ uri: image && image.src }}
+              style={{ height: 180 }}
+              resizeMode="contain"
+            />
 
-						<FavoriteIcon id={product.id} size={24} />
-						<Debug>{product.type}</Debug>
+            <FavoriteIcon id={product.id} size={24} />
+            <Debug>{product.type}</Debug>
 
-						<Text style={{ marginBottom: 10 }}>{product.name}</Text>
-						<View style={{ flexDirection: "row" }}>
-							<Price product={product} />
-						</View>
-					</TouchableOpacity>
-				) : (
-					<Loading />
-				)}
-			</View>
-		);
-	}
+            <Text style={{ marginBottom: 10 }}>{product.name}</Text>
+            <View style={{ flexDirection: "row" }}>
+              <Price product={product} />
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <Loading />
+        )}
+      </View>
+    );
+  }
 }
 
 const mapStateToProps = (store: IStore, ownProps: IProps) => {
-	return {
-		product: store.products.products[ownProps.id],
-	};
+  return {
+    product: store.products.products[ownProps.id]
+  };
 };
 
 const mapDispatchToProps = dispatch => {
-	return {};
+  return {};
 };
 
 export default withNavigation(
-	connect(
-		mapStateToProps,
-		mapDispatchToProps
-	)(ProductTile)
+  connect(mapStateToProps, mapDispatchToProps)(ProductTile)
 );
