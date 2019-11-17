@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, View, Platform } from "react-native";
 import React, { Component } from "react";
 import { createAppContainer, createStackNavigator } from "react-navigation";
 import CartScreen from "./screens/CartScreen";
@@ -53,7 +53,7 @@ export const Routes = {
 export const setAddressBarToDerivedPath = (route, params) => {
   const path = derivePathFromRouteAndParams(route, params);
 
-  window.history.pushState(params, "", path);
+  Platform.OS === "web" && window.history.pushState(params, "", path);
 };
 export const derivePathFromRouteAndParams = (route, params) => {
   const routeObject = Routes[route];
@@ -186,15 +186,22 @@ class Root extends React.Component {
 }
 
 const MergeToColors = withTheme(props => {
+  console.log("MTC props", props, config);
   const state = props.store.getState();
 
-  if (state.shop.business) {
-    const { branding } = state.shop.business;
+  let branding;
 
-    props.theme.colors = branding.darkMode ? darkMode : lightMode;
-  } else {
-    props.theme.colors = lightMode;
+  if (state.shop.business) {
+    branding = state.shop.business.branding;
   }
+  if (config.branding) {
+    branding = config.branding;
+  }
+
+  props.theme.colors = {
+    ...props.theme.colors,
+    ...(branding.darkMode ? darkMode : lightMode)
+  };
 
   setTheme(props.theme);
   return props.children;

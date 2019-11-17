@@ -22,7 +22,9 @@ const getEndpoint = () => {
 
     switch (environment) {
       case "dev":
-        return "https://y974dhoem9.execute-api.us-east-1.amazonaws.com/dev/web/mobile-app-proxy";
+      case "test":
+      case "prod":
+        return `https://y974dhoem9.execute-api.us-east-1.amazonaws.com/${environment}/web/mobile-app-proxy`;
         break;
       default:
         debugger;
