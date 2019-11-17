@@ -200,7 +200,7 @@ const MergeToColors = withTheme(props => {
 
   props.theme.colors = {
     ...props.theme.colors,
-    ...(branding.darkMode ? darkMode : lightMode)
+    ...(branding && branding.darkMode ? darkMode : lightMode)
   };
 
   setTheme(props.theme);
