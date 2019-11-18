@@ -117,12 +117,6 @@ class HomeScreen extends React.Component<IAppProps> {
           onClosingState={this.onClosingState}
           entry={"bottom"}
         >
-          <View style={{ padding: 8 }}>
-            <Text h4 style={{ textAlign: "center", marginBottom: 6 }}>
-              Sign in
-            </Text>
-            <Divider />
-          </View>
           <SocialSignin canSkip={true} />
         </Modal>
         {hasSignedInOrSkippedWelcome && (
@@ -161,7 +155,7 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   modal: {
     height: "auto",
-    backgroundColor: "#ffffff88",
+    backgroundColor: "#ffffffaa",
     padding: 8,
     marginLeft: 0,
     width: width - 32,

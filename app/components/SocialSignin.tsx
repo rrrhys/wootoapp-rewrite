@@ -10,19 +10,19 @@ import {
 import Actions from "../actions";
 import React from "react";
 import { View } from "react-native";
-import { SocialProvider } from "../actions/customer";
+import { SocialProvider, RegisterArgs } from "../actions/customer";
 
-import { LoginManager } from "react-native-fbsdk";
-import { GoogleSignin, statusCodes } from "react-native-google-signin";
 import config from "../../env";
 import { connect } from "react-redux";
 import Button from "./Button";
+import ExternalSigninProviders from "./ExternalSigninProviders";
 import { ICON_SIZE } from "./Header";
 
 const SCREEN_0_SIGNIN_OPTIONS = 0;
 const SCREEN_1_EMAIL_SIGNIN = 1;
 const SCREEN_2_EMAIL_REGISTER = 2;
 const SCREEN_3_FORGOT_PASSWORD = 3;
+const SCREEN_4_FORGOT_PASSWORD_EMAIL_SENT = 4;
 
 const inputStyle = { fontSize: 20, paddingVertical: 2, marginVertical: 6 };
 
@@ -42,18 +42,25 @@ const PopupModalHeader = props => {
         </Text>
         <Divider />
       </View>
-      <Button
-        title="Back"
-        type="clear"
-        onPress={props.onBackPress}
-        style={{ position: "absolute" }}
-      />
+      {props.onBackPress && (
+        <Button
+          title="Back"
+          type="clear"
+          onPress={props.onBackPress}
+          style={{ position: "absolute" }}
+        />
+      )}
     </View>
   );
 };
 class SocialSignin extends React.Component {
   state = {
-    step: SCREEN_0_SIGNIN_OPTIONS
+    step: SCREEN_0_SIGNIN_OPTIONS,
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    phone: ""
   };
   constructor(props) {
     super(props);
@@ -68,28 +75,17 @@ class SocialSignin extends React.Component {
       step: screen
     });
   };
-  signinWithFacebook = () => {
-    const { authenticateSocialUser } = this.props;
-    LoginManager.logInWithPermissions(["public_profile", "email"]).then(
-      function(result) {
-        if (result.isCancelled) {
-        } else {
-          authenticateSocialUser("facebook");
-        }
-      },
-      function(error) {
-        alert("Login failed with error: " + error);
-      }
-    );
-  };
 
   resetPassword = () => {
     const { resetPassword } = this.props;
 
     const { email } = this.state;
 
-    debugger;
     resetPassword(email);
+
+    this.setState({
+      step: SCREEN_4_FORGOT_PASSWORD_EMAIL_SENT
+    });
   };
   signinWithEmail = () => {
     const { authenticateSocialUser } = this.props;
@@ -97,67 +93,26 @@ class SocialSignin extends React.Component {
     const access_token = btoa(JSON.stringify({ email, password }));
     authenticateSocialUser("store", { access_token });
   };
-  signinWithGoogle = async () => {
-    const { authenticateSocialUser } = this.props;
-    try {
-      await GoogleSignin.hasPlayServices();
-      GoogleSignin.configure({
-        iosClientId: config.google_ios_client_id,
-        webClientId: config.google_web_client_id,
-        offlineAccess: true
-      });
-      const userInfo = await GoogleSignin.signIn();
-      authenticateSocialUser("google", userInfo);
-      this.setState({ userInfo });
-    } catch (error) {
-      console.log(error);
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-      } else {
-        // some other error happened
-      }
-    }
-  };
 
+  registerWithEmail = () => {
+    const { registerUser } = this.props;
+    const { email, password, phone, first_name, last_name } = this.state;
+    const args: RegisterArgs = {
+      email,
+      password,
+      phone,
+      first_name,
+      last_name
+    };
+    registerUser(args);
+  };
   signinOptionsComponent = () => {
     return (
       <View>
-        <Button
-          icon={
-            <Icon
-              name="facebook"
-              type="font-awesome"
-              size={24}
-              color="white"
-              iconStyle={{ paddingRight: 16 }}
-            />
-          }
-          buttonStyle={{ ...socialButtonStyle, backgroundColor: FACEBOOK_BLUE }}
-          titleStyle={socialTitleStyle}
-          raised={true}
-          title={`Sign in with Facebook`}
-          onPress={this.signinWithFacebook}
-        />
-
-        <Button
-          icon={
-            <Icon
-              name="google"
-              type="font-awesome"
-              size={24}
-              color="white"
-              iconStyle={{ paddingRight: 16 }}
-            />
-          }
-          buttonStyle={{ ...socialButtonStyle, backgroundColor: GOOGLE_RED }}
-          titleStyle={socialTitleStyle}
-          raised={true}
-          title={`Sign in with Google`}
-          onPress={this.signinWithGoogle}
+        <PopupModalHeader title="Sign In" />
+        <ExternalSigninProviders
+          socialButtonStyle={socialButtonStyle}
+          socialTitleStyle={socialTitleStyle}
         />
 
         <Button
@@ -205,6 +160,23 @@ class SocialSignin extends React.Component {
     );
   };
 
+  forgotPasswordEmailSentComponent = () => {
+    return (
+      <View>
+        <PopupModalHeader
+          title="Forgot Password"
+          onBackPress={() => this.transitionToScreen(SCREEN_1_EMAIL_SIGNIN)}
+        />
+
+        <View style={{ margin: 8 }}>
+          <Text>
+            Thanks! If an account exists for the address {this.state.email}, you
+            will receive an email from us shortly.
+          </Text>
+        </View>
+      </View>
+    );
+  };
   forgotPasswordComponent = () => {
     return (
       <View>
@@ -243,9 +215,38 @@ class SocialSignin extends React.Component {
           title="Register"
           onBackPress={() => this.transitionToScreen(SCREEN_1_EMAIL_SIGNIN)}
         />
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: 1 }}>
+            <Input
+              placeholder="First Name"
+              inputStyle={inputStyle}
+              onChange={e =>
+                this.handleChange("first_name", e.nativeEvent.text)
+              }
+              value={this.state["first_name"]}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Input
+              placeholder="Last Name"
+              inputStyle={inputStyle}
+              onChange={e => this.handleChange("last_name", e.nativeEvent.text)}
+              value={this.state["last_name"]}
+            />
+          </View>
+        </View>
+
+        <Input
+          placeholder="Phone Number"
+          inputStyle={inputStyle}
+          keyboardType={"phone-pad"}
+          onChange={e => this.handleChange("phone", e.nativeEvent.text)}
+          value={this.state["phone"]}
+        />
         <Input
           placeholder="sam@email.com"
           inputStyle={inputStyle}
+          keyboardType={"email-address"}
           onChange={e => this.handleChange("email", e.nativeEvent.text)}
           value={this.state["email"]}
         />
@@ -273,6 +274,7 @@ class SocialSignin extends React.Component {
         <Input
           placeholder="sam@email.com"
           inputStyle={inputStyle}
+          keyboardType={"email-address"}
           onChange={e => this.handleChange("email", e.nativeEvent.text)}
           value={this.state["email"]}
         />
@@ -317,8 +319,6 @@ class SocialSignin extends React.Component {
   render() {
     const { step } = this.state;
 
-    console.log(step);
-
     switch (step) {
       case SCREEN_0_SIGNIN_OPTIONS:
         return this.signinOptionsComponent();
@@ -328,6 +328,8 @@ class SocialSignin extends React.Component {
         return this.emailRegisterComponent();
       case SCREEN_3_FORGOT_PASSWORD:
         return this.forgotPasswordComponent();
+      case SCREEN_4_FORGOT_PASSWORD_EMAIL_SENT:
+        return this.forgotPasswordEmailSentComponent();
     }
   }
 }
@@ -349,11 +351,13 @@ const actions = dispatch => {
     authenticateSocialUser,
     signoutCustomer,
     skipSignin,
-    resetPassword
+    resetPassword,
+    registerUser
   } = Actions;
   return {
     skipSignin: () => dispatch(skipSignin()),
     resetPassword: email => dispatch(resetPassword(email)),
+    registerUser: args => dispatch(registerUser(args)),
     authenticateSocialUser: (provider: SocialProvider, additionalInfo = null) =>
       dispatch(authenticateSocialUser(provider, additionalInfo))
   };

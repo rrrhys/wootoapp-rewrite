@@ -3,6 +3,7 @@ const TRUSTED_USER_AUTHENTICATED = "TRUSTED_USER_AUTHENTICATED";
 const SIGNOUT_USER = "SIGNOUT_USER";
 const SKIP_SIGNIN = "SKIP_SIGNIN";
 const PASSWORD_RESET = "PASSWORD_RESET";
+const REGISTER_USER_SUCCESS = "REGISTER_USER_SUCCESS";
 import api from "./../../data/api";
 import { AccessToken } from "react-native-fbsdk";
 export type SocialProvider = "facebook" | "google" | "store";
@@ -15,6 +16,13 @@ const trustedUserAuthenticatedSuccess = (
   return {
     type: TRUSTED_USER_AUTHENTICATED,
     data: { jwt, provider, wc_customer }
+  };
+};
+
+const userRegisterSuccess = result => {
+  return {
+    type: REGISTER_USER_SUCCESS,
+    data: result
   };
 };
 
@@ -73,7 +81,6 @@ const authenticateSocialUser = (
             accessToken: (additionalData as StoreCredentials).access_token
           })
           .then(r => {
-            debugger;
             dispatch(
               trustedUserAuthenticatedSuccess(r.jwt, provider, r.wc_customer)
             );
@@ -99,6 +106,25 @@ const authenticateSocialUser = (
   };
 };
 
+export interface RegisterArgs {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  password: string;
+}
+
+const registerUser = (args: RegisterArgs) => {
+  return (dispatch, getState) => {
+    api.customers.create(args).then(r => {
+      const { email, password } = args;
+      const access_token = btoa(JSON.stringify({ email, password }));
+      dispatch(authenticateSocialUser("store", { access_token }));
+      dispatch(userRegisterSuccess(r));
+    });
+  };
+};
+
 const resetPassword = email => {
   api.customers.resetPassword({ email });
 
@@ -116,5 +142,6 @@ export default {
   SKIP_SIGNIN,
   PASSWORD_RESET,
   skipSignin,
-  resetPassword
+  resetPassword,
+  registerUser
 };

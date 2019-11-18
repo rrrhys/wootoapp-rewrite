@@ -4,9 +4,9 @@ import { persistReducer, persistStore } from "redux-persist";
 import { createLogger } from "redux-logger";
 import reducers from "../reducers";
 import thunk from "redux-thunk";
-import AsyncStorage from "@react-native-community/async-storage";
 var isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
+import storageProvider from "./platformStorageProvider";
 const OUTPUT_LOG_MESSAGES = false;
 var logger = createLogger({
   predicate: (getState, action) => isDebuggingInChrome && OUTPUT_LOG_MESSAGES,
@@ -17,7 +17,7 @@ var logger = createLogger({
 
 const persistConfig = {
   key: "root",
-  storage: AsyncStorage,
+  storage: storageProvider,
   blacklist: ["ui"]
 };
 

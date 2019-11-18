@@ -278,33 +278,6 @@ export default {
         return response.json();
       });
     },
-    authenticate(account) {
-      throw new Error("Needs checking.");
-      //https://livestore.payitlater.com.au/wp-admin/admin-ajax.php?action=wootoapp_execute&method=authenticate&XDEBUG_SESSION_START=1
-
-      let endpoint_custom =
-        config.scheme + getEndpoint() + config.plugin_endpoint;
-
-      let url = endpoint_custom.replace("{method}", "authenticate");
-
-      let req = activeRequest("customers.authenticate", url);
-
-      let data = JSON.stringify(account);
-
-      url = preflight(url);
-      return fetch(url, {
-        method: "POST",
-        body: data,
-        headers: getJsonStyleHeaders()
-      })
-        .then(response => response.json())
-        .then(response => {
-          return response;
-        })
-        .catch(error => {
-          console.error(error);
-        });
-    },
     resetPassword(customer) {
       let email = customer.email;
 
@@ -315,8 +288,6 @@ export default {
         "send_password_reset_email"
       );
 
-      debugger;
-
       let req = activeRequest("customers.resetPassword", url);
 
       let args = {};
@@ -326,14 +297,12 @@ export default {
 
       url = preflight(url, "");
 
-      debugger;
       return fetch(url, {
         method: "POST",
         body: data,
         headers: getJsonStyleHeaders(true)
       })
         .then(response => {
-          debugger;
           console.log(response);
           return true;
         })
@@ -394,15 +363,11 @@ export default {
 
       let url = "/customers";
 
-      args.password = randomString(32, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
-
-      let headersJson = getJsonStyleHeaders();
-
       url = preflight(url);
       return fetch(url, {
         method: "POST",
         body: JSON.stringify(args),
-        headers: getJsonStyleHeaders()
+        headers: getJsonStyleHeaders(true)
       })
         .then(response => response.json())
         .catch(error => {
