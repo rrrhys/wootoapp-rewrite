@@ -1,5 +1,16 @@
-import { Button, Card, Header as HeaderComponent, Icon, Image, withTheme } from "react-native-elements";
-import { NavigationParams, NavigationScreenProp, NavigationState } from "react-navigation";
+import {
+  Button,
+  Card,
+  Header as HeaderComponent,
+  Icon,
+  Image,
+  withTheme
+} from "react-native-elements";
+import {
+  NavigationParams,
+  NavigationScreenProp,
+  NavigationState
+} from "react-navigation";
 
 import Actions from "../actions";
 import HeaderCartButton from "./HeaderCartButton";
@@ -9,76 +20,83 @@ import { colors } from "../styles";
 import { connect } from "react-redux";
 
 export interface IProps {
-	backButton?: boolean;
-	title: string;
-	openDrawer: () => void;
-	navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  backButton?: boolean;
+  title: string;
+  openDrawer: () => void;
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }
 
+export const ICON_SIZE = 24;
+
 class Header extends React.PureComponent<IProps> {
-	navigateToCart = () => {
-		this.props.navigation.navigate("Cart");
-	};
-	navigateBack = () => {
-		this.props.navigation.goBack();
-	};
-	render() {
-		const { backButton, theme, showCartButton } = this.props;
+  navigateToCart = () => {
+    this.props.navigation.navigate("Cart");
+  };
+  navigateBack = () => {
+    this.props.navigation.goBack();
+  };
+  render() {
+    const { backButton, theme, showCartButton } = this.props;
 
-		console.log("Header theme", theme);
-		const ICON_SIZE = 24;
-		const menuButtonElement = (
-			<Button
-				onPress={this.props.openDrawer}
-				icon={<Icon name="menu" size={ICON_SIZE} color={theme.colors.navbarText} />}
-			/>
-		);
-		const backButtonElement = (
-			<Button
-				onPress={this.navigateBack}
-				icon={<Icon name="chevron-left" size={ICON_SIZE} color={theme.colors.navbarText} />}
-			/>
-		);
-		const leftComponent = backButton ? backButtonElement : menuButtonElement;
+    const menuButtonElement = (
+      <Button
+        onPress={this.props.openDrawer}
+        icon={
+          <Icon name="menu" size={ICON_SIZE} color={theme.colors.navbarText} />
+        }
+      />
+    );
+    const backButtonElement = (
+      <Button
+        onPress={this.navigateBack}
+        icon={
+          <Icon
+            name="chevron-left"
+            size={ICON_SIZE}
+            color={theme.colors.navbarText}
+          />
+        }
+      />
+    );
+    const leftComponent = backButton ? backButtonElement : menuButtonElement;
 
-		const cartElement = showCartButton ? <HeaderCartButton size={ICON_SIZE} onPress={this.navigateToCart} /> : null;
-		return (
-			<View>
-				<HeaderComponent
-					statusBarProps={{
-						barStyle: "light-content",
-						translucent: true,
-						backgroundColor: "transparent",
-					}}
-					leftComponent={leftComponent}
-					centerComponent={{
-						text: this.props.title,
-						style: { color: theme.colors.navbarText },
-					}}
-					rightComponent={cartElement}
-				/>
-			</View>
-		);
-	}
+    const cartElement = showCartButton ? (
+      <HeaderCartButton size={ICON_SIZE} onPress={this.navigateToCart} />
+    ) : null;
+    return (
+      <View>
+        <HeaderComponent
+          statusBarProps={{
+            barStyle: "light-content",
+            translucent: true,
+            backgroundColor: "transparent"
+          }}
+          leftComponent={leftComponent}
+          centerComponent={{
+            text: this.props.title,
+            style: { color: theme.colors.navbarText }
+          }}
+          rightComponent={cartElement}
+        />
+      </View>
+    );
+  }
 }
 
 const select = store => {
-	return {
-		ui: store.ui,
-	};
+  return {
+    ui: store.ui
+  };
 };
 
 const actions = dispatch => {
-	const { openDrawer } = Actions;
-	return {
-		openDrawer: () => dispatch(openDrawer()),
-	};
+  const { openDrawer } = Actions;
+  return {
+    openDrawer: () => dispatch(openDrawer())
+  };
 };
 
 Header.defaultProps = {
-	showCartButton: true,
+  showCartButton: true
 };
-export default connect(
-	select,
-	actions
-)(withTheme(Header));
+export default connect(select, actions)(withTheme(Header));

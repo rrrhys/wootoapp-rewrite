@@ -6,7 +6,7 @@
     "web": "expo start --web --offline --web-only --dev",
     "web-build": "expo build:web",
     "postinstall": "npx patch-package",
-    "deploy": "rm -rf web-build/* && yarn web-build && aws s3 sync web-build/ s3://dev-mobileapp.wootoapp.com && echo \"Open https://dev-mobileapp.wootoapp.com/ \""
+    "deploy": "rm -rf web-build/* && yarn web-build && aws s3 sync web-build/ s3://preview.wootoapp.com && echo \"Open https://preview.wootoapp.com/ \""
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.3",

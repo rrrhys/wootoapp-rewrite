@@ -77,8 +77,8 @@ const customPreflight = url => {
   return finalUrl;
 };
 
-const preflight = url => {
-  url = "/wp-json/wc/v2" + url;
+const preflight = (url, path_prefix = "/wp-json/wc/v2") => {
+  url = path_prefix + url;
 
   let finalUrl = edgeUrl();
   finalUrl += "&storeQuery=" + encodeURIComponent(url);
@@ -308,13 +308,14 @@ export default {
     resetPassword(customer) {
       let email = customer.email;
 
-      let endpoint_custom =
-        config.scheme + getEndpoint() + config.plugin_endpoint;
+      let endpoint_custom = config.plugin_endpoint;
 
       let url = endpoint_custom.replace(
         "{method}",
         "send_password_reset_email"
       );
+
+      debugger;
 
       let req = activeRequest("customers.resetPassword", url);
 
@@ -323,13 +324,16 @@ export default {
 
       let data = JSON.stringify(args);
 
-      url = preflight(url);
+      url = preflight(url, "");
+
+      debugger;
       return fetch(url, {
         method: "POST",
         body: data,
-        headers: getJsonStyleHeaders()
+        headers: getJsonStyleHeaders(true)
       })
         .then(response => {
+          debugger;
           console.log(response);
           return true;
         })

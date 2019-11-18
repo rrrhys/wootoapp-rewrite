@@ -11,69 +11,79 @@ import SocialSignin from "./SocialSignin";
 import { withNavigation } from "react-navigation";
 
 class RequiresAuthenticatedUser extends React.Component {
-	componentDidMount() {
-		if (!this.props.customer.customer) {
-			this.refs.modal1.open();
-		}
-	}
+  componentDidMount() {
+    if (!this.props.customer.customer) {
+      this.refs.modal1.open();
+    }
+  }
 
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.customer.customer && !this.props.customer.customer) {
-			this.refs.modal1.close();
-		}
-	}
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.customer.customer && !this.props.customer.customer) {
+      this.refs.modal1.close();
+    }
+  }
 
-	render() {
-		return (
-			<View style={{ flex: 1 }}>
-				<Modal
-					backdropPressToClose={false}
-					swipeToClose={false}
-					coverScreen={true}
-					backButtonClose={false}
-					style={[styles.modal]}
-					ref={"modal1"}
-					onClosed={this.onClose}
-					onOpened={this.onOpen}
-					onClosingState={this.onClosingState}
-					position={"bottom"}
-				>
-					<SocialSignin
-						goBack={() => {
-							this.refs.modal1.close();
-							this.props.navigation.goBack();
-						}}
-					/>
-				</Modal>
+  render() {
+    return (
+      <View style={{ flex: 1 }}>
+        <Modal
+          backdropPressToClose={false}
+          swipeToClose={false}
+          coverScreen={true}
+          backButtonClose={false}
+          style={[styles.modal]}
+          ref={"modal1"}
+          onClosed={this.onClose}
+          onOpened={this.onOpen}
+          onClosingState={this.onClosingState}
+          useNativeDriver={true}
+          position={"center"}
+        >
+          <View
+            style={{
+              margin: 10,
+              padding: 4,
+              borderRadius: 10,
+              backgroundColor: "#ffffff"
+            }}
+          >
+            <SocialSignin
+              goBack={() => {
+                this.refs.modal1.close();
+                this.props.navigation.goBack();
+              }}
+            />
+          </View>
+        </Modal>
 
-				{this.props.children}
-			</View>
-		);
-	}
+        {this.props.children}
+      </View>
+    );
+  }
 }
 
 const select = (store, ownProps: ICartScreenProps) => {
-	return {
-		customer: store.customer,
-	};
+  return {
+    customer: store.customer
+  };
 };
 
 const actions = dispatch => {
-	const { authenticateSocialUser, signoutCustomer } = Actions;
-	return {
-		authenticateSocialUser: (provider: SocialProvider, additionalInfo = null) =>
-			dispatch(authenticateSocialUser(provider, additionalInfo)),
-	};
+  const { authenticateSocialUser, signoutCustomer } = Actions;
+  return {
+    authenticateSocialUser: (provider: SocialProvider, additionalInfo = null) =>
+      dispatch(authenticateSocialUser(provider, additionalInfo))
+  };
 };
 
 export default connect(
-	select,
-	actions
+  select,
+  actions
 )(withNavigation(withTheme(RequiresAuthenticatedUser)));
 
 const styles = StyleSheet.create({
-	modal: {
-		height: "auto",
-		paddingBottom: 30,
-	},
+  modal: {
+    backgroundColor: "rgba(0,0,0,0)",
+    height: "auto"
+  }
 });

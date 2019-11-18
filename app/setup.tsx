@@ -155,6 +155,9 @@ class Root extends React.Component {
       Text: {
         h4Style: {
           fontSize: 20
+        },
+        h3Style: {
+          fontSize: 24
         }
       }
     };
@@ -186,7 +189,6 @@ class Root extends React.Component {
 }
 
 const MergeToColors = withTheme(props => {
-  console.log("MTC props", props, config);
   const state = props.store.getState();
 
   let branding;
@@ -202,6 +204,8 @@ const MergeToColors = withTheme(props => {
     ...props.theme.colors,
     ...(branding && branding.darkMode ? darkMode : lightMode)
   };
+
+  console.log(props.theme);
 
   setTheme(props.theme);
   return props.children;
