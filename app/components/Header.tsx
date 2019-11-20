@@ -15,7 +15,7 @@ import {
 import Actions from "../actions";
 import HeaderCartButton from "./HeaderCartButton";
 import React from "react";
-import { View } from "react-native";
+import { View, Dimensions, Platform } from "react-native";
 import { colors } from "../styles";
 import { connect } from "react-redux";
 
@@ -27,6 +27,16 @@ export interface IProps {
 }
 
 export const ICON_SIZE = 24;
+
+export const hasNotch = () => {
+  const { width, height } = Dimensions.get("window");
+  return (
+    Platform.OS === "ios" &&
+    !Platform.isPad &&
+    !Platform.isTVOS &&
+    (height === 812 || width === 812)
+  );
+};
 
 class Header extends React.PureComponent<IProps> {
   navigateToCart = () => {
@@ -41,6 +51,7 @@ class Header extends React.PureComponent<IProps> {
     const menuButtonElement = (
       <Button
         onPress={this.props.openDrawer}
+        buttonStyle={{ backgroundColor: theme.colors.navbarBackgroundColor }}
         icon={
           <Icon name="menu" size={ICON_SIZE} color={theme.colors.navbarText} />
         }
@@ -49,6 +60,7 @@ class Header extends React.PureComponent<IProps> {
     const backButtonElement = (
       <Button
         onPress={this.navigateBack}
+        buttonStyle={{ backgroundColor: theme.colors.navbarBackgroundColor }}
         icon={
           <Icon
             name="chevron-left"
@@ -69,12 +81,16 @@ class Header extends React.PureComponent<IProps> {
           statusBarProps={{
             barStyle: "light-content",
             translucent: true,
-            backgroundColor: "transparent"
+            backgroundColor: "transparent",
+            marginTop: hasNotch() ? 10 : 0
+          }}
+          containerStyle={{
+            backgroundColor: theme.colors.navbarBackgroundColor
           }}
           leftComponent={leftComponent}
           centerComponent={{
             text: this.props.title,
-            style: { color: theme.colors.navbarText }
+            style: { color: theme.colors.navbarText, fontSize: 22 }
           }}
           rightComponent={cartElement}
         />

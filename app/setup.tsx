@@ -20,84 +20,16 @@ import PayScreen from "./screens/PayScreen";
 import OrderPaidScreen from "./screens/OrderPaidScreen";
 import config from "../env";
 import OrderDetailsScreen from "./screens/OrderDetailsScreen";
-
-export const Routes = {
-  Home: {
-    screen: HomeScreen,
-    path: "/"
-  },
-  Category: {
-    screen: CategoryScreen,
-    path: "/category/:category_id"
-  },
-  Product: {
-    screen: ProductScreen,
-    path: "/product/:product_id"
-  },
-  Cart: {
-    screen: CartScreen,
-    path: "/cart"
-  },
-  Checkout: CheckoutScreen,
-  Order: OrderScreen,
-  Search: SearchScreen,
-  MyAccount: MyAccountScreen,
-  Pay: PayScreen,
-  OrderDetails: OrderDetailsScreen,
-  OrderPaid: {
-    screen: OrderPaidScreen,
-    path: "/order-paid/:order_id"
-  }
-};
-
-export const setAddressBarToDerivedPath = (route, params) => {
-  const path = derivePathFromRouteAndParams(route, params);
-
-  Platform.OS === "web" && window.history.pushState(params, "", path);
-};
-export const derivePathFromRouteAndParams = (route, params) => {
-  const routeObject = Routes[route];
-
-  let path = routeObject.path;
-
-  // we need to substitute vars into path.
-
-  if (params) {
-    Object.keys(params).forEach(k => {
-      if (typeof params[k] !== "object") {
-        path = path.split(":" + k).join(params[k]);
-      }
-    });
-  }
-
-  return path;
-};
-
-const RootStack = createStackNavigator(Routes, {
-  initialRouteName: "Home",
-  /* The header config from HomeScreen is now here */
-  defaultNavigationOptions: ({ navigation, screenProps }) => ({
-    header: props => {
-      // translate props passed in navigationOptions in the screen
-      // into regular props for header
-      const extraProps = props.scene.descriptor.options;
-
-      setAddressBarToDerivedPath(
-        navigation.state.routeName,
-        navigation.state.params
-      );
-
-      return <Header navigation={navigation} {...extraProps} />;
-    }
-  })
-});
+import { setAddressBarToDerivedPath } from "../helpers/routing";
+import RootStack from "./navigation/RootStack";
 
 const Navigation = createAppContainer(RootStack);
 
 const darkMode = {
   text: "#ffffff",
   primary: "#cccccc", // header bg, button bg ,
-  navbarText: "#000000",
+  navbarText: "#ffffff",
+  navbarBackgroundColor: "#000000",
   backgroundColor: "#121212",
   listBackgroundColor: "#000000",
   secondary: "#0000ff",
@@ -114,7 +46,8 @@ const darkMode = {
   overlayBackground: "#eeeeee33"
 };
 const lightMode = {
-  navbarText: "#ffffff",
+  navbarText: "#333333",
+  navbarBackgroundColor: "#ffffff",
   backgroundColor: "#fafafa",
   listBackgroundColor: "#ffffff",
   overlayBackground: "#333333cc"
@@ -204,8 +137,6 @@ const MergeToColors = withTheme(props => {
     ...props.theme.colors,
     ...(branding && branding.darkMode ? darkMode : lightMode)
   };
-
-  console.log(props.theme);
 
   setTheme(props.theme);
   return props.children;

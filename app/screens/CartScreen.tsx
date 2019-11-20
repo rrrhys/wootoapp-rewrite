@@ -17,7 +17,7 @@ import { rules, DIVIDER_HEIGHT } from "../styles";
 import Price from "../components/Price";
 import Card from "../primitives/Card";
 import ShippingMethodsModal from "../components/ShippingMethodsModal";
-import { setAddressBarToDerivedPath } from "../setup";
+import { setAddressBarToDerivedPath } from "../../helpers/routing";
 
 export interface ICartScreenProps {
   navigation: {

@@ -7,10 +7,7 @@ import ProductTile from "../components/ProductTile";
 import React from "react";
 import { connect } from "react-redux";
 import { withTheme } from "react-native-elements";
-import {
-  derivePathFromRouteAndParams,
-  setAddressBarToDerivedPath
-} from "../setup";
+import { setAddressBarToDerivedPath } from "../../helpers/routing";
 
 export interface ICategoryScreenProps {
   navigation: {
@@ -32,7 +29,9 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
     );
 
     return {
-      title: navigation.state.params.category.name,
+      title:
+        navigation.state.params.category &&
+        navigation.state.params.category.name,
       backButton: true
     };
   };
@@ -40,7 +39,23 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
   constructor(props: ICategoryScreenProps) {
     super(props);
 
-    props.loadProductsInCategory(props.navigation.state.params.category.id, 1);
+    this.setHeadingForProps(props);
+    props.loadProductsInCategory(props.category_id, 1);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setHeadingForProps(nextProps);
+  }
+  private setHeadingForProps(nextProps: any) {
+    if (!nextProps.navigation.state.params.category) {
+      this.props.navigation.setParams({
+        category: {
+          name: nextProps.categories.data.find(
+            c => c.id == nextProps.category_id
+          ).name
+        }
+      });
+    }
   }
 
   render() {
@@ -48,11 +63,7 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
     const numColumns = 2;
     const tileStyle = {
       flexDirection: "column",
-      flex: 1 / numColumns,
-      paddingHorizontal: 10,
-      borderColor: theme.colors.grey5,
-      borderWidth: 1,
-      borderRightWidth: 0
+      flex: 1 / numColumns
     };
 
     const { height } = Dimensions.get("window");
@@ -82,13 +93,17 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
 }
 
 const select = (store, ownProps: ICategoryScreenProps) => {
-  const { category } = ownProps.navigation.state.params;
+  let { category, category_id } = ownProps.navigation.state.params;
 
+  if (!category_id) {
+    category_id = category.id;
+  }
   return {
     cart: store.cart,
     ui: store.ui,
     categories: store.categories,
-    productsByCategory: store.products.byCategoryId[category.id]
+    category_id,
+    productsByCategory: store.products.byCategoryId[category_id]
   };
 };
 

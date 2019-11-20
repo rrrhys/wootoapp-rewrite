@@ -19,11 +19,8 @@ import ProductDescription from "../components/ProductDescription";
 import React from "react";
 import { connect } from "react-redux";
 import ThemedScrollableTabView from "../primitives/ThemedScrollableTabView";
+import { setAddressBarToDerivedPath } from "../../helpers/routing";
 
-import {
-  derivePathFromRouteAndParams,
-  setAddressBarToDerivedPath
-} from "../setup";
 export const INTERNAL_QUANTITY = "INTERNAL_QUANTITY";
 export const ATTRIBUTE_MATCHING_PROPERTY = "name";
 export interface IProductScreenProps {
@@ -73,7 +70,7 @@ class ProductScreen extends React.Component<
 
   constructor(props: IProductScreenProps) {
     super(props);
-    props.loadProductById(props.navigation.state.params.product.id);
+    props.loadProductById(props.product_id);
   }
 
   productAttributeChanged = (key: string, value: any) => {
@@ -176,8 +173,6 @@ class ProductScreen extends React.Component<
 
     const { quantity, attributesSelected, variation, viewWidth } = this.state;
 
-    console.log(attributesSelected);
-
     const OUTER_MARGIN = 8;
     return product ? (
       <View
@@ -241,12 +236,12 @@ class ProductScreen extends React.Component<
           // these belong on the specifications tab.
 
           //TODO: add to cart button should only be enabled if all variations have been selected.
-          product.attributes.map((a: Attribute) => {
+          product.attributes.map((a: Attribute, i) => {
             return (
               a.visible && (
                 <KeyValuePicker
                   containerStyle={{ margin: OUTER_MARGIN }}
-                  key={a.id}
+                  key={i}
                   id={a[ATTRIBUTE_MATCHING_PROPERTY]}
                   label={a.name}
                   values={a.options}
@@ -278,17 +273,21 @@ class ProductScreen extends React.Component<
 }
 
 const select = (store, ownProps: IProductScreenProps) => {
-  const { product } = ownProps.navigation.state.params;
+  let { product, product_id } = ownProps.navigation.state.params;
 
+  if (!product_id) {
+    product_id = product.id;
+  }
   const variations = store.products.variations
-    ? store.products.variations[product.id]
+    ? store.products.variations[product_id]
     : [];
 
   return {
+    product_id,
     cart: store.cart,
     ui: store.ui,
     categories: store.categories,
-    product: store.products.products[product.id],
+    product: store.products.products[product_id],
     variations
   };
 };

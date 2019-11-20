@@ -7,14 +7,13 @@ import ui from "./ui";
 import orders from "./orders";
 
 const actions = {
-	...shop,
-	...categories,
-	...ui,
-	...products,
-	...cart,
-	...customer,
-	...orders,
+  ...shop,
+  ...categories,
+  ...ui,
+  ...products,
+  ...cart,
+  ...customer,
+  ...orders
 };
 
-console.log("actions", actions);
 export default actions;

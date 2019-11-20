@@ -1,3 +1,4 @@
+import { TProductFilter } from "./../app/actions/products";
 import { ICustomer } from "./../app/reducers/customer";
 import { ICart } from "./../app/reducers/cart";
 import HtmlEntities from "html-entities";
@@ -779,6 +780,28 @@ export default {
       args.per_page = 20;
       if (!args.page) {
         args.page = 1;
+      }
+
+      if (args.filter) {
+        let filter: TProductFilter;
+        ({ filter } = args);
+        delete args.filter;
+        switch (filter) {
+          case "featured":
+            args.stock_status = "instock";
+            args.featured = true;
+
+            break;
+          case "on_sale":
+            args.stock_status = "instock";
+            args.on_sale = true;
+            break;
+          case "new":
+            args.stock_status = "instock";
+            args.orderby = "date";
+            args.order = "desc";
+            break;
+        }
       }
 
       let url = "/products";
