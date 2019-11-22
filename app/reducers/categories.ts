@@ -1,7 +1,7 @@
 import Actions from "../actions";
 import { Category } from "../types/woocommerce";
 
-const { CATEGORIES_LOADED } = Actions;
+const { CATEGORIES_LOADED, CATEGORY_LOADED } = Actions;
 
 export interface ICategories {
   data: Array<Category>;
@@ -20,6 +20,25 @@ const categories = (state = initialState, action) => {
       return {
         ...state,
         data,
+        lastUpdated: new Date()
+      };
+    }
+  }
+
+  if (action.type === CATEGORY_LOADED) {
+    let { data } = action;
+
+    let { category_id, result } = data;
+
+    let existingData = state.data;
+
+    existingDataFiltered = existingData.filter(e => e.id != category_id);
+    existingDataFiltered.push(data.result);
+    state.data = [...existingDataFiltered];
+
+    if (data) {
+      return {
+        ...state,
         lastUpdated: new Date()
       };
     }

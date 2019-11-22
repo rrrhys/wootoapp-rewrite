@@ -42,11 +42,39 @@ import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { deriveScreenAndParamsFromUrl } from "../../helpers/routing";
 import { CART_CARD_HORIZONTAL_PADDING } from "../components/CartLineItem";
 import ProductScroller from "../components/ProductScroller";
+import _ from "lodash";
 export interface IAppProps {
   categories: ICategories;
   loadCategories: () => void;
   ui: Iui;
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}
+
+interface ElementLink {
+  link: string;
+  resource: string;
+  id: string;
+}
+interface CarouselImage {
+  id: string;
+  image: string;
+  link: ElementLink;
+}
+interface Element {
+  sortKey: number;
+  name: string;
+  typeName: string;
+  type:
+    | "bannerImage"
+    | "bannerCarousel"
+    | "featuredScroller"
+    | "onSaleScroller"
+    | "newProductsScroller"
+    | "categoriesScroller";
+  id: string;
+  link?: ElementLink;
+  banner_image?: string;
+  carousel_images?: Array<CarouselImage>;
 }
 
 class HomepageSigninModal extends React.Component {
@@ -269,22 +297,12 @@ class HomeScreen extends React.Component<IAppProps> {
 
     const { search } = this.state;
 
-    const images = [
-      {
-        src:
-          "https://zbanoffice.com/wp-content/uploads/2019/05/banner1-1024x373.jpg"
-      },
-      {
-        src:
-          "https://carsalesvanuatu.com/wp-content/uploads/2017/07/indepencen-sale-banner.jpg",
-        link: "/category/15"
-      }
-    ];
-
-    const image = {
-      src: "https://cdn.displays2go.com/images/zoom/vban846sal.rw_zoom.jpg",
-      link: "/product/487"
-    };
+    const defaultElements = [];
+    const elements = _.get(
+      shop,
+      "business.homeScreen.elements",
+      defaultElements
+    ) as Array<Element>;
 
     return (
       <View
@@ -317,17 +335,42 @@ class HomeScreen extends React.Component<IAppProps> {
 
         {hasSignedInOrSkippedWelcome && (
           <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-            <NavigatableMarketingCarousel image={image} />
-            <NavigatableMarketingCarousel images={images} />
-
-            <CategoryScroller categories={categories.data} />
-
-            <ProductScroller filter="featured" />
-            <ProductScroller filter="on_sale" />
-            <ProductScroller filter="new" />
-            {/*categories.data.map(category => (
-              <CategoryTile key={category.id} category={category} />
-            ))*/}
+            {elements.map((e, i) => {
+              switch (e.type) {
+                case "bannerImage":
+                  const image = {
+                    src: e.banner_image,
+                    link: e.link.link
+                  };
+                  return <NavigatableMarketingCarousel key={i} image={image} />;
+                  break;
+                case "bannerCarousel":
+                  const images = e.carousel_images.map(ci => {
+                    return {
+                      src: ci.image,
+                      link: ci.link.link
+                    };
+                  });
+                  return (
+                    <NavigatableMarketingCarousel key={i} images={images} />
+                  );
+                  break;
+                case "featuredScroller":
+                  return <ProductScroller key={i} filter="featured" />;
+                  break;
+                case "onSaleScroller":
+                  return <ProductScroller key={i} filter="on_sale" />;
+                  break;
+                case "newProductsScroller":
+                  return <ProductScroller key={i} filter="new" />;
+                  break;
+                case "categoriesScroller":
+                  return (
+                    <CategoryScroller key={i} categories={categories.data} />
+                  );
+                  break;
+              }
+            })}
           </ScrollView>
         )}
       </View>

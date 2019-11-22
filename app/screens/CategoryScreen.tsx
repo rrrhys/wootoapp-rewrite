@@ -40,6 +40,7 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
     super(props);
 
     this.setHeadingForProps(props);
+    props.loadCategory(props.category_id);
     props.loadProductsInCategory(props.category_id, 1);
   }
 
@@ -48,13 +49,16 @@ class CategoryScreen extends React.Component<ICategoryScreenProps> {
   }
   private setHeadingForProps(nextProps: any) {
     if (!nextProps.navigation.state.params.category) {
-      this.props.navigation.setParams({
-        category: {
-          name: nextProps.categories.data.find(
-            c => c.id == nextProps.category_id
-          ).name
-        }
-      });
+      const category = nextProps.categories.data.find(
+        c => c.id == nextProps.category_id
+      );
+      if (category) {
+        this.props.navigation.setParams({
+          category: {
+            name: category.name
+          }
+        });
+      }
     }
   }
 
@@ -108,10 +112,11 @@ const select = (store, ownProps: ICategoryScreenProps) => {
 };
 
 const actions = dispatch => {
-  const { loadProductsInCategory } = Actions;
+  const { loadProductsInCategory, loadCategory } = Actions;
   return {
     loadProductsInCategory: (category: number, page: number) =>
-      dispatch(loadProductsInCategory(category, page))
+      dispatch(loadProductsInCategory(category, page)),
+    loadCategory: (category_id: number) => dispatch(loadCategory(category_id))
   };
 };
 
