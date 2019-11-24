@@ -38,11 +38,15 @@ import {
 } from "react-native-elements";
 import SocialSignin from "../components/SocialSignin";
 import shop from "../actions/shop";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  TouchableWithoutFeedback,
+  TouchableOpacity
+} from "react-native-gesture-handler";
 import { deriveScreenAndParamsFromUrl } from "../../helpers/routing";
 import { CART_CARD_HORIZONTAL_PADDING } from "../components/CartLineItem";
 import ProductScroller from "../components/ProductScroller";
 import _ from "lodash";
+import { rules } from "../styles";
 export interface IAppProps {
   categories: ICategories;
   loadCategories: () => void;
@@ -86,21 +90,23 @@ class HomepageSigninModal extends React.Component {
   };
   render() {
     return (
-      <Modal
-        backdropPressToClose={false}
-        swipeToClose={false}
-        coverScreen={true}
-        backButtonClose={false}
-        backdrop={false}
-        style={[styles.modal]}
-        ref={"modal1"}
-        onClosed={this.onClose}
-        onOpened={this.onOpen}
-        onClosingState={this.onClosingState}
-        entry={"bottom"}
-      >
-        <SocialSignin canSkip={true} />
-      </Modal>
+      <View accessibilityLabel={"SigninModal"}>
+        <Modal
+          backdropPressToClose={false}
+          swipeToClose={false}
+          coverScreen={true}
+          backButtonClose={false}
+          backdrop={false}
+          style={[styles.modal]}
+          ref={"modal1"}
+          onClosed={this.onClose}
+          onOpened={this.onOpen}
+          onClosingState={this.onClosingState}
+          entry={"bottom"}
+        >
+          <SocialSignin canSkip={true} />
+        </Modal>
+      </View>
     );
   }
 }
@@ -133,7 +139,7 @@ class MarketingCarousel extends React.Component {
             const resizeMethod = "auto";
             return (
               <View>
-                <TouchableWithoutFeedback
+                <TouchableOpacity
                   onPress={() => {
                     if (!item.link) {
                       return;
@@ -152,7 +158,7 @@ class MarketingCarousel extends React.Component {
                     style={imageStyle}
                     resizeMethod={resizeMethod}
                   />
-                </TouchableWithoutFeedback>
+                </TouchableOpacity>
               </View>
             );
           }}
@@ -293,7 +299,8 @@ class HomeScreen extends React.Component<IAppProps> {
   render() {
     const { categories, theme, shop, customer } = this.props;
     const { hasSignedInOrSkippedWelcome } = customer;
-    const { width } = Dimensions.get("window");
+    const { width, height } = Dimensions.get("window");
+    const effectiveHeight = height - rules.headerHeight;
 
     const { search } = this.state;
 
@@ -306,72 +313,91 @@ class HomeScreen extends React.Component<IAppProps> {
 
     return (
       <View
-        style={{ backgroundColor: theme.colors.backgroundColor, marginLeft: 3 }}
+        accessibilityLabel={"homeScreenBaseView"}
+        style={{
+          backgroundColor: theme.colors.backgroundColor,
+          marginLeft: 3,
+          height: effectiveHeight,
+          flex: 1
+        }}
       >
         {!hasSignedInOrSkippedWelcome && (
           <Image
-            style={{ width: "100%", height: "100%" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              top: 0,
+              left: 0
+            }}
             source={require("../../assets/elsplasho.jpg")}
           />
         )}
 
         <HomepageSigninModal ref={"signinModal"} />
 
-        <View>
-          <SearchBar
-            lightTheme={!!(theme.colors.navbarBackgroundColor == "#ffffff")}
-            containerStyle={{
-              backgroundColor: theme.colors.navbarBackgroundColor
-            }}
-            inputContainerStyle={{
-              backgroundColor: theme.colors.navbarBackgroundColor
-            }}
-            placeholder="What are you looking for?"
-            onSubmitEditing={this.performSearch}
-            onChange={this.updateSearch}
-            value={search}
-          />
-        </View>
-
         {hasSignedInOrSkippedWelcome && (
-          <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-            {elements.map((e, i) => {
-              switch (e.type) {
-                case "bannerImage":
-                  const image = {
-                    src: e.banner_image,
-                    link: e.link.link
-                  };
-                  return <NavigatableMarketingCarousel key={i} image={image} />;
-                  break;
-                case "bannerCarousel":
-                  const images = e.carousel_images.map(ci => {
-                    return {
-                      src: ci.image,
-                      link: ci.link.link
+          <View style={{ flex: 1 }}>
+            <View>
+              <SearchBar
+                lightTheme={!!(theme.colors.navbarBackgroundColor == "#ffffff")}
+                containerStyle={{
+                  backgroundColor: theme.colors.navbarBackgroundColor
+                }}
+                inputContainerStyle={{
+                  backgroundColor: theme.colors.navbarBackgroundColor
+                }}
+                placeholder="What are you looking for?"
+                onSubmitEditing={this.performSearch}
+                onChange={this.updateSearch}
+                value={search}
+              />
+            </View>
+
+            <ScrollView
+              contentContainerStyle={{ paddingBottom: 120 }}
+              style={{ flex: 1 }}
+            >
+              {elements.map((e, i) => {
+                switch (e.type) {
+                  case "bannerImage":
+                    const image = {
+                      src: e.banner_image,
+                      link: e.link.link
                     };
-                  });
-                  return (
-                    <NavigatableMarketingCarousel key={i} images={images} />
-                  );
-                  break;
-                case "featuredScroller":
-                  return <ProductScroller key={i} filter="featured" />;
-                  break;
-                case "onSaleScroller":
-                  return <ProductScroller key={i} filter="on_sale" />;
-                  break;
-                case "newProductsScroller":
-                  return <ProductScroller key={i} filter="new" />;
-                  break;
-                case "categoriesScroller":
-                  return (
-                    <CategoryScroller key={i} categories={categories.data} />
-                  );
-                  break;
-              }
-            })}
-          </ScrollView>
+                    return (
+                      <NavigatableMarketingCarousel key={i} image={image} />
+                    );
+                    break;
+                  case "bannerCarousel":
+                    const images = e.carousel_images.map(ci => {
+                      return {
+                        src: ci.image,
+                        link: ci.link.link
+                      };
+                    });
+                    return (
+                      <NavigatableMarketingCarousel key={i} images={images} />
+                    );
+                    break;
+                  case "featuredScroller":
+                    return <ProductScroller key={i} filter="featured" />;
+                    break;
+                  case "onSaleScroller":
+                    return <ProductScroller key={i} filter="on_sale" />;
+                    break;
+                  case "newProductsScroller":
+                    return <ProductScroller key={i} filter="new" />;
+                    break;
+                  case "categoriesScroller":
+                    return (
+                      <CategoryScroller key={i} categories={categories.data} />
+                    );
+                    break;
+                }
+              })}
+            </ScrollView>
+          </View>
         )}
       </View>
     );

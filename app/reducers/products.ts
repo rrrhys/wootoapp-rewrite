@@ -89,7 +89,7 @@ const handle_PRODUCTS_BY_FILTER_LOADED = (
 
     // initialise if doesnt exist.
 
-    let byFilter = _.get(newState, "byFilter", []);
+    let byFilter = _.get(newState, "byFilter", {});
 
     byFilter[filter] = _.get(byFilter, filter, []);
 

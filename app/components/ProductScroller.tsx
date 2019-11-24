@@ -57,6 +57,7 @@ class ProductScroller extends React.Component {
 
 const select = (store: IStore, ownProps: IProps) => {
   const { filter } = ownProps;
+
   return {
     productsByFilter: _.get(store, `products.byFilter.${filter}`, []) //store.products.byFilter[filter]
   };
