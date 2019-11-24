@@ -10,6 +10,7 @@ import { withNavigation } from "react-navigation";
 import { TProductFilter } from "../actions/products";
 import { ScrollerHeader } from "../screens/HomeScreen";
 import ProductTile from "./ProductTile";
+import _ from "lodash";
 
 interface IProps {
   filter: TProductFilter;
@@ -57,7 +58,7 @@ class ProductScroller extends React.Component {
 const select = (store: IStore, ownProps: IProps) => {
   const { filter } = ownProps;
   return {
-    productsByFilter: store.products.byFilter[filter]
+    productsByFilter: _.get(store, `products.byFilter.${filter}`, []) //store.products.byFilter[filter]
   };
 };
 

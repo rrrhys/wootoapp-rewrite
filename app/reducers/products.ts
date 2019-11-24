@@ -89,11 +89,14 @@ const handle_PRODUCTS_BY_FILTER_LOADED = (
 
     // initialise if doesnt exist.
 
-    newState.byFilter[filter] = _.get(newState.byFilter, filter, []);
+    let byFilter = _.get(newState, "byFilter", []);
+
+    byFilter[filter] = _.get(byFilter, filter, []);
 
     // store ids for ref by filter.
-    newState.byFilter[filter] = ids;
+    byFilter[filter] = ids;
 
+    newState.byFilter = byFilter;
     return {
       ...state,
       ...newState,

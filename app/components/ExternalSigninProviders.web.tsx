@@ -4,6 +4,7 @@ import React from "react";
 import { View } from "react-native";
 
 import { connect } from "react-redux";
+import { withTheme } from "react-native-elements";
 const ExternalSigninProviders = props => {
   return <View></View>;
 };
