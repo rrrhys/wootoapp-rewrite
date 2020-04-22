@@ -27,7 +27,7 @@ platform :ios do
       export_options: {
         method: "app-store",
         provisioningProfiles: { 
-        "com.wootoapp.MobileTEST": "match AppStore com.wootoapp.MobileTEST profile"
+        "com.wootoapp.MobileTEST": "match AppStore com.wootoapp.MobileTEST"
         }
       }
       )
