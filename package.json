@@ -20,7 +20,7 @@
     "query-string": "^6.8.3",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
-    "react-native": "0.59.9",
+    "react-native": "0.62.3",
     "react-native-code-push": "^5.6.1",
     "react-native-drawer": "^2.5.1",
     "react-native-elements": "^1.2.0",
